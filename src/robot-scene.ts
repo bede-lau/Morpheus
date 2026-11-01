@@ -112,7 +112,7 @@ export class RobotScene {
     this.previous=p.clone();this.robot.position.copy(p);this.robot.rotation.z=frame.yaw;this.pose={position:p.clone(),yaw:frame.yaw};
     this.lastTime=time;this.updateCarried(time,frame);
     const nearby=sampleReplay(this.replay,Math.min(this.replay.duration,time+.02));
-    const moving=this.replay.source==='demo'&&Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;
+    const moving=Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;
     this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);
   }
   setLayer(layer:string){this.viewer.setLayers(layer!=='collisions',layer==='collisions'&&!this.hasEnvironmentColliders,layer==='collisions'&&this.hasEnvironmentColliders);this.reach.visible=layer==='reach'&&this.hasReplay&&this.replay.source==='demo';}

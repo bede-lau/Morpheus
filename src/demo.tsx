@@ -23,7 +23,7 @@ type Replacement={id:string;assetId:string;position:number[];quaternion:number[]
 type Data={tasks:{slug:string;task:string}[];env:BackendEnvironment;views:View[];detections:Detection[];source:string;report:ReportObject[];replacements:Replacement[];task:{slug:string;task:string};replay:Replay;numSplats:number;samples:number;floor:number;top:number;cut:number;size:THREE.Vector3};
 type Log={id:number;at:string;text:string;tone:'ok'|'warn'|'dim'|'hi'};
 type RobotRun={robot:RobotId;replay:Replay;start:number;speed:number};
-type UI={stage:'empty'|'loading'|'ready'|'morph';status:string;error:string;data:Data|null;phase:number;now:number;paused:boolean;logs:Log[];crops:Record<string,string>;robot:{id:RobotId;time:number;replay:Replay}|null;verdicts:Partial<Record<RobotId,{verdict:Verdict|'missing';task:string}>>;panel:boolean;running:boolean;pick:{robot:RobotId;slug:string}};
+type UI={stage:'empty'|'loading'|'ready'|'morph';status:string;error:string;data:Data|null;phase:number;now:number;paused:boolean;logs:Log[];crops:Record<string,string>;robot:{id:RobotId;time:number;replay:Replay}|null;verdicts:Partial<Record<RobotId,{verdict:Verdict|'missing';task:string}>>;panel:boolean;running:boolean;pick:{robot:RobotId;slug:string};room:string};
 
 const PHASES=['SCAN','TERRA VISION','LUNA DECISIONS','SIMREADY SWAP','PHYSICS','ROBOTS'];
 const START=[0,7,21,37,42,47];
@@ -68,7 +68,9 @@ class Show {
     const reps=((objects as {replacements?:Replacement[]}).replacements??[]).map(r=>({...r,match:(report.objects as ReportObject[]).map(o=>({o,d:Math.hypot(o.position[0]-r.position[0],o.position[1]-r.position[1])})).filter(x=>x.d<.35).sort((a,b)=>a.d-b.d)[0]?.o}));
     this.data={tasks:tasks.map(t=>({slug:t.slug,task:t.task})),env,views:views.views,detections:detections.detections,source:detections.source,report:report.objects,replacements:reps,task:{slug:chosen.slug,task:chosen.task},replay,numSplats:v.splat?.numSplats??0,samples:v.points.length/3,floor:min.z,top:max.z,cut:suggestedCutawayHeight(min.z,max.z),size:max.clone().sub(min)};
     this.center.set((min.x+max.x)/2,(min.y+max.y)/2,min.z);this.revealRadius=Math.hypot(max.x-min.x,max.y-min.y,max.z-min.z)*.62;
-    this.scan=createScanPlane(v.scene,min,max);
+    // Oversize the sweep so it covers every visible splat, not just the trimmed mesh bounds.
+    const pad=Math.max(2,Math.hypot(max.x-min.x,max.y-min.y)*.35);
+    this.scan=createScanPlane(v.scene,new THREE.Vector3(min.x-pad,min.y-pad,min.z),new THREE.Vector3(max.x+pad,max.y+pad,max.z));
     try{this.saved=parseSavedObjects(objects,env)}catch(e){console.warn('Saved SimReady objects unavailable',e)}
     // Warm the HTTP cache so the SavedObjectLayer load in phase 04 is instant.
     for(const r of reps)if(!this.assets.has(r.assetId)){const p=loadAsset(r.assetId);p.catch(()=>{});this.assets.set(r.assetId,p)}
@@ -81,6 +83,22 @@ class Show {
     const offset=this.home.pos.clone().sub(this.home.target).applyAxisAngle(new THREE.Vector3(0,0,1),-.55).multiplyScalar(1.75);offset.z*=1.25;
     this.cameraTo(this.home.pos,this.home.target,4.6,[this.home.target.clone().add(offset),this.home.target.clone().add(new THREE.Vector3(0,0,-.3))]);
     this.envelopes.set(`${chosen.slug}/stretch`,replay);this.set(u=>({...u,stage:'ready',data:this.data,status:'',pick:{robot:'stretch',slug:chosen.slug}}));
+  }
+  /** Scan-only room: stream a splat, frame it and land on the ready screen with no pipeline data. */
+  async loadScan(room:Room){
+    if(!room.splat||!room.file)throw new Error(`${room.name} has no scan.`);
+    this.set(u=>({...u,stage:'loading',status:`streaming ${room.file}`}));
+    const v=this.viewer;
+    await v.load(room.splat,undefined,room.name,'sample',room.file,room.up??'y-down');
+    if(this.disposed)return;
+    v.setCrop(true);v.setCutaway(true);v.setLayers(true,false,false);
+    const b=computeBounds(v.points,.008),min=new THREE.Vector3(...b.min),max=new THREE.Vector3(...b.max);
+    this.center.set((min.x+max.x)/2,(min.y+max.y)/2,min.z);this.revealRadius=Math.hypot(max.x-min.x,max.y-min.y,max.z-min.z)*.62;
+    this.reveal=createSphereReveal(v.splat!,this.center);this.revealStart=performance.now();v.sourceRoot.visible=true;
+    this.home.target.copy(v.orbit.target);this.home.pos.copy(v.camera.position);
+    const offset=this.home.pos.clone().sub(this.home.target).applyAxisAngle(new THREE.Vector3(0,0,1),-.55).multiplyScalar(1.75);offset.z*=1.25;
+    this.cameraTo(this.home.pos,this.home.target,4.6,[this.home.target.clone().add(offset),this.home.target.clone().add(new THREE.Vector3(0,0,-.3))]);
+    this.set(u=>({...u,stage:'ready',data:null,status:''}));
   }
   cameraTo(pos:THREE.Vector3,target:THREE.Vector3,dur:number,from?:[THREE.Vector3,THREE.Vector3]){const c=this.viewer.camera,o=this.viewer.orbit;if(from){c.position.copy(from[0]);o.target.copy(from[1])}
     this.tween={from:[c.position.clone(),o.target.clone()],to:[pos.clone(),target.clone()],start:performance.now(),dur:dur*1000}}
@@ -176,8 +194,12 @@ class Show {
     this.pov?.dispose();this.robotScene?.dispose();this.viewer.dispose()}
 }
 
-const INITIAL:UI={stage:'empty',status:'',error:'',data:null,phase:-1,now:0,paused:false,logs:[],crops:{},robot:null,verdicts:{},panel:false,running:false,pick:{robot:'stretch',slug:''}};
-const ROOMS=[{name:'Rustic kitchen',meta:'500k gaussians',active:true,image:'/rooms/rustic-kitchen.jpg'},{name:'Hackney flat',meta:'soon',active:false,image:'/rooms/hackney-flat.jpg'},{name:'Studio',meta:'soon',active:false,image:'/rooms/studio.jpg'}];
+const INITIAL:UI={stage:'empty',status:'',error:'',data:null,phase:-1,now:0,paused:false,logs:[],crops:{},robot:null,verdicts:{},panel:false,running:false,pick:{robot:'stretch',slug:''},room:''};
+type Room={name:string;meta:string;image:string;kind:'kitchen'|'splat';splat?:string;file?:string;up?:'y-down'|'y-up'|'z-up';credit?:string};
+const ROOMS:Room[]=[
+  {name:'Rustic kitchen',meta:'500k gaussians',image:'/rooms/rustic-kitchen.jpg',kind:'kitchen'},
+  {name:'Hackney flat',meta:'scan only',image:'/rooms/hackney-flat.jpg',kind:'splat',splat:'/samples/hackney-room.spz',file:'hackney-room.spz',up:'y-down',credit:'Scaniverse capture · hackney-room'},
+  {name:'Studio',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',splat:'/samples/mipnerf-room.splat',file:'mipnerf-room.splat',up:'y-down',credit:'Mip-NeRF 360 “room” · antimatter15 .splat'}];
 
 function Glyph({id}:{id:RobotId}){const c={fill:'none',stroke:'currentColor',strokeWidth:1.4,strokeLinecap:'square' as const};
   return <svg viewBox="0 0 64 44" width="64" height="44" aria-hidden="true">{id==='go2'?<g {...c}><rect x="14" y="14" width="30" height="9"/><rect x="44" y="11" width="9" height="8"/><path d="M18 23l-3 9 3 7M26 23l2 9-2 7M36 23l-3 9 3 7M42 23l2 9-2 7"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
@@ -273,15 +295,17 @@ function RedPill(){
 
 export default function Demo(){
   const host=useRef<HTMLDivElement>(null),labels=useRef<HTMLDivElement>(null),show=useRef<Show|null>(null),logEnd=useRef<HTMLDivElement>(null);
-  const [ui,setUi]=useState<UI>(INITIAL),[gen,setGen]=useState(0),[auto,setAuto]=useState(false);
+  const [ui,setUi]=useState<UI>(INITIAL),[gen,setGen]=useState(0),[auto,setAuto]=useState(false),room=useRef<Room>(ROOMS[0]);
+  const fail=(e:unknown)=>{console.error(e);setUi(u=>({...u,stage:'empty',error:e instanceof Error?e.message:String(e)}))};
+  const load=(s:Show,r:Room)=>{setUi(u=>({...u,error:'',room:r.name}));void (r.kind==='kitchen'?s.loadKitchen():s.loadScan(r)).catch(fail)};
   useEffect(()=>{const s=new Show(host.current!,setUi,()=>labels.current);show.current=s;setUi(INITIAL);
-    if(auto)void s.loadKitchen().catch(e=>{console.error(e);setUi(u=>({...u,stage:'empty',error:e instanceof Error?e.message:String(e)}))});
+    if(auto)load(s,room.current);
     return()=>{s.dispose();show.current=null}},[gen]);
   useEffect(()=>{logEnd.current?.scrollIntoView({block:'end'})},[ui.logs.length]);
-  const start=()=>{if(ui.stage!=='empty')return;setUi(u=>({...u,error:''}));void show.current?.loadKitchen().catch(e=>{console.error(e);setUi(u=>({...u,stage:'empty',error:e instanceof Error?e.message:String(e)}))})};
-  const restart=()=>{setAuto(true);setGen(g=>g+1)};
+  const start=(r:Room)=>{if(ui.stage!=='empty'||!show.current)return;room.current=r;load(show.current,r)};
+  const restart=()=>{setAuto(true);setGen(g=>g+1)};const back=()=>{setAuto(false);setGen(g=>g+1)};
   useEffect(()=>{const key=(e:KeyboardEvent)=>{if(e.target instanceof HTMLInputElement)return;const s=show.current;if(!s)return;
-      if(e.code==='Space'){e.preventDefault();if(ui.stage==='ready')s.startMorph();else if(ui.stage==='morph')s.togglePause();else if(ui.stage==='empty')start()}
+      if(e.code==='Space'){e.preventDefault();if(ui.stage==='ready')s.startMorph();else if(ui.stage==='morph')s.togglePause();else if(ui.stage==='empty')start(ROOMS[0])}
       else if(e.key==='ArrowRight'){s.next()}else if(e.key.toLowerCase()==='r'&&ui.stage!=='empty'&&ui.stage!=='loading')restart()};
     addEventListener('keydown',key);return()=>removeEventListener('keydown',key)});
   const d=ui.data,now=ui.now,phase=ui.phase;
@@ -300,13 +324,14 @@ export default function Demo(){
     </div>
     <header className="d-brand"><span className="d-mark"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>
     {ui.stage==='empty'&&<>
-      <div className="d-rooms">{ROOMS.map(r=><button key={r.name} className={`d-room ${r.active?'':'off'}`} disabled={!r.active} onClick={start}><div className="d-tile"><img src={r.image} alt={r.name} draggable={false}/><span>{r.active?'scan ready':'scan pending'}</span></div><div className="d-room-meta"><b>{r.name}</b><small>{r.meta}</small></div></button>)}</div>
+      <div className="d-rooms">{ROOMS.map(r=><button key={r.name} className="d-room" onClick={()=>start(r)}><div className="d-tile"><img src={r.image} alt={r.name} draggable={false}/><span>{r.kind==='kitchen'?'scan → sim':'scan'}</span></div><div className="d-room-meta"><b>{r.name}</b><small>{r.meta}</small></div></button>)}</div>
       {ui.error&&<div className="d-error">{ui.error}</div>}
       <nav className="d-links"><a href="/?view=workspace">workspace</a>·<a href="/?view=objects">objects</a>·<a href="/?view=builder">builder</a></nav>
     </>}
     <RedPill/>
     {ui.stage==='loading'&&<div className="d-loading"><span className="d-spin"/>{ui.status||'loading'}</div>}
-    {ui.stage==='ready'&&<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>scan → objects → physics → robots</small></div>}
+    {ui.stage==='ready'&&(d?<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>scan → objects → physics → robots</small></div>
+      :<div className="d-cta"><small>{ui.room} · {ROOMS.find(r=>r.name===ui.room)?.credit??'scan preview'}</small><button onClick={back}>← CHOOSE ROOM</button><small>pipeline demo runs on the rustic kitchen</small></div>)}
     {ui.stage==='morph'&&d&&<>
       <nav className="d-phases">{PHASES.map((p,i)=><span key={p} className={i===phase?'on':i<phase?'past':''}><b>{pad(i+1)}</b>{p}</span>)}</nav>
       <aside className="d-console glass"><div className="d-console-head"><span>BUILD LOG</span><span className={ui.paused?'warn':'ok'}>{ui.paused?'❚❚ paused':'● live'} · {stamp(now)}</span></div>
