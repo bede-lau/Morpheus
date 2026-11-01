@@ -253,8 +253,9 @@ function Rain({on}:{on:boolean}){
 }
 
 // Grey loading veil: up as soon as loading starts, held until the quote lands, then dissolves into the room reveal.
+// Also the opening screen: the app starts grey on the quote, then fades to the room picker (click to skip).
 function RedPill({loading,abort,status}:{loading:boolean;abort:boolean;status:string}){
-  const [typed,setTyped]=useState(0),[on,setOn]=useState(false),[live,setLive]=useState(false);
+  const [typed,setTyped]=useState(0),[on,setOn]=useState(true),[live,setLive]=useState(true);
   useEffect(()=>{if(loading){setOn(true);setLive(true)}},[loading]);
   useEffect(()=>{if(!on)return;setTyped(0);const id=setInterval(()=>setTyped(n=>n>=QUOTE_LEN?(clearInterval(id),n):n+1),17);return()=>clearInterval(id)},[on]);
   useEffect(()=>{if(abort){setOn(false);return}if(!on||loading||typed<QUOTE_LEN)return;
@@ -262,7 +263,7 @@ function RedPill({loading,abort,status}:{loading:boolean;abort:boolean;status:st
   useEffect(()=>{if(on)return;const t=setTimeout(()=>setLive(false),1400);return()=>clearTimeout(t)},[on]);
   if(!live&&!on)return null;
   let left=typed;
-  return <div className={`rp ${on?'on':''}`} aria-live="polite">
+  return <div className={`rp ${on?'on':''} ${loading?'':'skippable'}`} aria-live="polite" onClick={()=>{if(!loading)setOn(false)}}>
     <Rain on={live}/>
     <div className="rp-body">
       <svg className="rp-hands" viewBox="0 0 440 120" aria-hidden="true"><Hand pill="blue" x={0}/><Hand pill="red" x={240} flip/></svg>
@@ -306,7 +307,7 @@ export default function Demo(){
       {ui.error&&<div className="d-error">{ui.error}</div>}
       <nav className="d-links"><a href="/?view=workspace">workspace</a>·<a href="/?view=objects">objects</a>·<a href="/?view=builder">builder</a></nav>
     </>}
-    <RedPill loading={ui.stage==='loading'} abort={ui.stage==='empty'} status={ui.stage==='loading'?ui.status:'wake up · entering the kitchen'}/>
+    <RedPill loading={ui.stage==='loading'} abort={ui.stage==='empty'&&!!ui.error} status={ui.stage==='loading'?ui.status:ui.stage==='empty'?'wake up · click to enter':'wake up · entering the kitchen'}/>
     {ui.stage==='ready'&&<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>scan → objects → physics → robots</small></div>}
     {ui.stage==='morph'&&d&&<>
       <nav className="d-phases">{PHASES.map((p,i)=><span key={p} className={i===phase?'on':i<phase?'past':''}><b>{pad(i+1)}</b>{p}</span>)}</nav>
