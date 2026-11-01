@@ -92,10 +92,12 @@ class Show {
     await v.load(room.splat,undefined,room.name,'sample',room.file,room.up??'y-down');
     if(this.disposed)return;
     v.setCrop(true);v.setCutaway(true);v.setLayers(true,false,false);
-    const b=computeBounds(v.points,.008),min=new THREE.Vector3(...b.min),max=new THREE.Vector3(...b.max);
-    this.center.set((min.x+max.x)/2,(min.y+max.y)/2,min.z);this.revealRadius=Math.hypot(max.x-min.x,max.y-min.y,max.z-min.z)*.62;
+    // Frame the cropped room footprint, not the outer bounds: web splats carry floaters that blow up the full extent.
+    const fb=roomFootprintBounds(v.points,.02),fc=new THREE.Vector3(...fb.center),fs=new THREE.Vector3(...fb.size),radius=Math.max(fs.x,fs.y,.5);
+    this.center.set(fc.x,fc.y,fb.min[2]);this.revealRadius=Math.hypot(fs.x,fs.y,fs.z)*.62;
     this.reveal=createSphereReveal(v.splat!,this.center);this.revealStart=performance.now();v.sourceRoot.visible=true;
-    this.home.target.copy(v.orbit.target);this.home.pos.copy(v.camera.position);
+    const dir=v.camera.position.clone().sub(v.orbit.target).normalize();
+    this.home.target.set(fc.x,fc.y,fb.min[2]+fs.z*.35);this.home.pos.copy(this.home.target).add(dir.multiplyScalar(radius*1.15));
     const offset=this.home.pos.clone().sub(this.home.target).applyAxisAngle(new THREE.Vector3(0,0,1),-.55).multiplyScalar(1.75);offset.z*=1.25;
     this.cameraTo(this.home.pos,this.home.target,4.6,[this.home.target.clone().add(offset),this.home.target.clone().add(new THREE.Vector3(0,0,-.3))]);
     this.set(u=>({...u,stage:'ready',data:null,status:''}));
