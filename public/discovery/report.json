@@ -1,0 +1,105 @@
+{
+  "objects": [
+    {
+      "label": "bowl",
+      "view": 0,
+      "pixel": [
+        563,
+        652
+      ],
+      "position": [
+        1.238,
+        0.472,
+        0.645
+      ],
+      "confidence": 0.76,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "weak",
+      "asset": "dishware plastic small Plate a01 | 18,160 triangles \u00b7 0.27/3"
+    },
+    {
+      "label": "plate",
+      "view": 0,
+      "pixel": [
+        756,
+        534
+      ],
+      "position": [
+        1.114,
+        1.885,
+        0.681
+      ],
+      "confidence": 0.87,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "plate",
+      "view": 2,
+      "pixel": [
+        500,
+        637
+      ],
+      "position": [
+        1.158,
+        0.808,
+        0.633
+      ],
+      "confidence": 0.7,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "weak",
+      "asset": "dishware plastic small Plate a01 | 18,160 triangles \u00b7 0.06/3"
+    },
+    {
+      "label": "plate",
+      "view": 6,
+      "pixel": [
+        287,
+        627
+      ],
+      "position": [
+        1.023,
+        0.404,
+        0.528
+      ],
+      "confidence": 0.83,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "weak",
+      "asset": "dishware plastic big Plate a01 | 19,488 triangles \u00b7 0.11/3"
+    },
+    {
+      "label": "bowl",
+      "view": 9,
+      "pixel": [
+        311,
+        151
+      ],
+      "position": [
+        3.146,
+        -2.262,
+        0.616
+      ],
+      "confidence": 0.85,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "replaced",
+      "asset": "kitchenware bowl b01 | 5,360 triangles \u00b7 1.31/3"
+    },
+    {
+      "label": "bowl",
+      "view": 15,
+      "pixel": [
+        753,
+        171
+      ],
+      "position": [
+        3.097,
+        2.789,
+        0.769
+      ],
+      "confidence": 0.9,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    }
+  ],
+  "source": "codex-cli detections"
+}

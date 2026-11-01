@@ -61,6 +61,8 @@ The service listens on `127.0.0.1:8000`; Vite proxies `/api` to it. It accepts c
 
 ## Run the task demo
 
+The cinematic version is **`/?view=demo`**: a blank canvas, click the kitchen, the splat blooms in, then **MORPH TO SIM** replays the real recorded pipeline (scan, terra detections, luna Decisions traces, SimReady swap, MuJoCo validation) and ends with the robots attempting the chore. See [docs/DEMO.md](docs/DEMO.md).
+
 ```sh
 pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all
 pipeline/.venv/bin/python -m pipeline.task_planner "fill a glass of water" --all

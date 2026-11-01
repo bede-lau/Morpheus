@@ -1,0 +1,149 @@
+{
+  "source": "Responses API (gpt-6.1-terra), one request per view",
+  "notes": {
+    "0": "ok (gpt-6.1-terra)",
+    "1": "ok (gpt-6.1-terra)",
+    "2": "ok (gpt-6.1-terra)",
+    "3": "ok (gpt-6.1-terra)",
+    "4": "ok (gpt-6.1-terra)",
+    "5": "ok (gpt-6.1-terra)",
+    "6": "ok (gpt-6.1-terra)",
+    "7": "ok (gpt-6.1-terra)",
+    "8": "ok (gpt-6.1-terra)",
+    "9": "ok (gpt-6.1-terra)",
+    "10": "ok (gpt-6.1-terra)",
+    "11": "ok (gpt-6.1-terra)",
+    "12": "ok (gpt-6.1-terra)",
+    "13": "ok (gpt-6.1-terra)",
+    "14": "ok (gpt-6.1-terra)",
+    "15": "ok (gpt-6.1-terra)"
+  },
+  "detections": [
+    {
+      "view": 0,
+      "label": "bowl",
+      "x": 563,
+      "y": 652,
+      "confidence": 0.76
+    },
+    {
+      "view": 0,
+      "label": "plate",
+      "x": 756,
+      "y": 534,
+      "confidence": 0.87
+    },
+    {
+      "view": 1,
+      "label": "plate",
+      "x": 752,
+      "y": 377,
+      "confidence": 0.95
+    },
+    {
+      "view": 1,
+      "label": "bowl",
+      "x": 545,
+      "y": 721,
+      "confidence": 0.74
+    },
+    {
+      "view": 2,
+      "label": "bowl",
+      "x": 326,
+      "y": 656,
+      "confidence": 0.92
+    },
+    {
+      "view": 2,
+      "label": "plate",
+      "x": 500,
+      "y": 637,
+      "confidence": 0.7
+    },
+    {
+      "view": 3,
+      "label": "plate",
+      "x": 339,
+      "y": 731,
+      "confidence": 0.85
+    },
+    {
+      "view": 4,
+      "label": "bowl",
+      "x": 182,
+      "y": 626,
+      "confidence": 0.78
+    },
+    {
+      "view": 4,
+      "label": "plate",
+      "x": 372,
+      "y": 637,
+      "confidence": 0.87
+    },
+    {
+      "view": 5,
+      "label": "plate",
+      "x": 206,
+      "y": 643,
+      "confidence": 0.86
+    },
+    {
+      "view": 6,
+      "label": "bowl",
+      "x": 199,
+      "y": 594,
+      "confidence": 0.88
+    },
+    {
+      "view": 6,
+      "label": "plate",
+      "x": 287,
+      "y": 627,
+      "confidence": 0.83
+    },
+    {
+      "view": 7,
+      "label": "plate",
+      "x": 218,
+      "y": 537,
+      "confidence": 0.75
+    },
+    {
+      "view": 7,
+      "label": "bowl",
+      "x": 307,
+      "y": 620,
+      "confidence": 0.73
+    },
+    {
+      "view": 9,
+      "label": "bowl",
+      "x": 311,
+      "y": 151,
+      "confidence": 0.85
+    },
+    {
+      "view": 9,
+      "label": "bowl",
+      "x": 311,
+      "y": 162,
+      "confidence": 0.72
+    },
+    {
+      "view": 15,
+      "label": "bowl",
+      "x": 753,
+      "y": 171,
+      "confidence": 0.9
+    },
+    {
+      "view": 15,
+      "label": "plate",
+      "x": 756,
+      "y": 156,
+      "confidence": 0.7
+    }
+  ]
+}
