@@ -9,12 +9,14 @@ import json
 from urllib.parse import urlparse
 
 from .export import ManifestError, package_environment, validate_physics
+from .read_api import EnvironmentStore
 
 MAX_BODY = 5 * 1024 * 1024
 
 
 class Handler(BaseHTTPRequestHandler):
     server_version = "MorpheusLocal/1"
+    environment_store = EnvironmentStore()
 
     def _allowed_origin(self):
         origin = self.headers.get("Origin")
@@ -51,7 +53,17 @@ class Handler(BaseHTTPRequestHandler):
         if not self._allowed_origin():
             self._json(403, {"error": "Only localhost browser origins are allowed"})
             return
-        if self.path != "/api/health":
+        path = urlparse(self.path).path
+        try:
+            result = self.environment_store.read(path)
+        except Exception as exc:
+            self.log_error("Environment read failed: %s", exc)
+            self._json(500, {"error": "Local environment read failed; see server log"})
+            return
+        if result is not None:
+            self._send(*result)
+            return
+        if path != "/api/health":
             self._json(404, {"error": "Not found"})
             return
         try:

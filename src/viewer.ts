@@ -67,10 +67,27 @@ export class RoomViewer {
     const out:number[]=[];const target=90000;let budget=0;let index=0;
     for(const t of triangles){budget+=t.area/total*target;const n=Math.floor(budget);budget-=n;for(let j=0;j<n;j++){index++;const u=Math.sqrt((index*.618033988749895)%1),v=(index*.414213562373095)%1;const p=t.a.clone().multiplyScalar(1-u).addScaledVector(t.b,u*(1-v)).addScaledVector(t.c,u*v);out.push(p.x,p.y,p.z)}}return new Float32Array(out);
   }
+  applyWorldTransform(values:number[]){
+    if(values.length!==16||!values.every(Number.isFinite))throw new Error('Expected a finite column-major 4×4 transform.');
+    const target=new THREE.Matrix4().fromArray(values),position=new THREE.Vector3(),rotation=new THREE.Quaternion(),scale=new THREE.Vector3();
+    target.decompose(position,rotation,scale);
+    const recomposed=new THREE.Matrix4().compose(position,rotation,scale);
+    if(scale.x<=0||Math.abs(scale.x-scale.y)>1e-6||Math.abs(scale.x-scale.z)>1e-6||target.elements.some((n,i)=>Math.abs(n-recomposed.elements[i])>1e-6))throw new Error('Room transform must have positive uniform scale and no shear.');
+    this.sourceRoot.updateMatrixWorld(true);
+    const delta=target.clone().multiply(this.sourceRoot.matrixWorld.clone().invert()),point=new THREE.Vector3();
+    const aligned=new Float32Array(this.points.length);
+    for(let i=0;i<this.points.length;i+=3){point.fromArray(this.points,i).applyMatrix4(delta);point.toArray(aligned,i)}
+    this.points=aligned;this.scale=scale.x;this.basePoints=transformPoints(aligned,1/this.scale);
+    this.offset.copy(position).divideScalar(this.scale);this.baseRotation.copy(rotation);
+    this.sourceRoot.position.copy(position);this.sourceRoot.quaternion.copy(rotation);this.sourceRoot.scale.copy(scale);this.sourceRoot.updateMatrixWorld(true);
+    if(aligned.length){const bounds=computeBounds(aligned,.008);if(this.info){this.info.bounds=bounds.size;this.info.floorZ=bounds.min[2]}this.cutaway?.setHeight(suggestedCutawayHeight(bounds.min[2],bounds.max[2]));}
+    this.clearMeasure();this.home();
+  }
   setScale(value:number){if(!Number.isFinite(value)||value<=0)throw new Error('Scale must be positive.');const ratio=value/this.scale;this.scale=value;this.sourceRoot.scale.setScalar(value);this.sourceRoot.position.copy(this.offset).multiplyScalar(value);this.points=transformPoints(this.basePoints,value);if(this.cutaway)this.cutaway.setHeight(this.cutaway.height*ratio);this.clearMeasure();this.home()}
   setCutaway(enabled:boolean){this.cutaway?.setEnabled(enabled);this.mesh?.traverse(o=>{if(o instanceof THREE.Mesh){const materials=Array.isArray(o.material)?o.material:[o.material];for(const material of materials){material.clippingPlanes=enabled&&this.cutaway?this.cutaway.planes:[];material.needsUpdate=true;}}})}
   getTransform(){this.sourceRoot.updateMatrixWorld(true);return {matrix:this.sourceRoot.matrixWorld.toArray(),matrixOrder:'column-major',unitsPerSourceUnit:this.scale}}
   getGeometryPoints(useMesh:boolean){return useMesh&&this.mesh?this.points:this.splat?this.sampleSplat(this.splat):this.points}
+  visibleSplatHit(ray:THREE.Raycaster){return this.splat?ray.intersectObject(this.splat,false).find(hit=>!this.cutaway?.enabled||hit.point.z<=this.cutaway.height):undefined}
   interior(){if(!this.info||!this.splat)return;this.sourceRoot.updateMatrixWorld(true);const position=new THREE.Vector3(0,0,0).applyMatrix4(this.sourceRoot.matrixWorld),target=new THREE.Vector3(-1,0,1.5).applyMatrix4(this.sourceRoot.matrixWorld);this.camera.position.copy(position);this.orbit.target.copy(target);this.orbit.update()}
   home(){let center:Vec3,size:Vec3;if(this.points.length){const b=computeBounds(this.points,.008);center=b.center;size=b.size}else if(this.boxes.size){this.colliderRoot.updateMatrixWorld(true);const b=new THREE.Box3().setFromObject(this.colliderRoot);center=b.getCenter(new THREE.Vector3()).toArray() as Vec3;size=b.getSize(new THREE.Vector3()).toArray() as Vec3}else return;const r=Math.max(...size,1);this.orbit.target.set(center[0],center[1],size[2]*.35);this.camera.position.copy(this.orbit.target).add(new THREE.Vector3(r*.78,-r*.98,r*.78));this.camera.near=.02;this.camera.far=Math.max(100,r*12);this.camera.updateProjectionMatrix();this.orbit.update()}
   top(){if(!this.points.length)return;const b=computeBounds(this.points);this.orbit.target.set(b.center[0],b.center[1],0);this.camera.position.set(b.center[0],b.center[1]-.01,Math.max(...b.size)*1.6);this.orbit.update()}
