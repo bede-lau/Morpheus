@@ -1,6 +1,6 @@
 import type { Vec3 } from './types';
 
-export type RobotId = 'stretch' | 'go2' | 'soarm';
+export type RobotId = 'stretch' | 'go2' | 'g1';
 export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number };
 export type ReplayEvent = { time: number; label: string };
 export type StepStatus = 'done' | 'failed' | 'skipped';
@@ -11,13 +11,13 @@ export type CarriedObject = { objectId: string; assetId?: string; pickTime: numb
 export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[]; carried?: CarriedObject[] };
 export const ROBOTS = [
   { id: 'go2' as const, name: 'Go2', type: 'Quadruped', description: 'A mobile quadruped for exploring a room. This demo model has no manipulation arm.', reach: 'No arm', clearance: 'Review', drawer: 'Not tested' },
-  { id: 'soarm' as const, name: 'SO-ARM100', type: 'Stationary arm', description: 'A compact arm for a fixed work area. The demo keeps its base stationary while the arm moves.', reach: 'Review', clearance: 'Stationary', drawer: 'Not tested' },
+  { id: 'g1' as const, name: 'Unitree G1', type: 'Humanoid', description: 'A 1.3 m humanoid that walks between work areas and reaches with two arms at counter height.', reach: 'Reachable', clearance: 'Review', drawer: 'Not tested' },
   { id: 'stretch' as const, name: 'Stretch', type: 'Mobile manipulator', description: 'A mobile base moves between work areas. A telescoping arm approaches the counter target.', reach: 'Reachable', clearance: 'Tight', drawer: 'Not tested' },
 ];
 // Z-up coordinates in the aligned sample scene. Illustrative only; not a planned or collision-tested route.
 export function createDemoReplay(robot: RobotId): Replay {
   const route: Vec3[] = [[1.95,-1.2,0],[1.95,-.6,0],[1.95,0,0],[1.95,.6,0],[1.95,1.2,0],[1.95,1.2,0]];
-  return { version: 1, duration: 24, source: 'demo', robot, frames: route.map((position,i)=>({ time: i*4.8, position: robot==='soarm'?[1.95,1.2,0]:position, yaw: 0, armExtension: i<4?0:.25 })) };
+  return { version: 1, duration: 24, source: 'demo', robot, frames: route.map((position,i)=>({ time: i*4.8, position, yaw: 0, armExtension: i<4?0:.25 })) };
 }
 export function sampleReplay(replay: Replay, time: number): ReplayFrame {
   const t=Math.max(0,Math.min(replay.duration,time));

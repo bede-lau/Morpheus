@@ -14,7 +14,7 @@ React 19, TypeScript, Vite 7, Three.js 0.180, Spark 2.4, Lucide. No new dependen
 
 The user confirmed their teammate has not produced a rollout yet. No robot is shown and play/scrub/save are disabled until a matching rollout exists. The separate **Open illustrative demo** action enables the frontend demonstration.
 
-Publish `output/kitchen/replays/stretch.json`, `go2.json`, or `soarm.json` with this envelope (replace the revision with the current GET response):
+Publish `output/kitchen/replays/stretch.json`, `go2.json`, or `g1.json` with this envelope (replace the revision with the current GET response):
 
 ```json
 {

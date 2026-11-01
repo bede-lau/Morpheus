@@ -19,7 +19,7 @@
 .d-room:not(.off):hover{transform:translateY(-3px);border-color:var(--ink);box-shadow:0 14px 30px -18px rgba(0,0,0,.4)}
 .d-room.off{cursor:not-allowed;opacity:.45}
 .d-tile{height:112px;position:relative;background-color:#f6f7f6;background-image:radial-gradient(circle,#c9cdca 1px,transparent 1.2px);background-size:9px 9px;border-bottom:1px solid var(--rule);display:grid;place-items:center;overflow:hidden}
-.d-tile span{font-size:30px;font-weight:700;letter-spacing:.08em;color:var(--ink)}
+.d-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s ease}.d-room:not(.off):hover .d-tile img{transform:scale(1.04)}.d-room.off .d-tile img{filter:grayscale(1) contrast(.85);opacity:.7}.d-tile span{position:absolute;left:8px;bottom:7px;font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:#fff;background:rgba(13,15,14,.72);padding:3px 6px;pointer-events:none}.d-room:not(.off) .d-tile span{color:var(--green)}
 .d-room:not(.off) .d-tile::after{content:'';position:absolute;left:0;right:0;height:1px;background:var(--green);box-shadow:0 0 12px var(--green);animation:sweep 2.6s ease-in-out infinite}
 .d-room-meta{padding:9px 11px;display:flex;justify-content:space-between;align-items:baseline}
 .d-room-meta b{font-weight:600;font-size:11px;white-space:nowrap}.d-room-meta small{white-space:nowrap}.d-room-meta small{color:var(--mute);font-size:9px}
@@ -179,3 +179,25 @@
 .d-run-links button{background:none;border:0;font-size:10px;color:var(--mute);cursor:pointer;padding:0}
 .d-run-links a{font-size:10px;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--green)}
 .d-verdict small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* loading veil: grey, digital rain, Morpheus' two pills */
+.rp{position:absolute;inset:0;z-index:20;background:radial-gradient(ellipse at 50% 45%,#3a3e3c 0%,#2b2e2d 62%,#222524 100%);color:#e4e8e6;display:grid;place-items:center;opacity:0;pointer-events:none;transition:opacity 1.3s cubic-bezier(.4,0,.2,1)}
+.rp.on{opacity:1;pointer-events:auto;transition-duration:.35s}
+.rp-rain{position:absolute;inset:0;width:100%;height:100%;opacity:.16;mix-blend-mode:screen}
+.rp-body{position:relative;display:flex;flex-direction:column;align-items:center;max-width:min(640px,calc(100vw - 48px));text-align:center;animation:rise .6s .1s both}
+.rp-hands{width:min(520px,84vw);height:auto;overflow:visible;margin-bottom:34px}
+.rp-hand path{fill:none;stroke:#cfd5d2;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.rp-hand path:first-child{stroke:#6f7672}.rp-hand .rp-crease{stroke:#7d8480;stroke-width:1}
+.rp-pill{animation:float 3.2s ease-in-out infinite}.rp-pill.red{animation-delay:-1.6s}
+.rp-pill rect{stroke:none}.rp-pill path{stroke:rgba(0,0,0,.25);stroke-width:1}.rp-pill .rp-shine{fill:rgba(255,255,255,.55)}
+.rp-pill.blue rect:first-child{fill:#3e7bfa;filter:drop-shadow(0 0 8px rgba(62,123,250,.85))}
+.rp-pill.red rect:first-child{fill:#e5484d;filter:drop-shadow(0 0 8px rgba(229,72,77,.85))}
+.rp-quote{margin:0;font-size:15px;line-height:1.75;letter-spacing:.01em;font-weight:500;min-height:5.25em;color:#e4e8e6}
+.rp-quote .blue{color:#7aa5ff}.rp-quote .red{color:#ff7a7e}
+.rp-caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--green);animation:blink 1s steps(1) infinite}
+.rp-cite{margin-top:18px;font-style:normal;font-size:10px;font-weight:700;letter-spacing:.32em;color:#8f9692}
+.rp-status{margin-top:44px;display:flex;gap:10px;align-items:center;font-size:10px;letter-spacing:.06em;color:#7f8682}
+.rp-status .d-spin{border-color:#cfd5d2;border-right-color:transparent}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+@keyframes blink{50%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.rp-rain{display:none}.rp-pill,.rp-caret{animation:none}}

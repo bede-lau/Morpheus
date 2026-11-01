@@ -11,8 +11,8 @@ import type { RoomViewer } from './viewer';
 test('sample placement follows floor height and preserves backend trajectories',()=>{
  const floor=new THREE.Mesh(new THREE.PlaneGeometry(10,10),new THREE.MeshBasicMaterial({side:THREE.DoubleSide}));floor.position.z=-.12;
  const replay=groundDemoReplay(createDemoReplay('stretch'),floor);
- // Wheel bottom = 0.01; retain 0.03 m over rough reference geometry.
- assert.ok(replay.frames.every(f=>Math.abs(f.position[2]+.1)<1e-6));
+ // Exported meshes touch the floor at z=0; retain 0.03 m over rough reference geometry.
+ assert.ok(replay.frames.every(f=>Math.abs(f.position[2]+.09)<1e-6));
  const backend={...replay,source:'backend' as const};assert.equal(groundDemoReplay(backend,floor),backend);
  assert.throws(()=>groundDemoReplay(createDemoReplay('stretch'),new THREE.Group()),/floor support/);
 });
@@ -55,6 +55,6 @@ test('sample robot volumes clear the actual kitchen mesh throughout their replay
  // Regression proof: the old center-only route passes through a cabinet.
  const legacy=createDemoReplay('stretch');legacy.frames=legacy.frames.map((f,i)=>({...f,position:[1.5,[-1.5,-.7,.1,.8,1.5,1.5][i],.06]}));
  assert.ok(firstIntersection(legacy),'The reference test must detect the original clipping route.');
- for(const robot of ['stretch','go2','soarm'] as const){assert.equal(firstIntersection(createPlacedDemoReplay(robot,room)),undefined);}
+ for(const robot of ['stretch','go2','g1'] as const){assert.equal(firstIntersection(createPlacedDemoReplay(robot,room)),undefined);}
  simulation.dispose();
 });

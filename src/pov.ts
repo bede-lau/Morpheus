@@ -6,7 +6,7 @@ import type { RobotId } from './replay';
 import type { Vec3 } from './types';
 
 /** Eye height above the robot body origin (docs/TASKS.md robot profiles). */
-export const EYE_HEIGHT:Record<RobotId,number>={stretch:1.30,go2:.45,soarm:.35};
+export const EYE_HEIGHT:Record<RobotId,number>={stretch:1.30,go2:.33,g1:1.22};
 export const EYE_FORWARD=.12, EYE_PITCH=12*Math.PI/180, POV_FOV=70;
 export type InsetLayout={widthFraction:number;aspect:number;right:number;bottom:number};
 /** Default inset layout in CSS pixels / fractions; the user can drag and resize it (workspace.tsx). */

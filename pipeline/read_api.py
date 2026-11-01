@@ -10,7 +10,7 @@ import zipfile
 from .export import export_files, validate_manifest, validate_physics
 
 ROOT = Path(__file__).resolve().parents[1] / "output"
-ROBOTS = ("go2", "soarm", "stretch")
+ROBOTS = ("go2", "g1", "stretch")
 # Committed pre-rendered rollouts (docs/TASKS.md); used when output/kitchen/replays/<robot>.json is absent.
 DEFAULT_ROLLOUTS = Path(__file__).resolve().parents[1] / "rollouts" / "kitchen" / "default"
 CDN = "https://wlt-ai-cdn.art/example_exports/rustic_kitchen_with_natural_light/rustic_kitchen_with_natural_light"

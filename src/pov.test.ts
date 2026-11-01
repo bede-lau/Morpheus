@@ -5,7 +5,7 @@ import type { RobotId } from './replay';
 
 const close=(a:number[],b:number[],eps=1e-9)=>a.forEach((v,i)=>assert.ok(Math.abs(v-b[i])<eps,`${a} vs ${b}`));
 test('eye sits at the profile height, 0.12 m forward along yaw',()=>{
- const expected:Record<RobotId,number>={stretch:1.30,go2:.45,soarm:.35};
+ const expected:Record<RobotId,number>={stretch:1.30,go2:.33,g1:1.22};
  for(const robot of Object.keys(expected) as RobotId[]){
   assert.equal(EYE_HEIGHT[robot],expected[robot]);
   close(eyePose(robot,[1,2,.1],0).eye,[1,2.12,.1+expected[robot]]);

@@ -2259,6 +2259,78 @@
     ]
    },
    {
+    "id": "object_1",
+    "label": "Bowl (SimReady kitchenware_bowl_b01)",
+    "kind": "object",
+    "position": [
+     3.146,
+     -2.2618,
+     0.586
+    ],
+    "size": [
+     0.24,
+     0.24,
+     0.12
+    ],
+    "objectId": "359dd49d-7c5a-4c88-a329-2fe4cff679e8",
+    "assetId": "kitchenware_bowl_b01",
+    "category": "bowl",
+    "halfHeight": 0.0554,
+    "meshPosition": [
+     3.146,
+     -2.2618,
+     0.586
+    ]
+   },
+   {
+    "id": "object_2",
+    "label": "Bowl (SimReady kitchenware_bowl_b01)",
+    "kind": "object",
+    "position": [
+     1.2479,
+     0.4615,
+     0.615
+    ],
+    "size": [
+     0.24,
+     0.24,
+     0.12
+    ],
+    "objectId": "fe34ab14-a0ff-4523-8224-27d66157ed47",
+    "assetId": "kitchenware_bowl_b01",
+    "category": "bowl",
+    "halfHeight": 0.0554,
+    "meshPosition": [
+     1.2479,
+     0.4615,
+     0.615
+    ]
+   },
+   {
+    "id": "object_3",
+    "label": "Cup (SimReady kitchenware_cup_a01)",
+    "kind": "object",
+    "position": [
+     3.1387,
+     -0.0749,
+     1.283
+    ],
+    "size": [
+     0.12,
+     0.12,
+     0.11
+    ],
+    "objectId": "6740d6bc-ae25-4854-9f18-399a6c5d56a5",
+    "assetId": "kitchenware_cup_a01",
+    "category": "cup",
+    "halfHeight": 0.06,
+    "meshPosition": [
+     3.1387,
+     -0.0749,
+     1.283
+    ]
+   },
+   {
     "id": "door",
     "label": "Kitchen entrance (far end of the room)",
     "kind": "door",

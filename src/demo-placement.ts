@@ -1,9 +1,10 @@
 import * as THREE from 'three';
 import { createDemoReplay, type Replay, type RobotId } from './replay';
 
-// Model origin to the lowest physical part. The floor ring is decoration.
-const CONTACT_Z: Record<RobotId,number> = {stretch:.01,go2:.005,soarm:.025};
-const FOOTPRINT: Record<RobotId,[number,number]> = {stretch:[.295,.265],go2:[.23,.4],soarm:[.16,.16]};
+// Model origin to the lowest physical part (the exported meshes put their lowest point at z=0). The floor ring is decoration.
+const CONTACT_Z: Record<RobotId,number> = {stretch:0,go2:0,g1:0};
+// Half extents of the support footprint probed against the floor mesh (Stretch 3 base, Go2 stance, G1 feet).
+const FOOTPRINT: Record<RobotId,[number,number]> = {stretch:[.17,.17],go2:[.16,.36],g1:[.14,.1]};
 
 /** Ground only our sample animation. Never rewrite an imported trajectory. */
 export function groundDemoReplay(replay:Replay, mesh:THREE.Object3D):Replay {

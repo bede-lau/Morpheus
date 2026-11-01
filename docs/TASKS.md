@@ -5,7 +5,7 @@ reconstructed (collision boxes in `output/kitchen/scene.json`, optional
 SimReady object replacements in `output/simready/scene.json`). A robot is
 spawned at the kitchen door, given a natural-language task such as
 **"wipe the table"** or **"fill a glass of water"**, and attempts it inside
-the reconstructed room. Three robots (Stretch, Go2, SO-ARM100) attempt the
+the reconstructed room. Three robots (Stretch, Go2, Unitree G1) attempt the
 same task so the user can decide which robot suits their home.
 
 Everything in this stage must work **offline and deterministically** (no API
@@ -27,10 +27,9 @@ Do not edit the other owner's files. Shared contract is this document.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `stretch` | Stretch | wheeled | 0.34 | 0.52 | 0.15–1.10 | 1.30 | 0.45 |
 | `go2` | Go2 | quadruped | 0.42 | 0 (no arm) | – | 0.45 | 0.80 |
-| `soarm` | SO-ARM100 | stationary | 0.18 | 0.36 | 0.05–0.40 | 0.35 | 0 |
+| `g1` | Unitree G1 | humanoid | 0.30 | 0.50 | 0.30–1.45 | 1.22 | 0.60 |
 
-The SO-ARM100 cannot navigate: it is placed at the door and must report that
-it cannot reach anything that is not within 0.36 m of its base. Go2 can
+The Unitree G1 walks like Stretch and reaches counter and table tops with its arms. Go2 can
 navigate anywhere but has no manipulator; it can reach the target and then
 must report the manipulation step as failed. Stretch can do both (counter
 height 0.9 m is inside its arm range).
@@ -123,7 +122,7 @@ that came first. Pick: approach like a landmark (0.10 m gap target; falls back t
 pose), extend to the object, hold 1.0 s, event "Picked up <label>", retract to 0.35 (carrying). Place:
 extend, hold 0.8 s, event "Placed <label> on the <destination>", retract. A pick is in reach when the
 object's near rim is within 0.15 + arm reach + 0.20 m (gripper fingers) of the base centre; Go2 fails
-at the first manipulation (no arm) and SO-ARM100 at the first navigate (stationary). The headline
+at the first manipulation (no arm) and the G1 completes it like Stretch. The headline
 rollout `rollouts/kitchen/default/` is "wipe the table and move the bowl to the sink".
 
 **API usage policy.** The `OPENAI_API_KEY` in `.env` is reserved for the
@@ -146,7 +145,7 @@ the Codex CLI agents, not by API calls:
 
 ## HTTP routes (port 8000, proxied by Vite under `/api`)
 
-- `GET /api/tasks` → `{version:1, tasks:[{slug, task, robots:{stretch:"/api/tasks/<slug>/stretch", go2:..., soarm:...}}]}` listing committed rollouts under `rollouts/kitchen/<slug>/<robot>.json` plus anything planned in this session.
+- `GET /api/tasks` → `{version:1, tasks:[{slug, task, robots:{stretch:"/api/tasks/<slug>/stretch", go2:..., g1:...}}]}` listing committed rollouts under `rollouts/kitchen/<slug>/<robot>.json` plus anything planned in this session.
 - `GET /api/tasks/<slug>/<robot>` → the envelope above (404 when absent, 409 when its revision does not match the current environment).
 - `POST /api/tasks/plan` body `{task:string, robot?:string}` → plans for one robot, or for all three when `robot` is omitted, returns `{version:1, slug, task, results:{stretch:envelope,...}}`, and writes `rollouts/kitchen/<slug>/<robot>.json` **and** `output/kitchen/replays/<robot>.json` (so the existing `GET /api/environments/kitchen` reports the latest plan as `available`). Task text max 200 chars, slugified `[a-z0-9-]`.
 - `pipeline/read_api.py` serves `output/kitchen/replays/<robot>.json` first and falls back to `rollouts/kitchen/default/<robot>.json` so a fresh clone shows rollouts immediately.

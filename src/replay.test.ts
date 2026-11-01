@@ -10,9 +10,9 @@ test('demo replay interpolates, clamps and reaches its final pose',()=>{
  assert.deepEqual(sampleReplay(replay,100).position,replay.frames.at(-1)!.position);
  assert.equal(sampleReplay(replay,24).armExtension,.25);
 });
-test('stationary arm keeps its base fixed throughout the replay',()=>{
- const replay=createDemoReplay('soarm');
- assert.ok(replay.frames.every(f=>f.position.every((v,i)=>v===replay.frames[0].position[i])));
+test('every robot follows the illustrative route',()=>{
+ const replay=createDemoReplay('g1');
+ assert.ok(replay.frames.some(f=>f.position.some((v,i)=>v!==replay.frames[0].position[i])));
 });
 test('backend replay rejects invalid times, coordinates and unsupported robots',()=>{
  for(const mutate of [

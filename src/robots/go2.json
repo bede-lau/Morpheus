@@ -1,0 +1,357 @@
+{
+ "robot": "go2",
+ "source": "google-deepmind/mujoco_menagerie",
+ "model": "go2.xml",
+ "forward": "+y",
+ "units": "m",
+ "liftZ": 0.018562466023148455,
+ "bounds": {
+  "min": [
+   -0.1622,
+   -0.3828,
+   -0.0
+  ],
+  "max": [
+   0.1619,
+   0.3321,
+   0.3774
+  ]
+ },
+ "faces": 90149,
+ "cameras": {},
+ "bodies": {
+  "base": {
+   "parent": "robot",
+   "free": true,
+   "position": [
+    0.0,
+    0.0,
+    0.2886
+   ]
+  },
+  "FL_hip": {
+   "parent": "base",
+   "joint": {
+    "name": "FL_hip_joint",
+    "type": "hinge",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.0472,
+     1.0472
+    ]
+   },
+   "position": [
+    -0.0465,
+    0.1934,
+    0.2886
+   ]
+  },
+  "FL_thigh": {
+   "parent": "FL_hip",
+   "joint": {
+    "name": "FL_thigh_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.9,
+    "range": [
+     -1.5708,
+     3.4907
+    ]
+   },
+   "position": [
+    -0.142,
+    0.1934,
+    0.2886
+   ]
+  },
+  "FL_calf": {
+   "parent": "FL_thigh",
+   "joint": {
+    "name": "FL_calf_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": -1.8,
+    "range": [
+     -2.7227,
+     -0.83776
+    ]
+   },
+   "position": [
+    -0.142,
+    0.0266,
+    0.1562
+   ]
+  },
+  "FR_hip": {
+   "parent": "base",
+   "joint": {
+    "name": "FR_hip_joint",
+    "type": "hinge",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.0472,
+     1.0472
+    ]
+   },
+   "position": [
+    0.0465,
+    0.1934,
+    0.2886
+   ]
+  },
+  "FR_thigh": {
+   "parent": "FR_hip",
+   "joint": {
+    "name": "FR_thigh_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.9,
+    "range": [
+     -1.5708,
+     3.4907
+    ]
+   },
+   "position": [
+    0.142,
+    0.1934,
+    0.2886
+   ]
+  },
+  "FR_calf": {
+   "parent": "FR_thigh",
+   "joint": {
+    "name": "FR_calf_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": -1.8,
+    "range": [
+     -2.7227,
+     -0.83776
+    ]
+   },
+   "position": [
+    0.142,
+    0.0266,
+    0.1562
+   ]
+  },
+  "RL_hip": {
+   "parent": "base",
+   "joint": {
+    "name": "RL_hip_joint",
+    "type": "hinge",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.0472,
+     1.0472
+    ]
+   },
+   "position": [
+    -0.0465,
+    -0.1934,
+    0.2886
+   ]
+  },
+  "RL_thigh": {
+   "parent": "RL_hip",
+   "joint": {
+    "name": "RL_thigh_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.9,
+    "range": [
+     -0.5236,
+     4.5379
+    ]
+   },
+   "position": [
+    -0.142,
+    -0.1934,
+    0.2886
+   ]
+  },
+  "RL_calf": {
+   "parent": "RL_thigh",
+   "joint": {
+    "name": "RL_calf_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": -1.8,
+    "range": [
+     -2.7227,
+     -0.83776
+    ]
+   },
+   "position": [
+    -0.142,
+    -0.3602,
+    0.1562
+   ]
+  },
+  "RR_hip": {
+   "parent": "base",
+   "joint": {
+    "name": "RR_hip_joint",
+    "type": "hinge",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.0472,
+     1.0472
+    ]
+   },
+   "position": [
+    0.0465,
+    -0.1934,
+    0.2886
+   ]
+  },
+  "RR_thigh": {
+   "parent": "RR_hip",
+   "joint": {
+    "name": "RR_thigh_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.9,
+    "range": [
+     -0.5236,
+     4.5379
+    ]
+   },
+   "position": [
+    0.142,
+    -0.1934,
+    0.2886
+   ]
+  },
+  "RR_calf": {
+   "parent": "RR_thigh",
+   "joint": {
+    "name": "RR_calf_joint",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": -1.8,
+    "range": [
+     -2.7227,
+     -0.83776
+    ]
+   },
+   "position": [
+    0.142,
+    -0.3602,
+    0.1562
+   ]
+  }
+ }
+}

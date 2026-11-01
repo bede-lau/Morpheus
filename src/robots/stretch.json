@@ -1,0 +1,677 @@
+{
+ "robot": "stretch",
+ "source": "google-deepmind/mujoco_menagerie",
+ "model": "stretch.xml",
+ "forward": "+y",
+ "units": "m",
+ "liftZ": -0.0001874419110887704,
+ "bounds": {
+  "min": [
+   -0.1715,
+   -0.2765,
+   0.0
+  ],
+  "max": [
+   0.5015,
+   0.0506,
+   1.4103
+  ]
+ },
+ "faces": 103294,
+ "cameras": {
+  "d405_rgb": [
+   0.3249,
+   -0.0212,
+   0.7763
+  ],
+  "d405_depth": [
+   0.3249,
+   -0.0212,
+   0.7763
+  ],
+  "d435i_camera_rgb": [
+   0.0029,
+   0.0454,
+   1.322
+  ],
+  "d435i_camera_depth": [
+   0.0029,
+   0.0454,
+   1.307
+  ],
+  "nav_camera_rgb": [
+   -0.0524,
+   0.0448,
+   1.2605
+  ]
+ },
+ "bodies": {
+  "base_link": {
+   "parent": "robot",
+   "free": true,
+   "position": [
+    0.0,
+    0.0,
+    -0.0002
+   ]
+  },
+  "base_imu": {
+   "parent": "base_link",
+   "position": [
+    -0.0032,
+    -0.1284,
+    0.1472
+   ]
+  },
+  "link_mast": {
+   "parent": "base_link",
+   "position": [
+    -0.135,
+    -0.067,
+    0.0282
+   ]
+  },
+  "link_head": {
+   "parent": "base_link",
+   "position": [
+    -0.135,
+    -0.067,
+    1.3582
+   ]
+  },
+  "link_aruco_right_base": {
+   "parent": "base_link",
+   "position": [
+    0.1305,
+    -0.0015,
+    0.1596
+   ]
+  },
+  "link_aruco_left_base": {
+   "parent": "base_link",
+   "position": [
+    -0.1305,
+    -0.0015,
+    0.1596
+   ]
+  },
+  "laser": {
+   "parent": "base_link",
+   "position": [
+    0.0,
+    0.004,
+    0.1662
+   ]
+  },
+  "link_right_wheel": {
+   "parent": "base_link",
+   "joint": {
+    "name": "joint_right_wheel",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": null
+   },
+   "position": [
+    0.1704,
+    -0.0,
+    0.0506
+   ]
+  },
+  "link_left_wheel": {
+   "parent": "base_link",
+   "joint": {
+    "name": "joint_left_wheel",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": null
+   },
+   "position": [
+    -0.1704,
+    0.0,
+    0.0506
+   ]
+  },
+  "link_lift": {
+   "parent": "base_link",
+   "joint": {
+    "name": "joint_lift",
+    "type": "slide",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.6,
+    "range": [
+     0.0,
+     1.1
+    ]
+   },
+   "position": [
+    -0.135,
+    -0.1044,
+    0.7998
+   ]
+  },
+  "link_arm_l4": {
+   "parent": "link_lift",
+   "position": [
+    -0.135,
+    -0.1044,
+    0.7998
+   ]
+  },
+  "link_arm_l3": {
+   "parent": "link_arm_l4",
+   "joint": {
+    "name": "joint_arm_l3",
+    "type": "slide",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.02,
+    "range": [
+     0.0,
+     0.13
+    ]
+   },
+   "position": [
+    0.1527,
+    -0.1044,
+    0.7998
+   ]
+  },
+  "link_arm_l2": {
+   "parent": "link_arm_l3",
+   "joint": {
+    "name": "joint_arm_l2",
+    "type": "slide",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.02,
+    "range": [
+     0.0,
+     0.13
+    ]
+   },
+   "position": [
+    0.1857,
+    -0.1044,
+    0.7998
+   ]
+  },
+  "link_arm_l1": {
+   "parent": "link_arm_l2",
+   "joint": {
+    "name": "joint_arm_l1",
+    "type": "slide",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.02,
+    "range": [
+     0.0,
+     0.13
+    ]
+   },
+   "position": [
+    0.2187,
+    -0.1044,
+    0.7998
+   ]
+  },
+  "link_arm_l0": {
+   "parent": "link_arm_l1",
+   "joint": {
+    "name": "joint_arm_l0",
+    "type": "slide",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.02,
+    "range": [
+     0.0,
+     0.13
+    ]
+   },
+   "position": [
+    0.225,
+    -0.1044,
+    0.7998
+   ]
+  },
+  "link_aruco_top_wrist": {
+   "parent": "link_arm_l0",
+   "position": [
+    0.225,
+    -0.0571,
+    0.8291
+   ]
+  },
+  "link_aruco_inner_wrist": {
+   "parent": "link_arm_l0",
+   "position": [
+    0.1977,
+    -0.0571,
+    0.7879
+   ]
+  },
+  "link_wrist_yaw": {
+   "parent": "link_arm_l0",
+   "joint": {
+    "name": "joint_wrist_yaw",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.39,
+     4.42
+    ]
+   },
+   "position": [
+    0.225,
+    -0.0214,
+    0.7691
+   ]
+  },
+  "link_DW3_wrist_pitch": {
+   "parent": "link_wrist_yaw",
+   "joint": {
+    "name": "joint_wrist_pitch",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     -1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.57,
+     0.56
+    ]
+   },
+   "position": [
+    0.225,
+    -0.0408,
+    0.7386
+   ]
+  },
+  "link_SG3_gripper_body": {
+   "parent": "link_DW3_wrist_pitch",
+   "joint": {
+    "name": "joint_wrist_roll",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -3.14,
+     3.14
+    ]
+   },
+   "position": [
+    0.2648,
+    -0.0213,
+    0.7145
+   ]
+  },
+  "link_SG3_aruco_d405": {
+   "parent": "link_SG3_gripper_body",
+   "position": [
+    0.2947,
+    -0.0212,
+    0.7816
+   ]
+  },
+  "link_d405": {
+   "parent": "link_SG3_aruco_d405",
+   "position": [
+    0.3249,
+    -0.0212,
+    0.7763
+   ]
+  },
+  "d405_cam": {
+   "parent": "link_d405",
+   "position": [
+    0.3249,
+    -0.0212,
+    0.7763
+   ]
+  },
+  "link_grasp_center": {
+   "parent": "link_SG3_gripper_body",
+   "position": [
+    0.4948,
+    -0.0213,
+    0.7143
+   ]
+  },
+  "link_gripper_slider": {
+   "parent": "link_SG3_gripper_body",
+   "joint": {
+    "name": "joint_gripper_slide",
+    "type": "slide",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -0.02,
+     0.04
+    ]
+   },
+   "position": [
+    0.2648,
+    -0.0213,
+    0.7145
+   ]
+  },
+  "link_gripper_finger_left": {
+   "parent": "link_gripper_slider",
+   "joint": {
+    "name": "joint_gripper_finger_left_open",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -0.6,
+     0.6
+    ]
+   },
+   "position": [
+    0.3001,
+    0.0017,
+    0.7165
+   ]
+  },
+  "rubber_tip_left": {
+   "parent": "link_gripper_finger_left",
+   "joint": {
+    "name": "rubber_left_x",
+    "type": "hinge",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": null
+   },
+   "position": [
+    0.4779,
+    0.0131,
+    0.7145
+   ]
+  },
+  "link_SG3_gripper_left_finger_aruco": {
+   "parent": "link_gripper_finger_left",
+   "position": [
+    0.4444,
+    0.007,
+    0.7149
+   ]
+  },
+  "link_gripper_finger_right": {
+   "parent": "link_gripper_slider",
+   "joint": {
+    "name": "joint_gripper_finger_right_open",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     -1.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -0.6,
+     0.6
+    ]
+   },
+   "position": [
+    0.3001,
+    -0.0445,
+    0.7145
+   ]
+  },
+  "rubber_tip_right": {
+   "parent": "link_gripper_finger_right",
+   "joint": {
+    "name": "rubber_right_x",
+    "type": "hinge",
+    "axis": [
+     1.0,
+     0.0,
+     0.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": null
+   },
+   "position": [
+    0.4779,
+    -0.056,
+    0.7144
+   ]
+  },
+  "link_SG3_gripper_right_finger_aruco": {
+   "parent": "link_gripper_finger_right",
+   "position": [
+    0.4444,
+    -0.0498,
+    0.7144
+   ]
+  },
+  "link_aruco_shoulder": {
+   "parent": "link_lift",
+   "position": [
+    -0.1216,
+    -0.1602,
+    0.8863
+   ]
+  },
+  "link_head_pan": {
+   "parent": "base_link",
+   "joint": {
+    "name": "joint_head_pan",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -4.04,
+     1.73
+    ]
+   },
+   "position": [
+    0.0,
+    0.0061,
+    1.355
+   ]
+  },
+  "link_head_tilt": {
+   "parent": "link_head_pan",
+   "joint": {
+    "name": "joint_head_tilt",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.53,
+     0.79
+    ]
+   },
+   "position": [
+    -0.0278,
+    0.0048,
+    1.3017
+   ]
+  },
+  "realsense": {
+   "parent": "link_head_tilt",
+   "position": [
+    0.0029,
+    0.0454,
+    1.307
+   ]
+  },
+  "link_SE3_head_nav_cam": {
+   "parent": "link_head_tilt",
+   "joint": {
+    "name": "joint_head_nav_cam",
+    "type": "hinge",
+    "axis": [
+     0.0,
+     0.0,
+     1.0
+    ],
+    "anchor": [
+     0.0,
+     0.0,
+     0.0
+    ],
+    "home": 0.0,
+    "range": [
+     -1.53,
+     0.79
+    ]
+   },
+   "position": [
+    -0.0524,
+    0.0448,
+    1.2605
+   ]
+  },
+  "head_nav_cam": {
+   "parent": "link_SE3_head_nav_cam",
+   "position": [
+    -0.0524,
+    0.0448,
+    1.2605
+   ]
+  }
+ }
+}

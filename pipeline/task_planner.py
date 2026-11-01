@@ -40,9 +40,9 @@ OPENAI_MODELS = ("gpt-5", )   # extended at runtime by discover_models()
 ROBOTS = {
     "stretch": {"name": "Stretch", "base": "wheeled", "radius": 0.34, "reach": 0.52, "armHeight": (0.15, 1.10), "eye": 1.30, "speed": 0.45},
     "go2": {"name": "Go2", "base": "quadruped", "radius": 0.42, "reach": 0.0, "armHeight": None, "eye": 0.45, "speed": 0.80},
-    "soarm": {"name": "SO-ARM100", "base": "stationary", "radius": 0.18, "reach": 0.36, "armHeight": (0.05, 0.40), "eye": 0.35, "speed": 0.0},
+    "g1": {"name": "Unitree G1", "base": "humanoid", "radius": 0.30, "reach": 0.50, "armHeight": (0.30, 1.45), "eye": 1.22, "speed": 0.60},
 }
-ROBOT_IDS = ("stretch", "go2", "soarm")
+ROBOT_IDS = ("stretch", "go2", "g1")
 HEADLINE = "wipe-the-table-and-move-the-bowl-to-the-sink"   # copied to rollouts/kitchen/default
 ACTIONS = ("navigate", "wipe", "fill", "pick", "place")
 MANIPULATION = {"wipe", "fill", "pick", "place"}

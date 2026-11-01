@@ -1,14 +1,16 @@
 import * as THREE from 'three';
 import type { RoomViewer } from './viewer';
-import { createDemoReplay, sampleReplay, carriedPose, stretchLift, stretchTip, STRETCH_ARM, type Landmark, type Replay, type RobotId } from './replay';
+import { createDemoReplay, sampleReplay, carriedPose, stretchLift, stretchTip, STRETCH_ARM, type Landmark, type Replay, type ReplayFrame, type RobotId } from './replay';
 import type { Vec3 as _V } from './types';
 import type { SavedObjectLayer } from './saved-objects';
 import { EYE_FORWARD, EYE_HEIGHT } from './pov';
+import { ArticulatedRobot, loadRobotModel } from './robot-model';
 
-const dark=new THREE.MeshStandardMaterial({color:0x272e30,roughness:.65,metalness:.35});
-const silver=new THREE.MeshStandardMaterial({color:0xb7bec0,roughness:.32,metalness:.75});
-const rubber=new THREE.MeshStandardMaterial({color:0x161c1c,roughness:.95});
-const green=new THREE.MeshStandardMaterial({color:0x28bc88,emissive:0x096a45,emissiveIntensity:.7});
+// Footprint disc shown until the real mesh (src/robots/*.glb, exported from MuJoCo Menagerie) has loaded.
+const PLACEHOLDER_RADIUS:Record<RobotId,number>={stretch:.25,go2:.3,g1:.22};
+// Stretch 3 telescoping arm: four 0.13 m segments (MJCF joint_arm_l0..l3 range).
+const STRETCH_SEGMENT=.13;
+
 const LANDMARK_COLORS:Record<string,number>={table:0xd08a2c,counter:0x2b7fb8,sink:0x2b9bb8,tall:0x7a6bb0,door:0x0a8967};
 function labelSprite(text:string,color:number){
   const canvas=typeof document!=='undefined'?document.createElement('canvas'):null;const ctx=canvas?.getContext('2d');
@@ -20,9 +22,7 @@ function labelSprite(text:string,color:number){
   const sprite=new THREE.Sprite(new THREE.SpriteMaterial({map:texture,depthTest:false,depthWrite:false,transparent:true}));
   const height=.16;sprite.scale.set(height*w/h,height,1);sprite.renderOrder=40;return sprite;
 }
-function box(parent:THREE.Object3D,size:number[],position:number[],material=dark){const m=new THREE.Mesh(new THREE.BoxGeometry(...size as [number,number,number]),material);m.position.set(...position as [number,number,number]);parent.add(m);return m;}
-function cylinder(parent:THREE.Object3D,r:number,length:number,position:number[],material=dark){const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,length,20),material);m.rotation.x=Math.PI/2;m.position.set(...position as [number,number,number]);parent.add(m);return m;}
-function dispose(root:THREE.Object3D){root.traverse(o=>{if(o instanceof THREE.Sprite){o.material.map?.dispose();o.material.dispose();return}if(o instanceof THREE.Mesh||o instanceof THREE.Line){o.geometry.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];materials.forEach(m=>{if(![dark,silver,rubber,green].includes(m))m.dispose()})}});root.clear();}
+function dispose(root:THREE.Object3D){root.traverse(o=>{if(o.userData.shared)return;if(o instanceof THREE.Sprite){o.material.map?.dispose();o.material.dispose();return}if(o instanceof THREE.Mesh||o instanceof THREE.Line){o.geometry.dispose();const materials=Array.isArray(o.material)?o.material:[o.material];materials.forEach(m=>m.dispose())}});root.clear();}
 export class RobotScene {
   root=new THREE.Group(); route=new THREE.Group(); reach=new THREE.Group(); robot=new THREE.Group();
   arm=new THREE.Group(); legs:THREE.Object3D[]=[]; replay:Replay=createDemoReplay('stretch'); follow=false;
@@ -30,17 +30,18 @@ export class RobotScene {
   private hasReplay=true; private pose:{position:THREE.Vector3;yaw:number}|null=null;
   eye=new THREE.Group(); private savedVisibility:{route:boolean;reach:boolean;eye:boolean}|null=null;
   hasEnvironmentColliders=false;
+  private model:ArticulatedRobot|null=null; private modelToken=0; private lastPose:{frame:ReplayFrame;time:number;moving:boolean}|null=null; private lift=STRETCH_ARM.height;
   private carriedLayer:SavedObjectLayer|null=null;
   /** Saved SimReady meshes that replay.carried entries move (pick, carry at the gripper, place). */
   setCarriedObjects(layer:SavedObjectLayer|null){this.carriedLayer?.resetPoses();this.carriedLayer=layer;if(this.hasReplay&&this.pose)this.update(this.lastTime)}
   private lastTime=0;
   private updateCarried(time:number,frame:{position:number[];yaw:number;armExtension:number}){
     const layer=this.carriedLayer,carried=this.replay.robot==='stretch'?this.replay.carried??[]:[];
-    if(this.replay.robot==='stretch')this.arm.position.z=STRETCH_ARM.height;
+    if(this.replay.robot==='stretch')this.arm.position.z=STRETCH_ARM.height;this.lift=STRETCH_ARM.height;
     if(!layer)return;
     if(!carried.length){layer.resetPoses();return}
     const origins:Record<string,_V>={};for(const c of carried){const rest=layer.restPosition(c.objectId);if(rest)origins[c.objectId]=rest.toArray() as _V}
-    const lift=stretchLift(carried,time,frame.position[2],origins);this.arm.position.z=lift;
+    const lift=stretchLift(carried,time,frame.position[2],origins);this.arm.position.z=lift;this.lift=lift;
     const tip=stretchTip(frame.position as _V,frame.yaw,frame.armExtension,lift);
     for(const c of carried){const rest=origins[c.objectId];if(!rest)continue;layer.setPose(c.objectId,carriedPose(c,time,tip,rest).position)}
   }
@@ -74,39 +75,45 @@ export class RobotScene {
       const label=labelSprite(l.label,color);if(label){label.position.set(0,0,size[2]/2+.14);group.add(label)}
       this.route.add(group);}
   }
-  private buildRobot(id:RobotId){dispose(this.robot);this.arm=new THREE.Group();this.legs=[];this.eye=new THREE.Group();
-    if(id==='stretch'){
-      box(this.robot,[.48,.53,.19],[0,0,.19]);box(this.robot,[.42,.45,.035],[0,0,.3],silver);
-      for(const x of [-.255,.255]){const wheel=cylinder(this.robot,.13,.08,[x,0,.14],rubber);wheel.rotation.z=Math.PI/2;}
-      box(this.robot,[.085,.095,1.05],[-.13,.05,.84]);box(this.robot,[.025,.025,.98],[-.19,.05,.85],silver);
-      box(this.robot,[.19,.12,.075],[-.13,.05,1.39]);box(this.robot,[.05,.025,.025],[-.13,-.018,1.39],green);
-      this.arm.position.set(-.13,.05,.98);this.robot.add(this.arm);box(this.arm,[.16,.14,.15],[0,0,0]);
-      box(this.arm,[.1,.5,.07],[0,.24,0],silver);box(this.arm,[.15,.09,.08],[0,.5,0]);
-      box(this.arm,[.025,.13,.025],[-.065,.58,0],silver);box(this.arm,[.025,.13,.025],[.065,.58,0],silver);
-      box(this.robot,[.1,.015,.02],[0,-.273,.21],green);
-    }else if(id==='go2'){
-      box(this.robot,[.29,.57,.19],[0,0,.48],silver);box(this.robot,[.24,.14,.16],[0,.32,.47]);box(this.robot,[.12,.02,.03],[0,.397,.5],green);
-      for(const x of [-.19,.19])for(const y of [-.2,.2]){const leg=new THREE.Group();leg.position.set(x,y,.45);box(leg,[.065,.08,.24],[0,.035,-.1]);box(leg,[.045,.06,.24],[0,.06,-.3],silver);cylinder(leg,.055,.06,[0,.06,-.4],rubber);this.robot.add(leg);this.legs.push(leg);}
-    }else{
-      box(this.robot,[.32,.32,.07],[0,0,.06]);cylinder(this.robot,.1,.15,[0,0,.16],silver);this.robot.add(this.arm);this.arm.position.z=.24;
-      const lower=box(this.arm,[.08,.09,.34],[0,.06,.16],silver);lower.rotation.x=-.35;
-      const upper=box(this.arm,[.07,.32,.07],[0,.2,.33]);upper.rotation.x=.15;
-      box(this.arm,[.12,.06,.08],[0,.38,.3],silver);box(this.arm,[.025,.12,.035],[-.05,.43,.3]);box(this.arm,[.025,.12,.035],[.05,.43,.3]);
-    }
+  private buildRobot(id:RobotId){dispose(this.robot);this.arm=new THREE.Group();this.legs=[];this.eye=new THREE.Group();this.model=null;const token=++this.modelToken;
+    if(id==='stretch'){this.arm.position.set(STRETCH_ARM.mount[0],STRETCH_ARM.mount[1],STRETCH_ARM.height);this.robot.add(this.arm);}
+    const placeholder=new THREE.Mesh(new THREE.CylinderGeometry(PLACEHOLDER_RADIUS[id],PLACEHOLDER_RADIUS[id],.02,32),new THREE.MeshBasicMaterial({color:0x8fa39c,transparent:true,opacity:.35}));placeholder.rotation.x=Math.PI/2;placeholder.position.z=.02;this.robot.add(placeholder);
     const halo=new THREE.Mesh(new THREE.RingGeometry(.32,.35,48),new THREE.MeshBasicMaterial({color:0x12936d,transparent:true,opacity:.65,side:THREE.DoubleSide}));halo.position.z=.015;halo.userData.decoration=true;this.robot.add(halo);
     // Eye marker at the POV camera origin (0.12 m forward along local +Y, eye height above origin).
     this.eye.position.set(0,EYE_FORWARD,EYE_HEIGHT[id]);const lens=new THREE.Mesh(new THREE.SphereGeometry(.028,16,12),new THREE.MeshBasicMaterial({color:0x14d39a}));this.eye.add(lens);
     const ring=new THREE.Mesh(new THREE.TorusGeometry(.04,.008,8,24),new THREE.MeshBasicMaterial({color:0x253236}));ring.rotation.x=Math.PI/2;this.eye.add(ring);this.robot.add(this.eye);
+    // Real meshes (metres, Z-up, +Y forward, lowest point at z=0) replace the placeholder once loaded. Node tests have no DOM/fetch.
+    if(typeof document==='undefined')return;
+    loadRobotModel(id).then(({scene,meta})=>{
+      if(token!==this.modelToken)return;
+      const clone=scene.clone(true);this.robot.remove(placeholder);placeholder.geometry.dispose();placeholder.material.dispose();this.robot.add(clone);
+      this.model=new ArticulatedRobot(clone,meta);if(this.lastPose)this.poseModel(this.lastPose.frame,this.lastPose.time,this.lastPose.moving);
+    }).catch(e=>console.warn(`Robot model for ${id} unavailable; showing the footprint only.`,e));
+  }
+  /** Joint animation on the loaded mesh: gait while moving, arm extension and lift from the replay. */
+  private poseModel(frame:ReplayFrame,time:number,moving:boolean){
+    const m=this.model;if(!m)return;const id=this.replay.robot,phase=time*7;
+    if(id==='go2'){
+      for(const [leg,offset] of [['FL',0],['RR',0],['FR',Math.PI],['RL',Math.PI]] as const){const s=moving?Math.sin(phase+offset):0;m.offset(`${leg}_thigh_joint`,-.28*s);m.offset(`${leg}_calf_joint`,.38*Math.max(0,s));}
+    }else if(id==='g1'){
+      const ext=frame.armExtension;
+      for(const [side,offset] of [['left',0],['right',Math.PI]] as const){const s=moving?Math.sin(phase*.75+offset):0;
+        m.offset(`${side}_hip_pitch_joint`,-.3*s);m.offset(`${side}_knee_joint`,.5*Math.max(0,-s)+.04);m.offset(`${side}_ankle_pitch_joint`,-.18*Math.max(0,-s));
+        m.offset(`${side}_shoulder_pitch_joint`,(moving?.28*Math.sin(phase*.75+offset+Math.PI):0)-1.25*ext);m.offset(`${side}_elbow_joint`,-.7*ext);}
+    }else if(id==='stretch'){
+      for(const j of ['joint_arm_l0','joint_arm_l1','joint_arm_l2','joint_arm_l3'])m.set(j,STRETCH_SEGMENT*frame.armExtension);
+      // joint_lift is the arm height above the base minus the arm's height at joint zero (sidecar position at the exported home value).
+      const arm=m.meta.bodies.link_arm_l4;if(arm?.joint)m.set('joint_lift',this.lift-(arm.position[2]-arm.joint.home));
+      const roll=moving?time*5:0;m.offset('joint_left_wheel',roll);m.offset('joint_right_wheel',roll);
+    }
   }
   update(time:number){if(!this.hasReplay)return;const frame=sampleReplay(this.replay,time);const p=new THREE.Vector3(...frame.position);
     if(this.follow&&this.previous){const d=p.clone().sub(this.previous);this.viewer.camera.position.add(d);this.viewer.orbit.target.add(d)}
     this.previous=p.clone();this.robot.position.copy(p);this.robot.rotation.z=frame.yaw;this.pose={position:p.clone(),yaw:frame.yaw};
-    if(this.replay.robot==='stretch')this.arm.scale.y=.65+frame.armExtension;
     this.lastTime=time;this.updateCarried(time,frame);
-    if(this.replay.robot==='soarm')this.arm.rotation.z=this.replay.source==='demo'?Math.sin(time*.3)*.55:0;
     const nearby=sampleReplay(this.replay,Math.min(this.replay.duration,time+.02));
     const moving=this.replay.source==='demo'&&Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;
-    this.legs.forEach((leg,i)=>leg.rotation.x=moving?Math.sin(time*6+(i===0||i===3?0:Math.PI))*.22:0);
+    this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);
   }
   setLayer(layer:string){this.viewer.setLayers(layer!=='collisions',layer==='collisions'&&!this.hasEnvironmentColliders,layer==='collisions'&&this.hasEnvironmentColliders);this.reach.visible=layer==='reach'&&this.hasReplay&&this.replay.source==='demo';}
   home(){if(this.hasEnvironmentColliders)this.viewer.home();else{this.viewer.orbit.target.set(1.15,0,.65);this.viewer.camera.position.set(6.15,-6.7,6.65);this.viewer.orbit.update()}this.previous=null;}

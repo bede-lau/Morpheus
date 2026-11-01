@@ -177,11 +177,11 @@ class Show {
 }
 
 const INITIAL:UI={stage:'empty',status:'',error:'',data:null,phase:-1,now:0,paused:false,logs:[],crops:{},robot:null,verdicts:{},panel:false,running:false,pick:{robot:'stretch',slug:''}};
-const ROOMS=[{name:'Rustic kitchen',meta:'500k gaussians',active:true},{name:'Hackney flat',meta:'soon',active:false},{name:'Studio',meta:'soon',active:false}];
+const ROOMS=[{name:'Rustic kitchen',meta:'500k gaussians',active:true,image:'/rooms/rustic-kitchen.jpg'},{name:'Hackney flat',meta:'soon',active:false,image:'/rooms/hackney-flat.jpg'},{name:'Studio',meta:'soon',active:false,image:'/rooms/studio.jpg'}];
 
 function Glyph({id}:{id:RobotId}){const c={fill:'none',stroke:'currentColor',strokeWidth:1.4,strokeLinecap:'square' as const};
   return <svg viewBox="0 0 64 44" width="64" height="44" aria-hidden="true">{id==='go2'?<g {...c}><rect x="14" y="14" width="30" height="9"/><rect x="44" y="11" width="9" height="8"/><path d="M18 23l-3 9 3 7M26 23l2 9-2 7M36 23l-3 9 3 7M42 23l2 9-2 7"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
-    :id==='soarm'?<g {...c}><rect x="8" y="35" width="16" height="5"/><path d="M16 35V27l14-12 14 6"/><circle cx="16" cy="27" r="2"/><circle cx="30" cy="15" r="2"/><path d="M44 21l6-3M44 21l5 4"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
+    :id==='g1'?<g {...c}><circle cx="32" cy="7" r="4"/><path d="M26 13h12v14H26z"/><path d="M26 15l-7 10M38 15l7 10"/><path d="M28 27l-3 14M36 27l3 14"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
     :<g {...c}><rect x="10" y="31" width="18" height="8"/><circle cx="13" cy="39" r="2"/><circle cx="25" cy="39" r="2"/><path d="M22 31V4"/><rect x="19" y="15" width="7" height="5"/><path d="M26 17h24M50 15v5M53 15v5"/><path d="M4 41h56" strokeDasharray="2 3"/></g>}</svg>}
 
 function Crop({view,pixel,size,span=230}:{view:number;pixel:[number,number];size:number;span?:number}){const s=size/span;
@@ -221,6 +221,58 @@ function LunaCard({data,item,crop,local}:{data:Data;item:Replacement;crop?:strin
   </div>;
 }
 
+// After loading, the veil holds until the quote has finished typing plus this long to read it.
+const VEIL_READ_MS=1600;
+const QUOTE:[string,''|'blue'|'red'][]=[["This is your last chance. Take the ",''],["blue pill",'blue'],[" and you buy the robot the brochure promised. Take the ",''],["red pill",'red'],[" and I show you how it really moves through your kitchen.",'']];
+const QUOTE_LEN=QUOTE.reduce((n,[t])=>n+t.length,0);
+
+function Hand({pill,x,flip}:{pill:'blue'|'red';x:number;flip?:boolean}){
+  return <g transform={flip?`translate(${x+200},0) scale(-1,1)`:`translate(${x},0)`}>
+    <g className="rp-hand">
+      <path d="M0 64H20V112H0"/>
+      <path d="M20 68C36 67 48 64 58 60C66 49 72 38 81 32C88 28 94 33 90 41C86 50 81 58 80 66C96 72 118 72 136 66C150 61 165 55 177 51C186 48 191 56 183 61C174 66 163 70 153 74C165 74 177 73 186 72C194 72 195 81 186 83C176 85 165 86 155 88C164 90 173 91 180 92C187 94 185 102 177 101C150 99 118 106 90 108C62 110 40 109 20 108"/>
+      <path d="M141 77C152 79 166 79 176 77M136 86C146 88 158 89 168 89" className="rp-crease"/>
+      <path d="M84 70C98 78 120 78 134 72" className="rp-crease"/>
+    </g>
+    <g className={`rp-pill ${pill}`}><g transform="translate(108 62) rotate(-14)"><rect x="-15" y="-6.5" width="30" height="13" rx="6.5"/><path d="M0-6.5V6.5"/><rect x="-11" y="-4" width="9" height="2.4" rx="1.2" className="rp-shine"/></g></g>
+  </g>;
+}
+
+function Rain({on}:{on:boolean}){
+  const ref=useRef<HTMLCanvasElement>(null);
+  useEffect(()=>{if(!on)return;const c=ref.current!,g=c.getContext('2d')!,cell=16,glyphs='ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ0123456789MORPHEUS<>/*';
+    let drops:number[]=[],raf=0,last=0;
+    const size=()=>{c.width=innerWidth;c.height=innerHeight;drops=Array.from({length:Math.ceil(c.width/cell)},()=>Math.random()*c.height/cell-12);g.font=`${cell-3}px 'JetBrains Mono',monospace`};
+    const tick=(t:number)=>{raf=requestAnimationFrame(tick);if(t-last<55)return;last=t;
+      g.fillStyle='rgba(43,46,45,.16)';g.fillRect(0,0,c.width,c.height);
+      drops.forEach((y,i)=>{const ch=glyphs[Math.floor(Math.random()*glyphs.length)];g.fillStyle=Math.random()<.04?'#d8ffe9':'#19c37d';g.fillText(ch,i*cell,y*cell);
+        drops[i]=y*cell>c.height&&Math.random()>.97?Math.random()*-20:y+1})};
+    size();addEventListener('resize',size);raf=requestAnimationFrame(tick);
+    return()=>{cancelAnimationFrame(raf);removeEventListener('resize',size)}},[on]);
+  return <canvas ref={ref} className="rp-rain"/>;
+}
+
+// Grey loading veil: up as soon as loading starts, held until the quote lands, then dissolves into the room reveal.
+function RedPill({loading,abort,status}:{loading:boolean;abort:boolean;status:string}){
+  const [typed,setTyped]=useState(0),[on,setOn]=useState(false),[live,setLive]=useState(false);
+  useEffect(()=>{if(loading){setOn(true);setLive(true)}},[loading]);
+  useEffect(()=>{if(!on)return;setTyped(0);const id=setInterval(()=>setTyped(n=>n>=QUOTE_LEN?(clearInterval(id),n):n+1),17);return()=>clearInterval(id)},[on]);
+  useEffect(()=>{if(abort){setOn(false);return}if(!on||loading||typed<QUOTE_LEN)return;
+    const t=setTimeout(()=>setOn(false),VEIL_READ_MS);return()=>clearTimeout(t)},[on,loading,abort,typed>=QUOTE_LEN]);
+  useEffect(()=>{if(on)return;const t=setTimeout(()=>setLive(false),1400);return()=>clearTimeout(t)},[on]);
+  if(!live&&!on)return null;
+  let left=typed;
+  return <div className={`rp ${on?'on':''}`} aria-live="polite">
+    <Rain on={live}/>
+    <div className="rp-body">
+      <svg className="rp-hands" viewBox="0 0 440 120" aria-hidden="true"><Hand pill="blue" x={0}/><Hand pill="red" x={240} flip/></svg>
+      <blockquote className="rp-quote">{QUOTE.map(([text,tone],i)=>{const shown=text.slice(0,Math.max(0,left));left-=text.length;return <span key={i} className={tone}>{shown}</span>})}<span className={`rp-caret ${typed>=QUOTE_LEN?'done':''}`}/></blockquote>
+      <cite className="rp-cite">— MORPHEUS</cite>
+      <div className="rp-status"><span className="d-spin"/>{status||'loading'}</div>
+    </div>
+  </div>;
+}
+
 export default function Demo(){
   const host=useRef<HTMLDivElement>(null),labels=useRef<HTMLDivElement>(null),show=useRef<Show|null>(null),logEnd=useRef<HTMLDivElement>(null);
   const [ui,setUi]=useState<UI>(INITIAL),[gen,setGen]=useState(0),[auto,setAuto]=useState(false);
@@ -250,11 +302,11 @@ export default function Demo(){
     </div>
     <header className="d-brand"><span className="d-mark"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>
     {ui.stage==='empty'&&<>
-      <div className="d-rooms">{ROOMS.map(r=><button key={r.name} className={`d-room ${r.active?'':'off'}`} disabled={!r.active} onClick={start}><div className="d-tile"><span>{r.name.split(' ').map(w=>w[0]).join('')}</span></div><div className="d-room-meta"><b>{r.name}</b><small>{r.meta}</small></div></button>)}</div>
+      <div className="d-rooms">{ROOMS.map(r=><button key={r.name} className={`d-room ${r.active?'':'off'}`} disabled={!r.active} onClick={start}><div className="d-tile"><img src={r.image} alt={r.name} draggable={false}/><span>{r.active?'scan ready':'scan pending'}</span></div><div className="d-room-meta"><b>{r.name}</b><small>{r.meta}</small></div></button>)}</div>
       {ui.error&&<div className="d-error">{ui.error}</div>}
       <nav className="d-links"><a href="/?view=workspace">workspace</a>·<a href="/?view=objects">objects</a>·<a href="/?view=builder">builder</a></nav>
     </>}
-    {ui.stage==='loading'&&<div className="d-loading"><span className="d-spin"/>{ui.status||'loading'}</div>}
+    <RedPill loading={ui.stage==='loading'} abort={ui.stage==='empty'} status={ui.stage==='loading'?ui.status:'wake up · entering the kitchen'}/>
     {ui.stage==='ready'&&<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>scan → objects → physics → robots</small></div>}
     {ui.stage==='morph'&&d&&<>
       <nav className="d-phases">{PHASES.map((p,i)=><span key={p} className={i===phase?'on':i<phase?'past':''}><b>{pad(i+1)}</b>{p}</span>)}</nav>
@@ -269,7 +321,7 @@ export default function Demo(){
       {phase===5&&<>
         {ui.robot&&<div className="d-task glass"><small>TASK · {ROBOT_NAME[ui.robot.id]}</small><b>{ui.robot.replay.task??''}</b><div className="d-prog"><i style={{width:`${ui.robot.time/ui.robot.replay.duration*100}%`}}/></div></div>}
         {event&&ui.running&&<div className="d-caption" key={event.label+ui.robot?.id}>{event.label}</div>}
-        {Object.keys(ui.verdicts).length>0&&<div className="d-verdicts">{(['go2','soarm','stretch'] as RobotId[]).filter(id=>ui.verdicts[id]).map(id=>{const r=ui.verdicts[id]!,v=r.verdict;return <div key={id} className={`d-verdict glass ${v!=='missing'?v.status:''}`}>
+        {Object.keys(ui.verdicts).length>0&&<div className="d-verdicts">{(['go2','g1','stretch'] as RobotId[]).filter(id=>ui.verdicts[id]).map(id=>{const r=ui.verdicts[id]!,v=r.verdict;return <div key={id} className={`d-verdict glass ${v!=='missing'?v.status:''}`}>
             <small>{ROBOT_NAME[id]} · {r.task}</small>{v!=='missing'?<><b>{v.status}</b><span>{v.steps.filter(s=>s.status==='done').length}/{v.steps.length} steps</span><ul>{v.steps.map(s=><li key={s.name} className={s.status}>{s.status==='done'?'✓':s.status==='failed'?'✗':'–'} {s.name}</li>)}</ul></>:<b>no rollout</b>}</div>})}</div>}
         {ui.panel&&<div className="d-robots glass">
           <div className="d-k">06 · SELECT ROBOT</div>

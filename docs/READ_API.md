@@ -7,7 +7,7 @@ The prepared environment is `output/kitchen/scene.json`. Generate it with `npm r
 - `GET /api/environments`: `{version:1,environments:[{id,name,revision,url}]}`.
 - `GET /api/environments/kitchen`: `{version:1,id,revision,scene,validation,visual,replays}`.
 - `GET /api/environments/kitchen/{scene.json,scene.xml,environment.xml,validation.json,bundle.zip}`: download the current revision's artifact.
-- `GET /api/environments/kitchen/replays/{go2,soarm,stretch}`: a revision-bound replay envelope, or 404 if absent / 409 if invalid or stale.
+- `GET /api/environments/kitchen/replays/{go2,g1,stretch}`: a revision-bound replay envelope, or 404 if absent / 409 if invalid or stale.
 
 `revision` is a SHA-256 of the normalized manifest serialized by Python with sorted keys and compact separators. Consumers should use the returned value rather than recomputing it. Native validation is computed from exactly that manifest and cached by revision; historical validation.json files on disk are not trusted as current evidence.
 

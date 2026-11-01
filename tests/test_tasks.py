@@ -63,11 +63,11 @@ class TaskPlannerTest(unittest.TestCase):
         go2 = self.envelopes[("wipe the table", "go2")]["replay"]["verdict"]
         self.assertIn(go2["status"], {"failed", "partial"})
         self.assertTrue(any(s["status"] == "failed" and s["name"].startswith("Wipe") for s in go2["steps"]))
-        self.assertEqual(self.envelopes[("wipe the table", "soarm")]["replay"]["verdict"]["status"], "failed")
+        self.assertEqual(self.envelopes[("wipe the table", "g1")]["replay"]["verdict"]["status"], "completed")
         self.assertEqual(self.envelopes[("wipe the table", "stretch")]["replay"]["verdict"]["status"], "completed")
         self.assertEqual(self.envelopes[("fill a glass of water", "stretch")]["replay"]["verdict"]["status"], "completed")
-        soarm = self.envelopes[("wipe the table", "soarm")]["replay"]
-        self.assertEqual(len({tuple(f["position"]) for f in soarm["frames"]}), 1)
+        g1 = self.envelopes[("wipe the table", "g1")]["replay"]
+        self.assertGreater(len({tuple(f["position"]) for f in g1["frames"]}), 1)
 
     def test_rules_and_plan_validation(self):
         lms = self.world.landmarks
@@ -130,7 +130,7 @@ class CarryTaskTest(unittest.TestCase):
         validate_replay(json.loads(json.dumps(self.envs["stretch"])), "stretch", self.revision)
         self.assertNotIn("carried", self.envs["go2"]["replay"])
         self.assertNotEqual(self.envs["go2"]["replay"]["verdict"]["status"], "completed")
-        self.assertEqual(self.envs["soarm"]["replay"]["verdict"]["status"], "failed")
+        self.assertIn(self.envs["g1"]["replay"]["verdict"]["status"], {"completed", "partial"})
 
     @unittest.skipUnless(room_mesh.GLB.exists(), "companion collider GLB missing")
     def test_frames_stay_inside_with_clearance(self):
