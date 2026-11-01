@@ -139,6 +139,10 @@ CLI: `pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all`
   after the main render; keep the Spark sort stable by rendering the POV at
   reduced size and accepting the main camera's sort order. A button swaps the
   POV and the main view (POV fullscreen, orbit in the inset).
+- **Fly camera**: `F` or the gamepad button toggles a creative-mode free
+  camera (`src/fly.ts`): WASD along the look heading, Space/Shift up and
+  down, drag or pointer-lock mouse look, wheel for speed, Esc exits. While it
+  is on, the POV render loop drives it instead of OrbitControls.
 - **Event captions**: show the most recent `events` label (time ≤ current
   time) as a subtitle over the viewport; show the verdict in the right panel
   with the step list; the compare modal shows all three robots' verdicts for
