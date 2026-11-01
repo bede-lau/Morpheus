@@ -13,10 +13,14 @@ already performs.
         {"detections":[{"view":3,"label":"bowl","x":512,"y":388,"confidence":0.8}, ...]}
         with labels from plate|bowl|mug|cup|glass|spoon and pixel centres.
 
-    python3 scripts/discover-objects.py detect [--parallel 8] [--model gpt-6-astra]
-        Fans out one `codex exec` subagent per rendered view (Codex CLI, logged
-        in with ChatGPT; no API key; gpt-6-astra, since terra is not offered
-        to ChatGPT-account logins) with the image attached, and merges their
+    python3 scripts/discover-objects.py detect [--parallel 4] [--backend auto|api|codex]
+        Detects objects per view. With OPENAI_TERRA_API_KEY in .env (backend
+        "api") it calls the Responses API with gpt-6-terra directly, a few
+        requests at a time, no subagents needed. Otherwise (backend "codex") it
+        fans out one `codex exec` Astra subagent per view through the Codex
+        CLI's ChatGPT login. The API path is pinned to gpt-6-terra: it refuses
+        any other model, so the key is never used for astra/sol/luna-class
+        models. with the image attached, and merges their
         answers into output/discovery/detections.json. Equivalent to the manual
         step above.
 
@@ -33,7 +37,7 @@ cups, spoons); raycasts on blurry splats can land on walls, so hits outside
 0.35–1.6 m height or further than 0.6 m behind a counter edge are rejected.
 """
 from __future__ import annotations
-import argparse, json, re, subprocess, sys, time
+import argparse, base64, json, re, subprocess, sys, time, urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -114,15 +118,71 @@ def detect_view(view, model):
         return view['view'], [], f'failed: {str(e).splitlines()[0] if str(e) else type(e).__name__}'
 
 
+API_MODEL = 'gpt-6-terra'
+API_ALLOWED = {'gpt-6-terra'}
+API_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['detections'], 'properties': {'detections': {
+    'type': 'array', 'items': {'type': 'object', 'additionalProperties': False, 'required': ['label', 'x', 'y', 'confidence'],
+    'properties': {'label': {'type': 'string', 'enum': list(SIZES)}, 'x': {'type': 'integer'}, 'y': {'type': 'integer'},
+                   'confidence': {'type': 'number'}}}}}}
+
+
+def terra_key():
+    env = ROOT / '.env'
+    if not env.exists(): return ''
+    for line in env.read_text().splitlines():
+        m = re.match(r'^\s*(?:export\s+)?OPENAI_TERRA_API_KEY\s*=\s*(.*?)\s*$', line)
+        if m: return m[1].strip('"\'')
+    return ''
+
+
+def detect_view_api(view, key, model=API_MODEL):
+    """One Responses API call per view (pinned to terra). Returns (view index, detections, note)."""
+    if model not in API_ALLOWED: raise ValueError(f'API detection is restricted to {sorted(API_ALLOWED)}')
+    out = OUT / f'detections.view{view["view"]:02d}.json'
+    try:
+        image = base64.b64encode((OUT / view['file']).read_bytes()).decode()
+        payload = {'model': model, 'input': [{'role': 'user', 'content': [
+            {'type': 'input_text', 'text': DETECT_PROMPT.format(w=view['width'], h=view['height'])},
+            {'type': 'input_image', 'image_url': 'data:image/jpeg;base64,' + image}]}],
+            'text': {'format': {'type': 'json_schema', 'name': 'detections', 'schema': API_SCHEMA, 'strict': True}}}
+        req = urllib.request.Request('https://api.openai.com/v1/responses', data=json.dumps(payload).encode(),
+                                     headers={'Authorization': f'Bearer {key}', 'Content-Type': 'application/json'})
+        with urllib.request.urlopen(req, timeout=120) as r: resp = json.load(r)
+        text = resp.get('output_text') or ''
+        if not text:
+            for item in resp.get('output', []):
+                for part in item.get('content', []) or []:
+                    if part.get('type') == 'output_text': text = part['text']
+        out.write_text(text)
+        items = json.loads(text)['detections']
+        clean = [{'view': view['view'], 'label': d['label'], 'x': int(d['x']), 'y': int(d['y']), 'confidence': float(d.get('confidence', 1))}
+                 for d in items if d.get('label') in SIZES and 0 <= int(d['x']) < view['width'] and 0 <= int(d['y']) < view['height']]
+        return view['view'], clean, f'ok ({resp.get("model", model)})'
+    except Exception as e:
+        # Never echo the request (it carries the key header) or the raw body.
+        return view['view'], [], f'failed: {type(e).__name__}: {str(e)[:120]}'
+
+
 def detect(args):
     views = json.loads((OUT / 'views.json').read_text())['views']
-    print(f'fanning out {len(views)} Codex subagents ({args.model}), {args.parallel} at a time')
+    key = terra_key()
+    backend = args.backend if args.backend != 'auto' else ('api' if key else 'codex')
+    if backend == 'api' and not key: sys.exit('OPENAI_TERRA_API_KEY missing in .env')
+    if backend == 'api':
+        parallel = min(args.parallel, 4)
+        print(f'{len(views)} views -> Responses API ({API_MODEL}), {parallel} requests at a time')
+        worker = lambda view: detect_view_api(view, key)
+    else:
+        parallel = args.parallel
+        print(f'fanning out {len(views)} Codex subagents ({args.model}), {parallel} at a time')
+        worker = lambda view: detect_view(view, args.model)
     merged, notes = [], {}
-    with ThreadPoolExecutor(max_workers=args.parallel) as pool:
-        for v, items, note in pool.map(lambda view: detect_view(view, args.model), views):
+    with ThreadPoolExecutor(max_workers=parallel) as pool:
+        for v, items, note in pool.map(worker, views):
             notes[v] = note; merged.extend(items)
             print(f'view {v}: {note}, {len(items)} detections', [(d["label"], d["x"], d["y"], round(d["confidence"], 2)) for d in items])
-    (OUT / 'detections.json').write_text(json.dumps({'source': f'codex exec ({args.model}), one subagent per view', 'notes': notes, 'detections': merged}, indent=2))
+    source = f'Responses API ({API_MODEL}), one request per view' if backend == 'api' else f'codex exec ({args.model}), one subagent per view'
+    (OUT / 'detections.json').write_text(json.dumps({'source': source, 'notes': notes, 'detections': merged}, indent=2))
     print(f'{len(merged)} detections written to {OUT / "detections.json"}')
 
 
@@ -203,7 +263,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='phase', required=True)
     r = sub.add_parser('render'); r.add_argument('--views', type=int, default=16)
-    d = sub.add_parser('detect'); d.add_argument('--parallel', type=int, default=8); d.add_argument('--model', default='gpt-6-astra')
+    d = sub.add_parser('detect'); d.add_argument('--parallel', type=int, default=4); d.add_argument('--model', default='gpt-6-astra', help='codex backend model')
+    d.add_argument('--backend', choices=['auto', 'api', 'codex'], default='auto')
     a = sub.add_parser('apply'); a.add_argument('detections', nargs='?', default=str(OUT / 'detections.json'))
     a.add_argument('--min-confidence', type=float, default=0.5); a.add_argument('--min-score', type=float, default=0.5, help='minimum Decisions score (0-3) to accept a match')
     a.add_argument('--dry-run', action='store_true')
