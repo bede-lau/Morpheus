@@ -67,6 +67,20 @@ height 0.9 m is inside its arm range).
   `duration`, 10 Hz sampling. Positions are the robot body origin; use the
   same contact-height convention as `src/demo-placement.ts` (floor z ≈ 0, the
   frontend grounds against the mesh when available).
+- `carried` (optional, additive) lists saved SimReady objects the robot moves:
+  `[{"objectId": "<replacement id in output/simready/scene.json>", "assetId": "kitchenware_bowl_b01", "landmark": "object_1",
+  "pickTime": 23.3, "placeTime": 35.9, "pickAt": [x,y,z], "placeAt": [x,y,z], "carryOffset": [0,0,0.05]}]`.
+  Before `pickTime` the mesh stays at its saved pose; between `pickTime` and `placeTime` it follows the
+  Stretch gripper tip in world space plus `carryOffset`; from `placeTime` on it sits at `placeAt`.
+  `pickAt` is the mesh origin when picked. `placeAt` is a point on the destination top 0.12 m inside its
+  edge nearest the robot's stop pose, z = surface top (floor plane + mesh surface height) + the scaled
+  asset half height (SimReady bowl origins are at their centre). Python `validate_carried` and
+  TypeScript `parseReplay` check it when present; envelopes without it remain valid.
+- Gripper tip (shared by `pipeline/task_planner.py` and `src/replay.ts` `stretchTip`): robot-local
+  `(-0.13, 0.05 + 0.58 * (0.65 + armExtension), lift)` rotated by yaw, where `lift` is 0.98 m except
+  that the frontend lowers it (`stretchLift`) to the pick/place height over the 0.8 s before each
+  `pickTime`/`placeTime` and raises it over the 0.8 s after. The planner yaws Stretch so this offset arm's
+  tip lands over the object / place point, and picks the extension that reaches it.
 - `events`, `verdict`, `landmarks`, `task` are **additive**; the existing
   Python `validate_replay` and TypeScript `parseReplay` must keep accepting
   envelopes that lack them.
@@ -97,6 +111,20 @@ labels clusters by geometry:
   assumed)")
 - `tall`: top height > 1.6 m (cabinets / fridge)
 - `door`: the spawn gap
+- `object`: each saved SimReady replacement in `output/simready/scene.json` (`object_<n>`, label
+  "Bowl (SimReady kitchenware_bowl_b01)", position/size = its removal box, plus `objectId`, `assetId`,
+  `category`, `halfHeight`, `meshPosition`). When several objects share a category, "the <category>"
+  means the one nearest the table landmark.
+
+**Pick and place.** Actions are `navigate|wipe|fill|pick|place`. The rule planner splits the task on
+"and"/"then"/commas; "move/put/bring/carry/take the <category> to the <landmark>" becomes
+`navigate object, pick object, navigate destination, place destination`, after any wipe/fill clause
+that came first. Pick: approach like a landmark (0.10 m gap target; falls back to the nearest reachable
+pose), extend to the object, hold 1.0 s, event "Picked up <label>", retract to 0.35 (carrying). Place:
+extend, hold 0.8 s, event "Placed <label> on the <destination>", retract. A pick is in reach when the
+object's near rim is within 0.15 + arm reach + 0.20 m (gripper fingers) of the base centre; Go2 fails
+at the first manipulation (no arm) and SO-ARM100 at the first navigate (stationary). The headline
+rollout `rollouts/kitchen/default/` is "wipe the table and move the bowl to the sink".
 
 **API usage policy.** The `OPENAI_API_KEY` in `.env` is reserved for the
 Decisions API (`POST /v1/decisions`, `gpt-6-luna`): object matching in stage 2
@@ -135,10 +163,16 @@ CLI: `pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all`
 - **Robot POV**: a picture-in-picture panel (bottom-right of the viewport,
   ~34% width, 16:10) rendered every frame from a camera at the robot's eye
   height, 0.12 m forward of its origin, looking along yaw (and pitched down
-  ~12°). Use `renderer.setScissorTest` + `setViewport` on the same canvas
-  after the main render; keep the Spark sort stable by rendering the POV at
-  reduced size and accepting the main camera's sort order. A button swaps the
-  POV and the main view (POV fullscreen, orbit in the inset).
+  ~12°). The inset renders through its own `SparkRenderer` (offscreen
+  `target`) and is composited onto the canvas with `setScissorTest` +
+  `setViewport` after the main render. Spark re-sorts for the camera of every
+  `renderer.render()` call, so sharing one SparkRenderer between two cameras
+  makes the sort order flip each frame (visible flicker); one SparkRenderer
+  per view keeps both sorts stable. A button swaps the POV and the main view
+  (POV fullscreen, orbit in the inset). The panel can be dragged anywhere in
+  the viewport, resized from its top-left corner (bottom-right stays
+  anchored) and reset with a double-click; the layout persists in
+  `localStorage` (`morpheus.pov-layout`).
 - **Fly camera**: `F` or the gamepad button toggles a creative-mode free
   camera (`src/fly.ts`): WASD along the look heading, Space/Shift up and
   down, drag or pointer-lock mouse look, wheel for speed, Esc exits. While it

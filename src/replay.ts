@@ -6,7 +6,9 @@ export type ReplayEvent = { time: number; label: string };
 export type StepStatus = 'done' | 'failed' | 'skipped';
 export type Verdict = { status: 'completed' | 'partial' | 'failed'; summary: string; steps: { name: string; status: StepStatus; note?: string }[]; planner?: string };
 export type Landmark = { id: string; label: string; position: Vec3; size: Vec3; kind: string };
-export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[] };
+/** A saved SimReady object the robot carries: picked at pickTime, set down at placeAt at placeTime. */
+export type CarriedObject = { objectId: string; assetId?: string; pickTime: number; placeTime: number; placeAt: Vec3; carryOffset: Vec3; pickAt?: Vec3 };
+export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[]; carried?: CarriedObject[] };
 export const ROBOTS = [
   { id: 'go2' as const, name: 'Go2', type: 'Quadruped', description: 'A mobile quadruped for exploring a room. This demo model has no manipulation arm.', reach: 'No arm', clearance: 'Review', drawer: 'Not tested' },
   { id: 'soarm' as const, name: 'SO-ARM100', type: 'Stationary arm', description: 'A compact arm for a fixed work area. The demo keeps its base stationary while the arm moves.', reach: 'Review', clearance: 'Stationary', drawer: 'Not tested' },
@@ -43,6 +45,7 @@ function validateTaskFields(r:Replay){
   if(r.task!==undefined&&typeof r.task!=='string')throw new Error('Replay task must be text.');
   if(r.events!==undefined){if(!Array.isArray(r.events)||r.events.some(e=>!e||!Number.isFinite(e.time)||typeof e.label!=='string'))throw new Error('Replay events need finite times and text labels.');}
   if(r.verdict!==undefined){const v=r.verdict;if(!v||!['completed','partial','failed'].includes(v.status)||typeof v.summary!=='string'||!Array.isArray(v.steps)||v.steps.some(s=>!s||typeof s.name!=='string'||!['done','failed','skipped'].includes(s.status)||(s.note!==undefined&&typeof s.note!=='string'))||(v.planner!==undefined&&typeof v.planner!=='string'))throw new Error('Replay verdict is malformed.');}
+  if(r.carried!==undefined){if(!Array.isArray(r.carried)||r.carried.some(c=>!c||typeof c.objectId!=='string'||!Number.isFinite(c.pickTime)||!Number.isFinite(c.placeTime)||c.pickTime<0||c.pickTime>=c.placeTime||!vec3(c.placeAt)||!vec3(c.carryOffset)||(c.pickAt!==undefined&&!vec3(c.pickAt))))throw new Error('Replay carried objects are malformed.');}
   if(r.landmarks!==undefined){if(!Array.isArray(r.landmarks)||r.landmarks.some(l=>!l||typeof l.id!=='string'||typeof l.label!=='string'||typeof l.kind!=='string'||!vec3(l.position)||!vec3(l.size)))throw new Error('Replay landmarks are malformed.');}
 }
 /** Latest event whose time is at or before `time`. */
@@ -50,4 +53,32 @@ export function currentEvent(replay:Pick<Replay,'events'>|null|undefined,time:nu
   let best:ReplayEvent|null=null;
   for(const e of replay?.events??[])if(e.time<=time+1e-6&&(!best||e.time>=best.time))best=e;
   return best;
+}
+
+/** Robot-local Stretch arm model (Z-up, +Y forward): arm group origin and gripper tip distance per unit arm scale. */
+export const STRETCH_ARM={mount:[-.13,.05] as [number,number],height:.98,link:.58,baseScale:.65,liftWindow:.8};
+const smooth=(x:number)=>{const t=Math.max(0,Math.min(1,x));return t*t*(3-2*t)};
+/** World position of the Stretch gripper tip for a robot pose, arm extension and lift height above the base. */
+export function stretchTip(position:Vec3,yaw:number,armExtension:number,lift=STRETCH_ARM.height):Vec3{
+  const x=STRETCH_ARM.mount[0],y=STRETCH_ARM.mount[1]+STRETCH_ARM.link*(STRETCH_ARM.baseScale+armExtension),c=Math.cos(yaw),s=Math.sin(yaw);
+  return [position[0]+x*c-y*s,position[1]+x*s+y*c,position[2]+lift];
+}
+/** Arm lift height (above the base) so the gripper dips to each pick/place height around pickTime/placeTime. */
+export function stretchLift(carried:CarriedObject[]|undefined,time:number,baseZ=0,origins?:Record<string,Vec3>):number{
+  let lift=STRETCH_ARM.height;const w=STRETCH_ARM.liftWindow;
+  for(const c of carried??[]){
+    const pickZ=(c.pickAt??origins?.[c.objectId])?.[2];
+    for(const [t,z] of [[c.pickTime,pickZ],[c.placeTime,c.placeAt[2]]] as [number,number|undefined][]){
+      if(z===undefined)continue;
+      const weight=time<=t?smooth((time-(t-w))/w):1-smooth((time-t)/w);
+      if(weight>0)lift=lift+(z-c.carryOffset[2]-baseZ-lift)*weight;
+    }
+  }
+  return lift;
+}
+/** Where a carried object is at `time`: at rest before pickTime, following the gripper tip until placeTime, then at placeAt. */
+export function carriedPose(entry:CarriedObject,time:number,tip:Vec3,rest:Vec3):{phase:'rest'|'carried'|'placed';position:Vec3}{
+  if(time<entry.pickTime)return {phase:'rest',position:[...rest] as Vec3};
+  if(time>=entry.placeTime)return {phase:'placed',position:[...entry.placeAt] as Vec3};
+  return {phase:'carried',position:tip.map((v,i)=>v+entry.carryOffset[i]) as Vec3};
 }

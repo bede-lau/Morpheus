@@ -25,6 +25,20 @@ export function parseSavedObjects(data:unknown,environment:BackendEnvironment):S
 function free(root:THREE.Object3D){root.traverse(o=>{if(o instanceof THREE.Mesh){o.geometry.dispose();for(const material of Array.isArray(o.material)?o.material:[o.material]){for(const value of Object.values(material))if(value instanceof THREE.Texture)value.dispose();material.dispose()}}})}
 export class SavedObjectLayer{
  root=new THREE.Group();private edits:SplatEdit[]=[];private generation=0;
+ private items:{id:string;mesh:THREE.Object3D;position:THREE.Vector3;quaternion:THREE.Quaternion}[]=[];
+ /** Loaded mesh by replacement id or load order index. */
+ getMesh(key:string|number){return (typeof key==='number'?this.items[key]:this.items.find(item=>item.id===key))?.mesh??null}
+ /** Saved (scan) pose of a replacement, Z-up world. */
+ restPosition(id:string){const item=this.items.find(i=>i.id===id);return item?item.position.clone():null}
+ /** Move a replacement mesh in world space (the scan mask stays at the saved location). */
+ setPose(id:string,position:THREE.Vector3|number[],quaternion?:THREE.Quaternion){const item=this.items.find(i=>i.id===id);if(!item)return false;if(item.mesh.parent!==this.root)this.detach(id);
+  if(Array.isArray(position))item.mesh.position.fromArray(position);else item.mesh.position.copy(position);if(quaternion)item.mesh.quaternion.copy(quaternion);return true}
+ /** Parent a replacement to another object, keeping its world transform. */
+ attach(id:string,parent:THREE.Object3D){const mesh=this.getMesh(id);if(!mesh)return false;parent.attach(mesh);return true}
+ /** Return a replacement to the layer root, keeping its world transform. */
+ detach(id:string){const mesh=this.getMesh(id);if(!mesh)return false;this.root.attach(mesh);return true}
+ /** Put every replacement back at its saved pose. */
+ resetPoses(){for(const item of this.items){this.root.attach(item.mesh);item.mesh.position.copy(item.position);item.mesh.quaternion.copy(item.quaternion)}}
  constructor(private view:RoomViewer){view.scene.add(this.root)}
  async load(scene:SavedObjects){
   const token=++this.generation;
@@ -33,14 +47,14 @@ export class SavedObjectLayer{
    mesh.position.fromArray(item.position);mesh.quaternion.set(item.quaternion[1],item.quaternion[2],item.quaternion[3],item.quaternion[0]);mesh.scale.setScalar(item.scale);
    const edit=new SplatEdit({rgbaBlendMode:SplatEditRgbaBlendMode.MULTIPLY,softEdge:0});
    const mask=new SplatEditSdf({type:SplatEditSdfType.BOX,opacity:0});mask.position.fromArray(item.selection.position);mask.scale.fromArray(item.selection.size).multiplyScalar(.5);edit.add(mask);edit.updateMatrixWorld(true);
-   return {mesh,edit};
+   return {mesh,edit,id:item.id};
   }));
   const loaded=results.flatMap(result=>result.status==='fulfilled'?[result.value]:[]);
   if(token!==this.generation||results.some(result=>result.status==='rejected')){loaded.forEach(({mesh})=>free(mesh));if(token===this.generation)throw new Error('A saved SimReady mesh could not load.');return;}
   this.clear();
-  for(const {mesh,edit} of loaded){this.root.add(mesh);this.edits.push(edit)}
+  for(const {mesh,edit,id} of loaded){this.root.add(mesh);this.edits.push(edit);this.items.push({id,mesh,position:mesh.position.clone(),quaternion:mesh.quaternion.clone()})}
   if(this.view.splat){this.view.splat.edits=[...(this.view.splat.edits??[]),...this.edits];this.view.splat.updateVersion()}
  }
- private clear(){if(this.view.splat){this.view.splat.edits=(this.view.splat.edits??[]).filter(edit=>!this.edits.includes(edit));this.view.splat.updateVersion()}this.edits=[];free(this.root);this.root.clear()}
+ private clear(){for(const item of this.items)if(item.mesh.parent!==this.root){item.mesh.parent?.remove(item.mesh);this.root.add(item.mesh)}this.items=[];if(this.view.splat){this.view.splat.edits=(this.view.splat.edits??[]).filter(edit=>!this.edits.includes(edit));this.view.splat.updateVersion()}this.edits=[];free(this.root);this.root.clear()}
  dispose(){this.generation++;this.clear();this.view.scene.remove(this.root)}
 }

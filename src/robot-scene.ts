@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import type { RoomViewer } from './viewer';
-import { createDemoReplay, sampleReplay, type Landmark, type Replay, type RobotId } from './replay';
+import { createDemoReplay, sampleReplay, carriedPose, stretchLift, stretchTip, STRETCH_ARM, type Landmark, type Replay, type RobotId } from './replay';
+import type { Vec3 as _V } from './types';
+import type { SavedObjectLayer } from './saved-objects';
 import { EYE_FORWARD, EYE_HEIGHT } from './pov';
 
 const dark=new THREE.MeshStandardMaterial({color:0x272e30,roughness:.65,metalness:.35});
@@ -28,11 +30,26 @@ export class RobotScene {
   private hasReplay=true; private pose:{position:THREE.Vector3;yaw:number}|null=null;
   eye=new THREE.Group(); private savedVisibility:{route:boolean;reach:boolean;eye:boolean}|null=null;
   hasEnvironmentColliders=false;
+  private carriedLayer:SavedObjectLayer|null=null;
+  /** Saved SimReady meshes that replay.carried entries move (pick, carry at the gripper, place). */
+  setCarriedObjects(layer:SavedObjectLayer|null){this.carriedLayer?.resetPoses();this.carriedLayer=layer;if(this.hasReplay&&this.pose)this.update(this.lastTime)}
+  private lastTime=0;
+  private updateCarried(time:number,frame:{position:number[];yaw:number;armExtension:number}){
+    const layer=this.carriedLayer,carried=this.replay.robot==='stretch'?this.replay.carried??[]:[];
+    if(this.replay.robot==='stretch')this.arm.position.z=STRETCH_ARM.height;
+    if(!layer)return;
+    if(!carried.length){layer.resetPoses();return}
+    const origins:Record<string,_V>={};for(const c of carried){const rest=layer.restPosition(c.objectId);if(rest)origins[c.objectId]=rest.toArray() as _V}
+    const lift=stretchLift(carried,time,frame.position[2],origins);this.arm.position.z=lift;
+    const tip=stretchTip(frame.position as _V,frame.yaw,frame.armExtension,lift);
+    for(const c of carried){const rest=origins[c.objectId];if(!rest)continue;layer.setPose(c.objectId,carriedPose(c,time,tip,rest).position)}
+  }
   constructor(private viewer:RoomViewer){
     this.root.add(this.route,this.reach,this.robot);viewer.scene.add(this.root);
     viewer.scene.background=new THREE.Color('#efeeea');
     viewer.scene.children.filter(o=>o instanceof THREE.GridHelper).forEach(o=>o.visible=false);
     this.setReplay(this.replay);
+    if(import.meta.env?.DEV&&typeof window!=='undefined')(window as unknown as {__robotScene?:RobotScene}).__robotScene=this; // dev-only hook for browser checks
   }
   /** Current robot body pose (Z-up, yaw 0 = +Y) or null when no replay is shown. */
   getPose(){return this.hasReplay&&this.pose?{position:this.pose.position.clone(),yaw:this.pose.yaw,robot:this.replay.robot}:null}
@@ -41,7 +58,7 @@ export class RobotScene {
     if(active&&!this.savedVisibility){this.savedVisibility={route:this.route.visible,reach:this.reach.visible,eye:this.eye.visible};this.route.visible=false;this.reach.visible=false;this.eye.visible=false}
     else if(!active&&this.savedVisibility){const v=this.savedVisibility;this.savedVisibility=null;this.route.visible=v.route;this.reach.visible=v.reach;this.eye.visible=v.eye}
   }
-  clearReplay(){this.pose=null;this.hasReplay=false;this.root.visible=false;this.previous=null;}
+  clearReplay(){this.carriedLayer?.resetPoses();this.pose=null;this.hasReplay=false;this.root.visible=false;this.previous=null;}
   setReplay(replay:Replay){this.hasReplay=true;this.root.visible=true;this.replay=replay;this.previous=null;this.buildRobot(replay.robot);dispose(this.route);dispose(this.reach);
     const points=replay.frames.map(f=>new THREE.Vector3(f.position[0],f.position[1],f.position[2]+.025));
     const path=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color:0x077c5c,dashSize:.13,gapSize:.075,depthTest:true,transparent:true,opacity:.85}));path.computeLineDistances();path.renderOrder=10;this.route.add(path);
@@ -50,7 +67,7 @@ export class RobotScene {
   }
   private addLandmarks(landmarks:Landmark[]){
     // Tall clusters are mostly the room walls; drawing them boxes the whole kitchen.
-    for(const l of landmarks.filter(l=>l.kind!=='tall')){const color=LANDMARK_COLORS[l.kind]??0x5e6e6a;const group=new THREE.Group();group.position.set(...l.position);group.userData.landmark=l.id;
+    for(const l of landmarks.filter(l=>l.kind!=='tall'&&l.kind!=='object')){const color=LANDMARK_COLORS[l.kind]??0x5e6e6a;const group=new THREE.Group();group.position.set(...l.position);group.userData.landmark=l.id;
       const size=l.size.map(v=>Math.max(.02,Math.abs(v))) as [number,number,number];
       const body=new THREE.Mesh(new THREE.BoxGeometry(...size),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.14,depthWrite:false}));body.renderOrder=5;group.add(body);
       const edges=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(...size)),new THREE.LineBasicMaterial({color,transparent:true,opacity:.8}));edges.renderOrder=6;group.add(edges);
@@ -85,6 +102,7 @@ export class RobotScene {
     if(this.follow&&this.previous){const d=p.clone().sub(this.previous);this.viewer.camera.position.add(d);this.viewer.orbit.target.add(d)}
     this.previous=p.clone();this.robot.position.copy(p);this.robot.rotation.z=frame.yaw;this.pose={position:p.clone(),yaw:frame.yaw};
     if(this.replay.robot==='stretch')this.arm.scale.y=.65+frame.armExtension;
+    this.lastTime=time;this.updateCarried(time,frame);
     if(this.replay.robot==='soarm')this.arm.rotation.z=this.replay.source==='demo'?Math.sin(time*.3)*.55:0;
     const nearby=sampleReplay(this.replay,Math.min(this.replay.duration,time+.02));
     const moving=this.replay.source==='demo'&&Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;

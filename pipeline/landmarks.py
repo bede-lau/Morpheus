@@ -192,7 +192,16 @@ def landmark(ident, label, kind, rect, top, **extra):
     return out
 
 
-def compute_landmarks(scene=None, use_mesh=True):
+def compute_landmarks(scene=None, use_mesh=True, objects=None):
+    """Landmarks plus saved SimReady objects (default scene only, unless objects=True)."""
+    info = _compute_landmarks(scene, use_mesh)
+    if objects if objects is not None else scene is None:
+        door = info["landmarks"].pop()  # keep the door last
+        info["landmarks"] += object_landmarks() + [door]
+    return info
+
+
+def _compute_landmarks(scene=None, use_mesh=True):
     """Return {landmarks, door, floor, rects, notes, mesh}. Deterministic.
 
     Uses the companion collider mesh (pipeline.room_mesh) for the room interior,
@@ -346,6 +355,35 @@ def filter_boxes(boxes, grids):
 
 
 REVIEW = SCENE.parent / "landmark-review.json"
+SIMREADY = REPO / "output" / "simready" / "scene.json"
+
+
+def object_landmarks(path=SIMREADY):
+    """Saved SimReady replacements as kind "object" landmarks (position/size = the replacement's removal box).
+
+    Extra fields: objectId (replacement id), assetId, category, halfHeight (scaled asset half height, m),
+    meshPosition (the replacement's mesh origin, world Z-up). Empty when no saved scene exists.
+    """
+    try:
+        data = json.loads(Path(path).read_text())
+    except (OSError, ValueError):
+        return []
+    out = []
+    for n, item in enumerate(data.get("replacements") or [], 1):
+        try:
+            asset = item.get("asset") or {}
+            category = str(asset.get("category") or item["assetId"].split("_")[1]).lower()
+            sel = item["selection"]
+            dims = asset.get("dimensions") or sel["size"]
+            out.append({"id": f"object_{n}", "label": f"{category.capitalize()} (SimReady {item['assetId']})", "kind": "object",
+                        "position": [round(float(v), 4) for v in sel["position"]],
+                        "size": [round(float(v), 4) for v in sel["size"]],
+                        "objectId": item["id"], "assetId": item["assetId"], "category": category,
+                        "halfHeight": round(float(dims[2]) * float(item.get("scale", 1.0)) / 2, 4),
+                        "meshPosition": [round(float(v), 4) for v in item["position"]]})
+        except (KeyError, TypeError, ValueError, IndexError):
+            continue
+    return out
 
 
 def load_review():

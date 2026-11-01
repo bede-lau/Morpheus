@@ -101,6 +101,49 @@ class RolloutsInsideRoomTest(unittest.TestCase):
             self.assertGreaterEqual(float(clear[i, j].min()), radius, name)
 
 
+class CarryTaskTest(unittest.TestCase):
+    TASK = "wipe the table and move the bowl to the sink"
+
+    @classmethod
+    def setUpClass(cls):
+        cls.world = World()
+        cls.revision = EnvironmentStore().snapshot()["revision"]
+        cls.envs = {r: plan_task(cls.TASK, r, cls.world, cls.revision, use_openai=False) for r in ROBOT_IDS}
+
+    def test_plan_wipes_then_moves_the_table_bowl(self):
+        steps = rules_plan(self.TASK, self.world.landmarks)
+        self.assertEqual([s["action"] for s in steps], ["navigate", "wipe", "navigate", "pick", "navigate", "place"])
+        obj = self.world.by_id[steps[3]["target"]]
+        self.assertEqual((obj["kind"], obj["category"]), ("object", "bowl"))
+        self.assertEqual(steps[5]["target"], "sink")
+
+    def test_stretch_carries_the_bowl_and_stays_clear(self):
+        replay = self.envs["stretch"]["replay"]
+        self.assertEqual(replay["verdict"]["status"], "completed")
+        self.assertGreaterEqual(len(replay["verdict"]["steps"]), 4)
+        self.assertEqual(len(replay["carried"]), 1)
+        c = replay["carried"][0]
+        self.assertLess(c["pickTime"], c["placeTime"])
+        self.assertLessEqual(c["placeTime"], replay["duration"])
+        sink = self.world.landmark_rect(self.world.by_id["sink"])
+        self.assertTrue(sink[0] <= c["placeAt"][0] <= sink[2] and sink[1] <= c["placeAt"][1] <= sink[3])
+        validate_replay(json.loads(json.dumps(self.envs["stretch"])), "stretch", self.revision)
+        self.assertNotIn("carried", self.envs["go2"]["replay"])
+        self.assertNotEqual(self.envs["go2"]["replay"]["verdict"]["status"], "completed")
+        self.assertEqual(self.envs["soarm"]["replay"]["verdict"]["status"], "failed")
+
+    @unittest.skipUnless(room_mesh.GLB.exists(), "companion collider GLB missing")
+    def test_frames_stay_inside_with_clearance(self):
+        grids = room_mesh.load_grids()
+        clear = room_mesh.obstacle_distance(grids)
+        for robot, env in self.envs.items():
+            pts = np.array([f["position"][:2] for f in env["replay"]["frames"]])
+            i, j, ok = room_mesh.cell_index(grids, pts)
+            self.assertTrue(ok.all() and grids["interior"][i, j].all(), robot)
+            self.assertGreaterEqual(float(clear[i, j].min()), ROBOTS[robot]["radius"], robot)
+            self.assertGreaterEqual(rect_distance(pts, self.world.rects).min(), ROBOTS[robot]["radius"], robot)
+
+
 class TaskApiTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

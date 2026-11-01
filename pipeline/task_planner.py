@@ -43,8 +43,17 @@ ROBOTS = {
     "soarm": {"name": "SO-ARM100", "base": "stationary", "radius": 0.18, "reach": 0.36, "armHeight": (0.05, 0.40), "eye": 0.35, "speed": 0.0},
 }
 ROBOT_IDS = ("stretch", "go2", "soarm")
-ACTIONS = ("navigate", "wipe", "fill", "place")
-MANIPULATION = {"wipe", "fill", "place"}
+HEADLINE = "wipe-the-table-and-move-the-bowl-to-the-sink"   # copied to rollouts/kitchen/default
+ACTIONS = ("navigate", "wipe", "fill", "pick", "place")
+MANIPULATION = {"wipe", "fill", "pick", "place"}
+# Visual arm model shared with src/robot-scene.ts (Stretch): the arm group sits at robot-local
+# (-0.13, 0.05) and its gripper tip is 0.58 * (0.65 + armExtension) m further along local +Y.
+ARM_MOUNT = (-0.13, 0.05)
+ARM_LINK, ARM_BASE = 0.58, 0.65
+GRIPPER = 0.20        # fingers close on a rim up to this far past the telescoping arm (object picks only)
+PLACE_INSET = 0.12    # objects are set down this far inside the destination edge nearest the robot
+CARRY_OFFSET = [0.0, 0.0, 0.05]
+MOVE_VERBS = {"move", "put", "bring", "carry", "take", "place", "return"}
 
 
 def slugify(task):
@@ -205,10 +214,7 @@ class World:
 
 
 # ---------------------------------------------------------------- task parsing
-def rules_plan(task, landmarks):
-    ids = {lm["id"] for lm in landmarks}
-    text = task.lower()
-    words = set(re.findall(r"[a-z]+", text))
+def _surface_steps(words, landmarks, ids):
     sink = "sink" if "sink" in ids else next((i for i in ids if i.startswith("counter")), "table")
     if words & {"wipe", "clean", "wash", "scrub"} and not words & {"glass", "water", "drink", "fill"}:
         target = "table"
@@ -219,12 +225,69 @@ def rules_plan(task, landmarks):
     if words & {"fill", "water", "glass", "drink"}:
         return [{"action": "navigate", "target": sink}, {"action": "fill", "target": sink},
                 {"action": "navigate", "target": "table"}, {"action": "place", "target": "table"}]
+    return None
+
+
+def _tokens(lm):
+    return set(re.findall(r"[a-z]+", (lm["id"] + " " + lm["label"].split(" (")[0] + " " + lm["kind"]).lower()))
+
+
+def pick_object(category, landmarks):
+    """The saved object of this category nearest the table (the table run is where the demo objects sit)."""
+    objs = [lm for lm in landmarks if lm["kind"] == "object" and lm.get("category") == category]
+    if not objs:
+        return None
+    table = next((lm for lm in landmarks if lm["id"] == "table"), None)
+    if table is None:
+        return objs[0]
+    (x, y, _), (sx, sy, _) = table["position"], table["size"]
+    rect = (x - sx / 2, y - sy / 2, x + sx / 2, y + sy / 2)
+    return min(objs, key=lambda lm: float(rect_distance([lm["position"][:2]], [rect])[0]))
+
+
+def _move_steps(clause, landmarks):
+    words = re.findall(r"[a-z]+", clause)
+    if not set(words) & MOVE_VERBS:
+        return None
+    cats = {lm.get("category") for lm in landmarks if lm["kind"] == "object"}
+    category = next((w for w in words if w in cats or w.rstrip("s") in cats), None)
+    if category is None:
+        return None
+    obj = pick_object(category if category in cats else category.rstrip("s"), landmarks)
+    m = re.search(r"\b(?:to|on|onto|in|into|at|by)\b(.*)$", clause)
+    dest_words = set(re.findall(r"[a-z]+", m.group(1))) if m else set()
+    best, score = None, 0
+    for lm in landmarks:
+        if lm["kind"] in {"door", "object", "tall"}:
+            continue
+        overlap = len(_tokens(lm) & dest_words)
+        if overlap > score:
+            best, score = lm["id"], overlap
+    if best is None:
+        return None
+    return [{"action": "navigate", "target": obj["id"]}, {"action": "pick", "target": obj["id"]},
+            {"action": "navigate", "target": best}, {"action": "place", "target": best}]
+
+
+def rules_plan(task, landmarks):
+    ids = {lm["id"] for lm in landmarks}
+    text = task.lower()
+    steps = []
+    for clause in re.split(r"\band\b|\bthen\b|[,;.]", text):
+        words = set(re.findall(r"[a-z]+", clause))
+        if not words:
+            continue
+        part = _move_steps(clause, landmarks) or _surface_steps(words, landmarks, ids)
+        if part:
+            steps += part
+    if steps:
+        return steps[:8]
+    words = set(re.findall(r"[a-z]+", text))
     best, score = "table", 0
     for lm in landmarks:
         if lm["kind"] == "door":
             continue
-        tokens = set(re.findall(r"[a-z]+", (lm["id"] + " " + lm["label"] + " " + lm["kind"]).lower()))
-        overlap = len(tokens & words)
+        overlap = len(_tokens(lm) & words)
         if overlap > score:
             best, score = lm["id"], overlap
     return [{"action": "navigate", "target": best}]
@@ -318,7 +381,7 @@ def openai_plan(task, landmarks):
         lm["schemaNote"] = "sink is assumed from geometry" if lm["kind"] == "sink" else ""
     prompt = ("You plan household tasks for a mobile robot in a reconstructed kitchen. Choose the minimal ordered step "
               "sequence using only these actions: navigate (drive to a landmark), wipe (wipe its surface), fill (fill a "
-              "glass with water; only at a sink), place (put a held object on a surface). Every manipulation must follow "
+              "glass with water; only at a sink), pick (pick up an object landmark), place (put a held object on a surface). Every manipulation must follow "
               "a navigate to the same target. Use only the landmark ids given. House conventions: a glass of water is "
               "filled at the sink and then served by navigating to the table and placing it there; wiping or cleaning "
               "without a named surface means the table; the robot starts at the door with nothing in hand.\n"
@@ -359,10 +422,11 @@ def decisions_feasibility(robot, steps, world):
         if step["action"] not in MANIPULATION:
             continue
         lm = world.by_id[step["target"]]
+        top = surface_top(lm)
         questions.append({"name": f"step_{i}", "type": "predicate",
                           "instructions": (f"Robot {prof['name']} ({prof['base']} base, arm reach {prof['reach']} m, arm height "
                                            f"range {prof['armHeight']}) must {step['action']} at a surface whose top is "
-                                           f"{lm['size'][2]:.2f} m high. Can this robot physically do that?")})
+                                           f"{top:.2f} m high. Can this robot physically do that?")})
     if not questions:
         return {}
     try:
@@ -470,7 +534,45 @@ class Timeline:
         self.arm_to(0.8)
 
 
-ACTION_TEXT = {"wipe": "Wipe", "fill": "Fill glass at", "place": "Place glass on"}
+ACTION_TEXT = {"wipe": "Wipe", "fill": "Fill glass at", "pick": "Pick up", "place": "Place glass on"}
+
+
+def surface_top(lm):
+    """Height the hand must reach: an object's top, or a surface landmark's top."""
+    if lm["kind"] == "object":
+        return float(lm["position"][2] + lm["size"][2] / 2)
+    return float(lm["size"][2])
+
+
+def arm_pose_for(pos, target):
+    """(yaw, armExtension) putting the visual Stretch gripper tip over target xy (see ARM_MOUNT)."""
+    v = np.array(target[:2], float) - np.array(pos[:2], float)
+    dist = float(np.hypot(*v))
+    lat = -ARM_MOUNT[0]
+    fwd = math.sqrt(max(dist * dist - lat * lat, 1e-6))
+    # yaw rotates local (ARM_MOUNT[0], fwd) onto v; yaw 0 maps local +Y to world +Y.
+    yaw = math.atan2(v[1], v[0]) - math.atan2(fwd, ARM_MOUNT[0])
+    ext = (fwd - ARM_MOUNT[1]) / ARM_LINK - ARM_BASE
+    return wrap(yaw), min(1.0, max(0.0, ext))
+
+
+def place_point(world, lm, pos, half_height):
+    """Point on the destination top PLACE_INSET inside its edge nearest pos; z = surface top + half height."""
+    x0, y0, x1, y1 = world.landmark_rect(lm)
+    inset = min(PLACE_INSET, (x1 - x0) / 2, (y1 - y0) / 2)
+    p = np.array([min(max(pos[0], x0 + inset), x1 - inset), min(max(pos[1], y0 + inset), y1 - inset)])
+    top = None
+    if world.mesh is not None:
+        from .room_mesh import cell_index
+        i, j, ok = cell_index(world.mesh, p[None, :])
+        if ok.all():
+            h = float(world.mesh["surface"][i[0], j[0]]) or float(world.mesh["top"][i[0], j[0]])
+            if h > 0:
+                a, b, c = world.mesh["plane"]
+                top = h + a * p[0] + b * p[1] + c
+    if top is None:
+        top = float(lm["size"][2]) + float(world.info.get("floorZ", 0.0))
+    return [round(float(p[0]), 4), round(float(p[1]), 4), round(float(top + half_height), 4)]
 
 
 def arm_target(robot, distance):
@@ -487,10 +589,14 @@ def simulate(world, robot, task, steps):
     tl.event("Spawned at the kitchen entrance" if world.mesh is not None else "Spawned at the kitchen door")
     results, at, arrival = [], None, None
     aborted = False
+    held, carried = None, []
     for i, step in enumerate(steps):
         lm = world.by_id[step["target"]]
         name = lm["label"].split(" (")[0].lower()
         title = f"Navigate to {name}" if step["action"] == "navigate" else f"{ACTION_TEXT[step['action']]} {name}"
+        planned = next((world.by_id[s["target"]] for s in reversed(steps[:i]) if s["action"] == "pick"), None)
+        if step["action"] == "place" and planned is not None:
+            title = f"Place {planned['label'].split(' (')[0].lower()} on {name}"
         if aborted:
             results.append({"name": title, "status": "skipped", "note": "Skipped after an earlier step failed."})
             continue
@@ -533,7 +639,7 @@ def simulate(world, robot, task, steps):
             results.append({"name": title, "status": "failed", "note": "Robot is not at this landmark."})
             aborted = True
             continue
-        top = lm["size"][2]
+        top = surface_top(lm)
         if not prof["reach"]:
             tl.event(f"{prof['name']} has no manipulator: cannot {step['action']} the {name}")
             tl.hold(2.0)
@@ -542,14 +648,44 @@ def simulate(world, robot, task, steps):
             continue
         lo, hi = prof["armHeight"]
         horizontal = arrival["distance"] - 0.15
-        if not lo <= top <= hi or horizontal > prof["reach"]:
+        limit = prof["reach"] + (GRIPPER if step["action"] == "pick" else 0.0)
+        if not lo <= top <= hi or horizontal > limit:
             tl.event(f"The {name} is out of reach")
             tl.arm_to(1.0)
             tl.hold(1.0)
             tl.arm_to(0.0)
-            why = f"surface top {top:.2f} m is outside the {lo:.2f}-{hi:.2f} m arm range" if not lo <= top <= hi else f"surface is {horizontal:.2f} m beyond the base, reach {prof['reach']:.2f} m"
+            why = f"surface top {top:.2f} m is outside the {lo:.2f}-{hi:.2f} m arm range" if not lo <= top <= hi else f"surface is {horizontal:.2f} m beyond the base, reach {limit:.2f} m"
             results.append({"name": title, "status": "failed", "note": why.capitalize() + "."})
             aborted = True
+            continue
+        if step["action"] == "pick" or (step["action"] == "place" and held is not None):
+            if step["action"] == "pick":
+                obj, target = lm, lm.get("meshPosition", lm["position"])
+            else:
+                obj = held
+                target = place_point(world, lm, tl.pos, held.get("halfHeight", held["size"][2] / 2))
+            yaw, ext = arm_pose_for(tl.pos, target)
+            if robot != "stretch":
+                yaw, ext = yaw_towards(*(np.array(target[:2]) - tl.pos)), arm_target(robot, arrival["distance"])
+            tl.turn_to(yaw)
+            tl.arm_to(ext)
+            label = obj["label"]
+            if step["action"] == "pick":
+                tl.hold(1.0)
+                tl.event(f"Picked up {label}")
+                carried.append({"objectId": obj.get("objectId", obj["id"]), "assetId": obj.get("assetId"), "landmark": obj["id"],
+                                "pickTime": round(tl.time, 1), "pickAt": list(target), "carryOffset": list(CARRY_OFFSET)})
+                tl.arm_to(0.35)
+                held = obj
+                results.append({"name": title, "status": "done",
+                                "note": f"Near rim {arrival['distance']:.2f} m from the base centre (arm {prof['reach']:.2f} m + gripper {GRIPPER:.2f} m); arm extended to {ext:.2f}, carrying at 0.35."})
+            else:
+                tl.hold(0.8)
+                tl.event(f"Placed {label} on the {name}")
+                carried[-1].update({"placeTime": round(tl.time, 1), "placeAt": target})
+                tl.arm_to(0.0)
+                held = None
+                results.append({"name": title, "status": "done", "note": f"Set down {PLACE_INSET:.2f} m inside the edge at ({target[0]:.2f}, {target[1]:.2f}, {target[2]:.2f})."})
             continue
         tl.turn_to(yaw_towards(*(np.array(lm["position"][:2]) - tl.pos)))
         ext = arm_target(robot, arrival["distance"])
@@ -575,6 +711,7 @@ def simulate(world, robot, task, steps):
     tl.hold(1.0)
     done = sum(r["status"] == "done" for r in results)
     status = "completed" if done == len(results) else ("partial" if done else "failed")
+    tl.carried = [c for c in carried if "placeTime" in c]
     return tl, results, status
 
 
@@ -608,8 +745,27 @@ def plan_task(task, robot, world=None, revision=None, use_openai=True, steps_inf
                    "task": task, "events": tl.events, "verdict": verdict, "landmarks": world.landmarks,
                    "plannerNotes": world.info["notes"]},
     }
+    if getattr(tl, "carried", None):
+        envelope["replay"]["carried"] = tl.carried
+    validate_carried(envelope["replay"])
     validate_replay(envelope, robot, revision)
     return envelope
+
+
+def validate_carried(replay):
+    """Optional replay.carried: [{objectId, assetId, pickTime, placeTime, placeAt[3], carryOffset[3]}]."""
+    carried = replay.get("carried")
+    if carried is None:
+        return
+    if not isinstance(carried, list):
+        raise ValueError("carried must be a list")
+    for c in carried:
+        ok = (isinstance(c, dict) and isinstance(c.get("objectId"), str)
+              and all(isinstance(c.get(k), (int, float)) and math.isfinite(c[k]) for k in ("pickTime", "placeTime"))
+              and 0 <= c["pickTime"] < c["placeTime"] <= replay["duration"]
+              and all(isinstance(c.get(k), list) and len(c[k]) == 3 and all(math.isfinite(v) for v in c[k]) for k in ("placeAt", "carryOffset")))
+        if not ok:
+            raise ValueError("carried entries need objectId, pickTime < placeTime within the replay, placeAt and carryOffset")
 
 
 def write_json(path, value):
@@ -630,7 +786,7 @@ def plan_and_write(task, robots=ROBOT_IDS, use_openai=True, rollouts=ROLLOUTS, r
         env = plan_task(task, robot, world, revision, use_openai, steps_info)
         write_json(Path(rollouts) / slug / f"{robot}.json", env)
         write_json(Path(replays) / f"{robot}.json", env)
-        if slug == "wipe-the-table":
+        if slug == HEADLINE:
             write_json(Path(rollouts) / "default" / f"{robot}.json", env)
         results[robot] = env
     return slug, results
