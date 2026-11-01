@@ -1842,8 +1842,7 @@
      "note": "Arm oscillated 0.55-0.85 for 6 s over an approx. 0.6 m x 0.4 m patch. Decisions (gpt-6-luna) feasibility estimate p=1.00."
     }
    ],
-   "planner": "openai",
-   "model": "gpt-6.1-sol"
+   "planner": "rules"
   },
   "landmarks": [
    {

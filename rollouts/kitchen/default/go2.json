@@ -818,8 +818,7 @@
      "note": "Go2 has no arm. Decisions (gpt-6-luna) feasibility estimate p=0.00."
     }
    ],
-   "planner": "openai",
-   "model": "gpt-6.1-sol"
+   "planner": "rules"
   },
   "landmarks": [
    {

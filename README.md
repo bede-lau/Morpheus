@@ -12,7 +12,7 @@ Built during the DevDay Community Hackathon in London on 1 November 2026 with Co
 | 2. Objects → SimReady | Select movable objects in the scan, identify them with the OpenAI Decisions API (`gpt-6-luna`), rank candidates from [nvidia/simready-assets](https://huggingface.co/datasets/nvidia/simready-assets), hide the original splats and drop in the real mesh. | `/?view=objects`, `pipeline/object_server.py`, `pipeline/simready.py` |
 | 3. Task → robot comparison | Spawn a robot at the kitchen door, tell it "wipe the table" or "fill a glass of water", plan a collision-free rollout over the reconstructed geometry, watch it from the room and from the robot's own camera, and compare Stretch, Go2 and SO-ARM100 verdicts side by side. | `/` (default workspace), `pipeline/task_planner.py`, `pipeline/landmarks.py`, `rollouts/kitchen/` |
 
-Pre-rendered rollouts for both demo tasks and all three robots are committed under `rollouts/kitchen/` so the task stage plays on a fresh clone without any API key. With `OPENAI_API_KEY` set in `environment-pipeline/.env`, stage 2 uses Decisions for object matching and stage 3 lets the Responses API choose the step plan (`verdict.planner: "openai"`); without it both fall back to deterministic rules and say so.
+Pre-rendered rollouts for both demo tasks and all three robots are committed under `rollouts/kitchen/` so the task stage plays on a fresh clone without any API key. The `OPENAI_API_KEY` in `environment-pipeline/.env` is used only for the Decisions API (`gpt-6-luna`): object matching in stage 2 and per-step feasibility notes in stage 3. Language-model reasoning (step plans, object spotting in rendered views) comes from the Codex CLI agents and is handed to the scripts as JSON (`--steps`, `detections.json`); without any of that, deterministic rules run and the verdict says `planner: "rules"`.
 
 ## What works
 
@@ -65,6 +65,10 @@ The service listens on `127.0.0.1:8000`; Vite proxies `/api` to it. It accepts c
 pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all
 pipeline/.venv/bin/python -m pipeline.task_planner "fill a glass of water" --all
 ```
+
+Add `--steps plan.json` to use a step plan written by a Codex CLI agent. To let CLI agents find objects for stage 2, run `python3 scripts/discover-objects.py render --views 16`, have them write `output/discovery/detections.json` from the rendered views, then `python3 scripts/discover-objects.py apply`.
+
+Add `--steps plan.json` to use a step plan written by a Codex CLI agent. To let CLI agents find objects for stage 2, run `python3 scripts/discover-objects.py render --views 16`, have them write `output/discovery/detections.json` from the rendered views, then `python3 scripts/discover-objects.py apply`.
 
 Each run writes `rollouts/kitchen/<task-slug>/<robot>.json` and the latest plan to `output/kitchen/replays/<robot>.json`. Open the default workspace, pick a task, pick a robot, press play. The inset shows the robot's camera; the right panel shows the verdict and each step's outcome. **Compare robots** shows all three verdicts for the task. Rollouts are planned against the exported collision boxes and checked against the reference mesh in `src/robot-clearance.test.ts`; they are not physics simulations or trained policies.
 

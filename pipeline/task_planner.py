@@ -293,7 +293,9 @@ PLAN_SCHEMA = {
 def openai_plan(task, landmarks):
     """Return (steps, model) or raise. Never logs the key."""
     key = load_key()
-    if not key or os.environ.get("MORPHEUS_PLANNER") == "rules":
+    # Opt-in only: the API key is reserved for Decisions. Language-model planning is
+    # done by the Codex CLI agent, which hands its plan in through --steps.
+    if not key or os.environ.get("MORPHEUS_PLANNER") != "openai":
         raise ValueError("OpenAI planner disabled")
     usable = [{"id": lm["id"], "label": lm["label"], "kind": lm["kind"], "topHeightM": lm["size"][2]} for lm in landmarks if lm["kind"] != "door"]
     for lm in usable:
@@ -333,7 +335,7 @@ def openai_plan(task, landmarks):
 def decisions_feasibility(robot, steps, world):
     """Optional Decisions predicates; returns {stepIndex: note}. Empty on any error."""
     key = load_key()
-    if not key or os.environ.get("MORPHEUS_PLANNER") == "rules":
+    if not key or os.environ.get("MORPHEUS_DECISIONS") == "off":
         return {}
     prof = ROBOTS[robot]
     questions = []
@@ -359,6 +361,19 @@ def decisions_feasibility(robot, steps, world):
         return notes
     except Exception:
         return {}
+
+
+def load_steps_file(path, landmarks):
+    """Plan JSON written by a Codex CLI agent: {"steps":[{"action","target"}], "rationale"?}."""
+    data = json.loads(Path(path).read_text())
+    steps = data["steps"] if isinstance(data, dict) else data
+    ids = {lm["id"] for lm in landmarks}
+    if not isinstance(steps, list) or not 1 <= len(steps) <= 8:
+        raise ValueError("steps must be a list of 1-8 {action,target} entries")
+    for step in steps:
+        if step.get("action") not in ACTIONS or step.get("target") not in ids:
+            raise ValueError(f"invalid step {step}; actions {sorted(ACTIONS)}, landmarks {sorted(ids)}")
+    return [{"action": s["action"], "target": s["target"]} for s in steps]
 
 
 def plan_steps(task, landmarks, use_openai=True):
@@ -558,7 +573,7 @@ def plan_task(task, robot, world=None, revision=None, use_openai=True, steps_inf
     revision = revision or EnvironmentStore().snapshot()["revision"]
     steps, planner, model = steps_info or plan_steps(task, world.landmarks, use_openai)
     tl, results, status = simulate(world, robot, task, steps)
-    if planner == "openai":
+    if use_openai or planner != "rules":
         for i, note in decisions_feasibility(robot, steps, world).items():
             if i < len(results):
                 results[i]["note"] = (results[i]["note"] + " " + note).strip()
@@ -584,11 +599,11 @@ def write_json(path, value):
     tmp.replace(path)
 
 
-def plan_and_write(task, robots=ROBOT_IDS, use_openai=True, rollouts=ROLLOUTS, replays=REPLAYS):
+def plan_and_write(task, robots=ROBOT_IDS, use_openai=True, rollouts=ROLLOUTS, replays=REPLAYS, steps_info=None):
     task = task.strip()
     world = World()
     revision = EnvironmentStore().snapshot()["revision"]
-    steps_info = plan_steps(task, world.landmarks, use_openai)
+    steps_info = steps_info or plan_steps(task, world.landmarks, use_openai)
     slug = slugify(task)
     results = {}
     for robot in robots:
@@ -607,12 +622,16 @@ def main():
     group = parser.add_mutually_exclusive_group()
     group.add_argument("--all", action="store_true")
     group.add_argument("--robot", choices=ROBOT_IDS)
-    parser.add_argument("--rules", action="store_true", help="skip the OpenAI planner")
+    parser.add_argument("--rules", action="store_true", help="rule planner only (default unless MORPHEUS_PLANNER=openai)")
+    parser.add_argument("--steps", help="plan JSON written by the Codex CLI agent: {\"steps\":[{\"action\",\"target\"}]}")
     args = parser.parse_args()
     if not 1 <= len(args.task.strip()) <= 200:
         parser.error("task must be 1-200 characters")
     robots = (args.robot,) if args.robot else ROBOT_IDS
-    slug, results = plan_and_write(args.task, robots, use_openai=not args.rules)
+    steps_info = None
+    if args.steps:
+        steps_info = (load_steps_file(args.steps, World().landmarks), "codex-cli", None)
+    slug, results = plan_and_write(args.task, robots, use_openai=not args.rules, steps_info=steps_info)
     for robot, env in results.items():
         v = env["replay"]["verdict"]
         print(f"{slug}/{robot}: {v['status']} planner={v['planner']}{' model=' + v['model'] if 'model' in v else ''} duration={env['replay']['duration']}s")

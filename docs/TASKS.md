@@ -98,14 +98,23 @@ labels clusters by geometry:
 - `tall`: top height > 1.6 m (cabinets / fridge)
 - `door`: the spawn gap
 
-When `OPENAI_API_KEY` is configured the planner additionally calls the
-Responses API (`gpt-5` family, JSON schema output) with the landmark list and
-the task text to choose the step sequence and target landmark IDs; the
-answer is validated against the same landmark IDs and falls back to the rule
-planner on any error. `verdict.planner` records which one produced the plan.
-Decisions API (`POST /v1/decisions`, model `gpt-6-luna`) may be used for the
-per-step feasibility predicates ("can this robot reach a 0.9 m surface?") in
-the same optional way.
+**API usage policy.** The `OPENAI_API_KEY` in `.env` is reserved for the
+Decisions API (`POST /v1/decisions`, `gpt-6-luna`): object matching in stage 2
+and the per-step feasibility predicates ("can this robot reach a 0.9 m
+surface?") recorded in `verdict.steps[].note`. Language-model reasoning
+(choosing the step sequence, spotting objects in rendered views) is done by
+the Codex CLI agents, not by API calls:
+
+- `python -m pipeline.task_planner "<task>" --all --steps plan.json` takes a
+  plan written by the CLI agent (`{"steps":[{"action":"navigate","target":"table"},...]}`,
+  actions `navigate|wipe|fill|place`, targets from `python -m pipeline.landmarks`)
+  and records `verdict.planner: "codex-cli"`. Without `--steps` the keyword
+  rule planner is used (`"rules"`).
+- `scripts/discover-objects.py render` writes camera views for the CLI agents
+  to inspect; they write `output/discovery/detections.json`; `apply` raycasts,
+  matches with Decisions, replaces and saves.
+- A Responses-API planner exists behind `MORPHEUS_PLANNER=openai` for
+  experiments only; it is off by default.
 
 ## HTTP routes (port 8000, proxied by Vite under `/api`)
 
