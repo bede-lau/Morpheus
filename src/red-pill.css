@@ -5,7 +5,7 @@
 .rp-stage{position:absolute;inset:0;opacity:0;transition:opacity 1.4s .2s}.rp.ready .rp-stage{opacity:1}
 .rp-stage canvas{display:block;outline:none}
 .rp-top{position:absolute;left:50%;top:5vh;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none;animation:rise .7s .1s both}
-.rp-shades{width:min(380px,72vw);aspect-ratio:1536/300;background:url(/brand/morpheus-matrix-logo.png) center 37%/100% auto no-repeat;-webkit-mask-image:radial-gradient(ellipse 52% 60% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 52% 60% at 50% 50%,#000 70%,transparent 100%);filter:drop-shadow(0 0 18px rgba(25,195,125,.35))}
+.rp-shades{width:min(300px,65vw);aspect-ratio:3/1;background:url(/brand/morpheus-glasses.png) center/contain no-repeat}
 .rp-quote{margin:22px 0 0;font-size:14px;line-height:1.75;font-weight:500;min-height:5.25em;color:#d7efe2;text-shadow:0 0 12px rgba(0,0,0,.9)}
 .rp-quote .blue{color:#6f9bff}.rp-quote .red{color:#ff5a63}
 .rp-caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 1s steps(1) infinite}

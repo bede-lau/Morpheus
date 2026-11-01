@@ -276,7 +276,7 @@ export default function Demo(){
       {d&&phase>=1&&phase<=3&&now>=RINGS_T&&d.report.map((o,i)=><div key={`r${i}`} className={`d-pin ${o.result}`} data-x={o.position[0]} data-y={o.position[1]} data-z={o.position[2]}><span>{o.label} · v{pad(o.view)} · {pct(o.confidence)}<b>{o.result}</b></span></div>)}
       {d&&phase===4&&now>START[4]+1.8&&landmarkList.map(l=><div key={l.id} className="d-pin land" data-x={l.position[0]} data-y={l.position[1]} data-z={l.position[2]+l.size[2]/2}><span>{l.label}<b>{l.size.slice(0,2).map(n=>Math.abs(n).toFixed(2)).join('×')} m</b></span></div>)}
     </div>
-    <header className="d-brand"><span className="d-mark"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>
+    <header className="d-brand"><img src="/brand/morpheus-glasses.png" alt="" width="48" height="16"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>
     {ui.stage==='empty'&&<>
       <div className="d-rooms">{ROOMS.map(r=><button key={r.name} className="d-room" onClick={()=>start(r)}><div className="d-tile"><img src={r.image} alt={r.name} draggable={false}/><span>{r.kind==='kitchen'?'scan → sim':'scan'}</span></div><div className="d-room-meta"><b>{r.name}</b><small>{r.meta}</small></div></button>)}</div>
       {ui.error&&<div className="d-error">{ui.error}</div>}

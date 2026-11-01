@@ -1,3 +1,5 @@
+<p align="center"><img src="public/brand/morpheus-glasses.png" width="300" alt="Morpheus — green sunglasses logo" /></p>
+
 # Morpheus
 
 **Which robot is best for my home?** Morpheus captures a room as a Gaussian splat, turns it into a simulation-ready environment, swaps scanned objects for real NVIDIA SimReady assets, and then lets three different robots attempt the same household task inside *your* room so you can pick the one that fits.
