@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+/* The room picker is the entrance: one quiet identity, no interstitial. */
+.demo.stage-empty{background:#f1f5f2;overflow-y:auto;--home-ink:#203b30;--home-muted:#75857b;--home-line:#d8e2da}
+.stage-empty .d-noise,.stage-empty .d-vignette,.stage-empty .d-labels{display:none}
+.home{position:relative;z-index:2;max-width:1280px;min-height:100%;margin:auto;padding:0 60px;color:var(--home-ink);font-family:'DM Sans',sans-serif;display:flex;flex-direction:column;letter-spacing:0}
+.home a,.home button{font-family:inherit}
+.home a{color:inherit;text-decoration:none}
+.home-header{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:30px 0;border-bottom:1px solid var(--home-line)}
+.home-brand{font-family:Manrope,sans-serif!important;font-size:13px;font-weight:800;letter-spacing:.2em}
+.home-brand span{display:block;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:400;letter-spacing:0;color:var(--home-muted);margin-top:6px}
+.home-workspace{display:flex;align-items:center;gap:20px;font-size:12px;padding:11px 16px;border:1px solid #c4d2c8;border-radius:30px;transition:background .2s,border-color .2s}
+.home-workspace:hover{background:#e2eae4;border-color:#8da597}
+.home-workspace span{font-size:19px;line-height:1}
+.home-hero{display:grid;grid-template-columns:1.15fr 1fr;align-items:center;gap:30px;padding:56px 0 54px;flex:1}
+.home-eyebrow{font-family:var(--mono);font-size:9px;letter-spacing:.17em;color:#668171}
+.home h1{font-family:Manrope,sans-serif;font-weight:500;font-size:clamp(36px,4.35vw,60px);line-height:1.12;letter-spacing:-.055em;margin:16px 0 22px}
+.home-intro>p{font-size:14px;line-height:1.8;color:#728177;margin:0}
+.home-glasses{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 0 0}
+.home-glasses img{width:100%;height:auto;display:block;transform:rotate(-7deg);filter:drop-shadow(0 28px 20px #244c3218)}
+.home-glasses>span{margin-top:46px;font-family:var(--mono);font-size:8px;letter-spacing:.09em;color:#7d9182}
+.home-spaces{padding-bottom:28px}
+.home-section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:18px;margin-bottom:18px}
+.home-section-heading h2{font-family:Manrope,sans-serif;font-size:16px;font-weight:600;letter-spacing:-.025em;margin:0}
+.home-section-heading>span{font-family:var(--mono);font-size:9px;color:var(--home-muted)}
+.home-room-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.home-room{padding:0;border:0;background:transparent;text-align:left;cursor:pointer;color:var(--home-ink);min-width:0}
+.home-room-image{position:relative;aspect-ratio:2;overflow:hidden;background:#dce5de;border-radius:8px;box-shadow:0 0 0 1px #203b3009;transition:box-shadow .2s,transform .2s}
+.home-room-image>img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s,filter .4s;filter:saturate(.65)}
+.home-room:hover .home-room-image,.home-room:focus-visible .home-room-image{box-shadow:0 0 0 2px #557b62,0 10px 25px -18px #203b30;transform:translateY(-3px)}
+.home-room:hover .home-room-image>img,.home-room:focus-visible .home-room-image>img{transform:scale(1.035);filter:saturate(1)}
+.home-room-badge{position:absolute;top:10px;left:10px;padding:5px 8px;border-radius:4px;background:#f3f6f0ed;color:#4f6657;font-size:9px;font-weight:500;line-height:1.3}
+.home-room.featured .home-room-badge{background:#244b39;color:#edf7ef}
+.home-room-open{position:absolute;right:10px;bottom:10px;display:grid;place-items:center;width:26px;height:26px;background:#f3f6f0ed;color:#244b39;border-radius:50%;font-size:17px}
+.home-room-caption{padding:15px 1px 4px}
+.home-room-caption h3{font-family:Manrope,sans-serif;font-size:14px;font-weight:600;letter-spacing:-.02em;margin:0 0 6px}
+.home-room-caption p{font-size:10px;color:var(--home-muted);line-height:1.5;margin:0}
+.home-footer{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:23px 0 25px;border-top:1px solid var(--home-line);font-size:10px;color:var(--home-muted)}
+.home-footer>span{display:flex;align-items:center;gap:8px}
+.home-footer i{width:5px;height:5px;border-radius:50%;background:#77a884}
+.home-footer nav{display:flex;gap:25px}
+.home-footer a:hover{color:var(--home-ink)}
+.home :is(button,a):focus-visible{outline:2px solid #426f55;outline-offset:5px;border-radius:5px}
+.home-error{margin-top:18px;padding:12px 16px;background:#fff3e8;border:1px solid #e1b58e;border-radius:6px;color:#8b4e22;font-size:12px;line-height:1.5}
+@media(min-height:850px) and (min-width:901px){.home-hero{padding-top:85px;padding-bottom:85px}.home-room-image{aspect-ratio:1.4}}
+@media(max-width:900px){.home{padding:0 32px}.home-hero{padding:44px 0;gap:16px}.home-room-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px 20px}.home-glasses>span{font-size:7px;letter-spacing:0}.home-wide-break{display:none}}
+@media(max-width:540px){.home{padding:0 22px}.home-header{padding:23px 0;gap:12px}.home-brand{font-size:11px}.home-brand span{font-size:9px}.home-workspace{font-size:10px;padding:9px 11px;gap:10px}.home-hero{grid-template-columns:1fr;padding:36px 0 30px;gap:8px}.home h1{font-size:42px;margin-top:12px;margin-bottom:17px}.home-intro>p{font-size:13px;max-width:290px}.home-glasses{padding:25px 25px 0}.home-glasses img{max-width:300px;transform:rotate(-5deg)}.home-glasses>span{margin-top:26px;font-size:8px}.home-section-heading{margin-bottom:16px}.home-section-heading h2{font-size:15px}.home-section-heading>span{font-size:8px}.home-room-grid{gap:22px 13px}.home-room-image{aspect-ratio:1.2}.home-room-badge{top:7px;left:7px;font-size:8px;padding:4px 6px}.home-room-caption h3{font-size:13px}.home-room-caption p{font-size:9px}.home-footer{align-items:flex-start;flex-direction:column;gap:18px;padding:22px 0}.home-footer nav{gap:24px}}
+@media(prefers-reduced-motion:reduce){.home *{transition:none!important}}
+
+@media(min-width:901px) and (max-height:800px){.home-header{padding:22px 0}.home-hero{padding:16px 0}.home-glasses>span{margin-top:34px}.home h1{font-size:50px;margin:12px 0 16px}.home-room-image{aspect-ratio:2.2}.home-spaces{padding-bottom:20px}.home-footer{padding:20px 0}}

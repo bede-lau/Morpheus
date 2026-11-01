@@ -9,9 +9,9 @@ import { fetchTasks, parseTaskEnvelope, taskUrl } from './tasks';
 import { currentEvent, ROBOTS, type Replay, type RobotId, type Verdict } from './replay';
 import { computeBounds, roomFootprintBounds } from './geometry';
 import { suggestedCutawayHeight } from './cutaway';
-import RedPill from './red-pill';
 import { AMBER, GREEN, backOut, captureAround, createFlash, createRing, createScanPlane, createSphereReveal, easeInOutCubic, easeOutCubic, fadeColliders, loadAsset, progress, project } from './demo-fx';
 import './demo.css';
+import './landing.css';
 
 type View={view:number;file:string;width:number;height:number};
 type Detection={view:number;label:string;x:number;y:number;confidence:number};
@@ -258,7 +258,7 @@ export default function Demo(){
   useEffect(()=>{logEnd.current?.scrollIntoView({block:'end'})},[ui.logs.length]);
   const start=(r:Room)=>{if(ui.stage!=='empty'||!show.current)return;room.current=r;load(show.current,r)};
   const restart=()=>{setAuto(true);setGen(g=>g+1)};const back=()=>{setAuto(false);setGen(g=>g+1)};
-  useEffect(()=>{const key=(e:KeyboardEvent)=>{if(e.target instanceof HTMLInputElement)return;const s=show.current;if(!s)return;
+  useEffect(()=>{const key=(e:KeyboardEvent)=>{if(e.target instanceof HTMLElement&&e.target.closest('button,a,input,select,textarea'))return;const s=show.current;if(!s)return;
       if(e.code==='Space'){e.preventDefault();if(ui.stage==='ready')s.startMorph();else if(ui.stage==='morph')s.togglePause();else if(ui.stage==='empty')start(ROOMS[0])}
       else if(e.key==='ArrowRight'){s.next()}else if(e.key.toLowerCase()==='r'&&ui.stage!=='empty'&&ui.stage!=='loading')restart()};
     addEventListener('keydown',key);return()=>removeEventListener('keydown',key)});
@@ -276,13 +276,23 @@ export default function Demo(){
       {d&&phase>=1&&phase<=3&&now>=RINGS_T&&d.report.map((o,i)=><div key={`r${i}`} className={`d-pin ${o.result}`} data-x={o.position[0]} data-y={o.position[1]} data-z={o.position[2]}><span>{o.label} · v{pad(o.view)} · {pct(o.confidence)}<b>{o.result}</b></span></div>)}
       {d&&phase===4&&now>START[4]+1.8&&landmarkList.map(l=><div key={l.id} className="d-pin land" data-x={l.position[0]} data-y={l.position[1]} data-z={l.position[2]+l.size[2]/2}><span>{l.label}<b>{l.size.slice(0,2).map(n=>Math.abs(n).toFixed(2)).join('×')} m</b></span></div>)}
     </div>
-    <header className="d-brand"><img src="/brand/morpheus-glasses.png" alt="" width="48" height="16"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>
-    {ui.stage==='empty'&&<>
-      <div className="d-rooms">{ROOMS.map(r=><button key={r.name} className="d-room" onClick={()=>start(r)}><div className="d-tile"><img src={r.image} alt={r.name} draggable={false}/><span>{r.kind==='kitchen'?'scan → sim':'scan'}</span></div><div className="d-room-meta"><b>{r.name}</b><small>{r.meta}</small></div></button>)}</div>
-      {ui.error&&<div className="d-error">{ui.error}</div>}
-      <nav className="d-links"><a href="/?view=workspace">workspace</a>·<a href="/?view=objects">objects</a>·<a href="/?view=builder">builder</a></nav>
-    </>}
-    <RedPill/>
+    {ui.stage!=='empty'&&<header className="d-brand"><img src="/brand/morpheus-glasses.png" alt="" width="48" height="16"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>}
+    {ui.stage==='empty'&&<main className="home">
+      <header className="home-header"><a className="home-brand" href="/" aria-label="Morpheus home">MORPHEUS<span>Home robotics, in perspective.</span></a><a className="home-workspace" href="/?view=workspace">Open workspace <span aria-hidden="true">↗</span></a></header>
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="home-intro"><span className="home-eyebrow">A NEW PERSPECTIVE</span><h1 id="home-title">See your home<br/>through new eyes.</h1><p>Choose a room. Turn the scan into a simulation,<br className="home-wide-break"/> then see how each robot moves through it.</p></div>
+        <div className="home-glasses"><img src="/brand/morpheus-glasses.png" alt="Morpheus green sunglasses" width="2172" height="724"/><span>Same room. Different possibilities.</span></div>
+      </section>
+      <section className="home-spaces" aria-labelledby="spaces-title">
+        <div className="home-section-heading"><h2 id="spaces-title">Choose your space</h2><span>{ROOMS.length} rooms to explore</span></div>
+        <div className="home-room-grid">{ROOMS.map(r=><button key={r.name} className={`home-room ${r.kind==='kitchen'?'featured':''}`} onClick={()=>start(r)} aria-label={`Open ${r.name}${r.kind==='kitchen'?', full simulation':', scan preview'}`}>
+          <div className="home-room-image"><img src={r.image} alt="" draggable={false}/><span className="home-room-badge">{r.kind==='kitchen'?'Full simulation':'Scan preview'}</span><span className="home-room-open" aria-hidden="true">↗</span></div>
+          <div className="home-room-caption"><h3>{r.name}</h3><p>{r.kind==='kitchen'?'Scan, simulate, compare robots':'Step inside the room scan'}</p></div>
+        </button>)}</div>
+        {ui.error&&<div className="home-error" role="alert">{ui.error}</div>}
+      </section>
+      <footer className="home-footer"><span><i aria-hidden="true"/>Start with a space. Find what fits.</span><nav aria-label="Preparation tools"><a href="/?view=objects">Object library</a><a href="/?view=builder">Environment builder <span aria-hidden="true">↗</span></a></nav></footer>
+    </main>}
     {ui.stage==='loading'&&<div className="d-loading"><span className="d-spin"/>{ui.status||'loading'}</div>}
     {ui.stage==='ready'&&(d?<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>scan → objects → physics → robots</small></div>
       :<div className="d-cta"><small>{ui.room} · {ROOMS.find(r=>r.name===ui.room)?.credit??'scan preview'}</small><button onClick={back}>← CHOOSE ROOM</button><small>pipeline demo runs on the rustic kitchen</small></div>)}
