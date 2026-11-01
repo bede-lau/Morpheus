@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import './red-pill.css';
 
-// Opening screen: Morpheus' shades, two 3D hands offering the pills. Only the red pill lets you in.
+// Opening screen: two 3D hands offer the pills. Only the red pill lets you in.
 // Hands: @webxr-input-profiles/assets generic-hand (MIT), bundled under public/brand/hands.
 
 type Pill='red'|'blue';
@@ -130,7 +130,6 @@ export default function RedPill(){
     <Rain on={live}/>
     <div className="rp-stage" ref={host}/>
     <div className="rp-top">
-      <div className="rp-shades" role="img" aria-label="Morpheus"/>
       <blockquote className="rp-quote">{QUOTE.map(([text,tone],i)=>{const shown=text.slice(0,Math.max(0,left));left-=text.length;return <span key={i} className={tone}>{shown}</span>})}<span className={`rp-caret ${typed>=QUOTE_LEN?'done':''}`}/></blockquote>
       <cite className="rp-cite">— MORPHEUS</cite>
     </div>
