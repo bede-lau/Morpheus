@@ -1,0 +1,9 @@
+{
+  "sink": {
+    "near": [
+      1.0,
+      1.2
+    ]
+  },
+  "note": "Sink is under the window on the west counter; pinned after looking at the scan. Everything else is inferred from geometry."
+}

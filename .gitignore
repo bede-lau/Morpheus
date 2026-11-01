@@ -18,6 +18,7 @@ output/*
 output/kitchen/*
 !output/kitchen/scene.json
 !output/kitchen/spawn-candidates.json
+!output/kitchen/landmark-review.json
 !output/kitchen/replays/
 !output/simready/
 output/simready/*

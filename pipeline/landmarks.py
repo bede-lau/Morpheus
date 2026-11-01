@@ -251,8 +251,8 @@ def compute_landmarks(scene=None, use_mesh=True):
 
     out = [landmark("table", "Table", "table", table["rect"], table["top"])]
     if sink is not None:
-        out.append(landmark("sink", "Counter (sink assumed)", "sink", sink["rect"], sink["top"]))
-    for n, s in enumerate([c for c in counters if c is not sink], 1):
+        out.append(landmark("sink", "Sink counter (reviewed)" if sink.get("reviewed") else "Counter (sink assumed)", "sink", sink["rect"], sink["top"]))
+    for n, s in enumerate([c for c in counters if c["rect"] != sink["rect"]] if sink is not None else counters, 1):
         out.append(landmark(f"counter_{n}", f"Counter {n}", "counter", s["rect"], s["top"]))
     for n, s in enumerate(sorted(talls, key=lambda s: -s["cells"])[:6], 1):
         out.append(landmark(f"tall_{n}", f"Tall unit {n}", "tall", s["rect"], s["maxTop"]))
@@ -345,6 +345,16 @@ def filter_boxes(boxes, grids):
     return kept, dropped
 
 
+REVIEW = SCENE.parent / "landmark-review.json"
+
+
+def load_review():
+    try:
+        return json.loads(REVIEW.read_text()) if REVIEW.exists() else {}
+    except (ValueError, OSError):
+        return {}
+
+
 def compute_mesh_landmarks(floor, floor_z, boxes, rects, grids):
     from scipy import ndimage
     from .room_mesh import obstacle_distance
@@ -432,11 +442,18 @@ def compute_mesh_landmarks(floor, floor_z, boxes, rects, grids):
     sink = min(pool, key=lambda s: float(np.linalg.norm(np.array(s["centre"]) - room_centre))) if pool else None
     if sink is not None and not opposite:
         notes.append("No counter lies on the side opposite the door; sink is the counter closest to the room centre.")
+    # A person can pin the sink from the scan: output/kitchen/landmark-review.json {"sink": {"near": [x, y]}}.
+    review = load_review()
+    if counters and isinstance(review.get("sink", {}).get("near"), list) and len(review["sink"]["near"]) == 2:
+        near = np.array(review["sink"]["near"], dtype=float)
+        sink = min(counters, key=lambda s: float(np.linalg.norm(np.array(s["centre"]) - near)))
+        notes.append("Sink location pinned by human review of the scan (output/kitchen/landmark-review.json).")
+        sink = {**sink, "reviewed": True}
 
     out = [landmark("table", "Table", "table", table["rect"], table["top"])]
     if sink is not None:
-        out.append(landmark("sink", "Counter (sink assumed)", "sink", sink["rect"], sink["top"]))
-    for n, s in enumerate([c for c in counters if c is not sink], 1):
+        out.append(landmark("sink", "Sink counter (reviewed)" if sink.get("reviewed") else "Counter (sink assumed)", "sink", sink["rect"], sink["top"]))
+    for n, s in enumerate([c for c in counters if c["rect"] != sink["rect"]] if sink is not None else counters, 1):
         out.append(landmark(f"counter_{n}", f"Counter {n}", "counter", s["rect"], s["top"]))
     for n, s in enumerate(sorted(talls, key=lambda s: -s["cells"])[:6], 1):
         out.append(landmark(f"tall_{n}", f"Tall unit {n}", "tall", s["rect"], s["maxTop"]))

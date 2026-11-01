@@ -878,23 +878,8 @@
    },
    {
     "id": "sink",
-    "label": "Counter (sink assumed)",
+    "label": "Sink counter (reviewed)",
     "kind": "sink",
-    "position": [
-     0.5501,
-     -1.3559,
-     0.3369
-    ],
-    "size": [
-     0.4,
-     0.45,
-     0.6738
-    ]
-   },
-   {
-    "id": "counter_1",
-    "label": "Counter 1",
-    "kind": "counter",
     "position": [
      1.0501,
      1.6941,
@@ -907,8 +892,8 @@
     ]
    },
    {
-    "id": "counter_2",
-    "label": "Counter 2",
+    "id": "counter_1",
+    "label": "Counter 1",
     "kind": "counter",
     "position": [
      2.1501,
@@ -922,8 +907,8 @@
     ]
    },
    {
-    "id": "counter_3",
-    "label": "Counter 3",
+    "id": "counter_2",
+    "label": "Counter 2",
     "kind": "counter",
     "position": [
      2.6751,
@@ -937,8 +922,8 @@
     ]
    },
    {
-    "id": "counter_4",
-    "label": "Counter 4",
+    "id": "counter_3",
+    "label": "Counter 3",
     "kind": "counter",
     "position": [
      2.9001,
@@ -952,8 +937,8 @@
     ]
    },
    {
-    "id": "counter_5",
-    "label": "Counter 5",
+    "id": "counter_4",
+    "label": "Counter 4",
     "kind": "counter",
     "position": [
      2.3501,
@@ -964,6 +949,21 @@
      0.5,
      0.55,
      0.6726
+    ]
+   },
+   {
+    "id": "counter_5",
+    "label": "Counter 5",
+    "kind": "counter",
+    "position": [
+     0.5501,
+     -1.3559,
+     0.3369
+    ],
+    "size": [
+     0.4,
+     0.45,
+     0.6738
     ]
    },
    {
@@ -1075,6 +1075,7 @@
   "plannerNotes": [
    "16 of 110 collision columns stand on floor the mesh shows as open (they were filled up to the ceiling) and are ignored for planning; the mesh obstacle grid is used instead.",
    "No interior cluster met the table rule (0.65-1.00 m top, >=0.5 m2, >0.3 m from walls); the interior-most accessible counter-height cluster is labelled table.",
+   "Sink location pinned by human review of the scan (output/kitchen/landmark-review.json).",
    "Room interior, landmarks and spawn come from the companion collider mesh (public/samples/rustic-kitchen-collider.glb); heights are above the fitted floor plane."
   ]
  }
