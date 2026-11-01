@@ -81,6 +81,57 @@ export function computeBounds(points: Float32Array, trimFraction = 0.01): Bounds
   return boundsOf(validPoints(points), trimFraction);
 }
 
+/**
+ * Display-only: bounds of the main room footprint. Builds an XY occupancy grid
+ * and keeps the contiguous band of columns/rows whose occupancy is at least
+ * `keep` of the busiest one, dropping thin exterior appendages (a garden seen
+ * through a window, a strip of street) that percentile bounds keep. Z comes
+ * from the points inside the kept footprint. Never used for exported geometry.
+ */
+export function roomFootprintBounds(points: Float32Array, trimFraction = 0.01, cellSize = 0.25, keep = 0.45): Bounds {
+  const all = validPoints(points);
+  const outer = boundsOf(all, trimFraction);
+  const cell = Math.max(cellSize, outer.size[0] / 400, outer.size[1] / 400, 1e-6);
+  const nx = Math.max(1, Math.ceil(outer.size[0] / cell)), ny = Math.max(1, Math.ceil(outer.size[1] / cell));
+  const counts = new Uint32Array(nx * ny);
+  for (const [x, y] of all) {
+    const ix = Math.floor((x - outer.min[0]) / cell), iy = Math.floor((y - outer.min[1]) / cell);
+    if (ix >= 0 && ix < nx && iy >= 0 && iy < ny) counts[iy * nx + ix]++;
+  }
+  const nonzero = [...counts].filter(n => n > 0);
+  const threshold = Math.max(2, 0.1 * nonzero.reduce((sum, n) => sum + n, 0) / Math.max(1, nonzero.length));
+  let x0 = 0, x1 = nx - 1, y0 = 0, y1 = ny - 1;
+  // Expand from the busiest line while lines stay well occupied.
+  const band = (occupancy: number[]) => {
+    const best = occupancy.indexOf(Math.max(...occupancy)), limit = occupancy[best] * keep;
+    let lo = best, hi = best;
+    while (lo > 0 && occupancy[lo - 1] >= limit) lo--;
+    while (hi < occupancy.length - 1 && occupancy[hi + 1] >= limit) hi++;
+    return [lo, hi] as const;
+  };
+  for (let pass = 0; pass < 2; pass++) {
+    const columns = Array.from({ length: x1 - x0 + 1 }, (_, i) => {
+      let n = 0; for (let iy = y0; iy <= y1; iy++) if (counts[iy * nx + x0 + i] >= threshold) n++; return n;
+    });
+    const [cx0, cx1] = band(columns); x1 = x0 + cx1; x0 = x0 + cx0;
+    const rows = Array.from({ length: y1 - y0 + 1 }, (_, i) => {
+      let n = 0; for (let ix = x0; ix <= x1; ix++) if (counts[(y0 + i) * nx + ix] >= threshold) n++; return n;
+    });
+    const [ry0, ry1] = band(rows); y1 = y0 + ry1; y0 = y0 + ry0;
+  }
+  const minX = outer.min[0] + x0 * cell, maxX = Math.min(outer.max[0], outer.min[0] + (x1 + 1) * cell);
+  const minY = outer.min[1] + y0 * cell, maxY = Math.min(outer.max[1], outer.min[1] + (y1 + 1) * cell);
+  const inside = all.filter(([x, y]) => x >= minX && x <= maxX && y >= minY && y <= maxY);
+  const z = boundsOf(inside.length ? inside : all, trimFraction);
+  const min: Vec3 = [minX, minY, z.min[2]], max: Vec3 = [maxX, maxY, z.max[2]];
+  return {
+    min, max,
+    center: min.map((value, axis) => (value + max[axis]) / 2) as Vec3,
+    size: min.map((value, axis) => max[axis] - value) as Vec3,
+    pointCount: inside.length,
+  };
+}
+
 /** Lower-height histogram mode. A proposal only: user must verify the floor plane. */
 export function estimateFloorZ(points: Float32Array): number {
   const zs = validPoints(points).map(p => p[2]).sort((a, b) => a - b);

@@ -1,6 +1,20 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { computeBounds, estimateFloorZ, proposeColliders, scaleFromMeasurement, transformPoints } from './geometry.ts';
+import { computeBounds, estimateFloorZ, proposeColliders, roomFootprintBounds, scaleFromMeasurement, transformPoints } from './geometry.ts';
+
+test('room footprint drops a thin exterior strip that percentile bounds keep', () => {
+  const points: number[] = [];
+  // 3 x 6 m room with floor and ceiling.
+  for (let x = 0; x <= 3; x += 0.05) for (let y = 0; y <= 6; y += 0.05) points.push(x, y, 0, x, y, 2.4);
+  // 3.5 m garden strip west of the room, only 1.5 m deep.
+  for (let x = -3.5; x < 0; x += 0.05) for (let y = 0; y <= 1.5; y += 0.05) points.push(x, y, 0.5);
+  const cloud = new Float32Array(points);
+  assert.ok(computeBounds(cloud, 0.008).min[0] < -3);
+  const room = roomFootprintBounds(cloud, 0.008);
+  assert.ok(room.min[0] > -0.3 && room.min[0] < 0.1, `min x ${room.min[0]}`);
+  assert.ok(room.max[0] > 2.8 && room.min[1] < 0.2 && room.max[1] > 5.8);
+  assert.ok(Math.abs(room.max[2] - 2.4) < 1e-6);
+});
 
 function roomPoints(): Float32Array {
   const points: number[] = [];

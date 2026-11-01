@@ -3,8 +3,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { TransformControls } from 'three/addons/controls/TransformControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { SplatMesh, SparkRenderer, SplatFileType } from '@sparkjsdev/spark';
-import { createSplatCutaway, suggestedCutawayHeight } from './cutaway';
-import { computeBounds, estimateFloorZ, transformPoints } from './geometry';
+import { createSplatCrop, createSplatCutaway, roomCropBounds, suggestedCutawayHeight } from './cutaway';
+import { computeBounds, estimateFloorZ, roomFootprintBounds, transformPoints } from './geometry';
 import type { Collider, SceneInfo, Vec3 } from './types';
 
 type Hooks = {onSelect:(id:string|null)=>void;onChange:(id:string,p:Vec3,s:Vec3,q:[number,number,number,number])=>void;onMeasure:(distance:number)=>void;onStatus:(text:string)=>void};
@@ -17,7 +17,9 @@ export class RoomViewer {
   private helper:THREE.Object3D; private measureRoot=new THREE.Group(); private disposed=false; private generation=0;
   private info:SceneInfo|null=null; private down={x:0,y:0}; private showColliders=true;
   private cutaway:ReturnType<typeof createSplatCutaway>|null=null;
-  constructor(private host:HTMLElement,private hooks:Hooks){
+  private crop:ReturnType<typeof createSplatCrop>|null=null; private cropEnabled:boolean; private cropFloor=0;
+  constructor(private host:HTMLElement,private hooks:Hooks,options:{crop?:boolean}={}){
+    this.cropEnabled=options.crop??false;
     THREE.Object3D.DEFAULT_UP.set(0,0,1); this.camera.up.set(0,0,1);this.camera.position.set(8,-10,8);
     this.scene.background=new THREE.Color('#e4e9e6');
     this.renderer=new THREE.WebGLRenderer({antialias:false});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
@@ -55,6 +57,7 @@ export class RoomViewer {
     this.offset.set(-bounds.center[0],-bounds.center[1],-floor);this.sourceRoot.position.copy(this.offset);
     this.basePoints=transformPoints(raw,1,this.offset.toArray() as Vec3);this.points=this.basePoints;this.scale=1;
     const aligned=computeBounds(this.points,.008);this.info={name,splats:room.numSplats,points:this.points.length/3,hasMesh:!!this.mesh,bounds:aligned.size,floorZ:0,sourceKind:kind,fileName};
+    this.cropFloor=0;const crop=this.cropBounds();this.crop=createSplatCrop(room,crop.min,crop.max);this.crop.setEnabled(this.cropEnabled);
     this.cutaway=createSplatCutaway(room,suggestedCutawayHeight(0,Math.max(.2,aligned.max[2])));this.setCutaway(true);
     this.home();this.hooks.onStatus('Room loaded · cutaway view. Check scale before export.');return this.info;
   }
@@ -80,10 +83,14 @@ export class RoomViewer {
     this.points=aligned;this.scale=scale.x;this.basePoints=transformPoints(aligned,1/this.scale);
     this.offset.copy(position).divideScalar(this.scale);this.baseRotation.copy(rotation);
     this.sourceRoot.position.copy(position);this.sourceRoot.quaternion.copy(rotation);this.sourceRoot.scale.copy(scale);this.sourceRoot.updateMatrixWorld(true);
-    if(aligned.length){const bounds=computeBounds(aligned,.008);if(this.info){this.info.bounds=bounds.size;this.info.floorZ=bounds.min[2]}this.cutaway?.setHeight(suggestedCutawayHeight(bounds.min[2],bounds.max[2]));}
+    if(aligned.length){const bounds=computeBounds(aligned,.008);if(this.info){this.info.bounds=bounds.size;this.info.floorZ=bounds.min[2]}this.cutaway?.setHeight(suggestedCutawayHeight(bounds.min[2],bounds.max[2]));this.cropFloor=bounds.min[2];this.updateCrop();}
     this.clearMeasure();this.home();
   }
-  setScale(value:number){if(!Number.isFinite(value)||value<=0)throw new Error('Scale must be positive.');const ratio=value/this.scale;this.scale=value;this.sourceRoot.scale.setScalar(value);this.sourceRoot.position.copy(this.offset).multiplyScalar(value);this.points=transformPoints(this.basePoints,value);if(this.cutaway)this.cutaway.setHeight(this.cutaway.height*ratio);this.clearMeasure();this.home()}
+  setScale(value:number){if(!Number.isFinite(value)||value<=0)throw new Error('Scale must be positive.');const ratio=value/this.scale;this.scale=value;this.sourceRoot.scale.setScalar(value);this.sourceRoot.position.copy(this.offset).multiplyScalar(value);this.points=transformPoints(this.basePoints,value);if(this.cutaway)this.cutaway.setHeight(this.cutaway.height*ratio);this.cropFloor*=ratio;this.updateCrop();this.clearMeasure();this.home()}
+  /** Display-only crop box around the room footprint: reference-mesh samples, or 2nd–98th percentile splat samples without a mesh. */
+  private cropBounds(){const b=roomFootprintBounds(this.points,this.mesh?.008:.02);return roomCropBounds(b,this.cropFloor)}
+  private updateCrop(){if(this.crop&&this.points.length){const b=this.cropBounds();this.crop.setBounds(b.min,b.max)}}
+  setCrop(enabled:boolean){this.cropEnabled=enabled;this.crop?.setEnabled(enabled)}
   setCutaway(enabled:boolean){this.cutaway?.setEnabled(enabled);this.mesh?.traverse(o=>{if(o instanceof THREE.Mesh){const materials=Array.isArray(o.material)?o.material:[o.material];for(const material of materials){material.clippingPlanes=enabled&&this.cutaway?this.cutaway.planes:[];material.needsUpdate=true;}}})}
   getTransform(){this.sourceRoot.updateMatrixWorld(true);return {matrix:this.sourceRoot.matrixWorld.toArray(),matrixOrder:'column-major',unitsPerSourceUnit:this.scale}}
   getGeometryPoints(useMesh:boolean){return useMesh&&this.mesh?this.points:this.splat?this.sampleSplat(this.splat):this.points}
@@ -107,7 +114,7 @@ export class RoomViewer {
     if(this.measuring){let hits=this.mesh?ray.intersectObject(this.mesh,true):this.splat?ray.intersectObject(this.splat,false):[];const hit=hits.find(h=>!this.cutaway?.enabled||h.point.z<=this.cutaway.height+.03);if(!hit)return;if(this.measurePoints.length===2)this.clearMeasure();this.measurePoints.push(hit.point.clone());const dot=new THREE.Mesh(new THREE.SphereGeometry(.045),new THREE.MeshBasicMaterial({color:0xe5a33c,depthTest:false}));dot.position.copy(hit.point);dot.renderOrder=100;this.measureRoot.add(dot);if(this.measurePoints.length===2){const line=new THREE.Line(new THREE.BufferGeometry().setFromPoints(this.measurePoints),new THREE.LineBasicMaterial({color:0xe5a33c,depthTest:false}));line.renderOrder=100;this.measureRoot.add(line);this.hooks.onMeasure(this.measurePoints[0].distanceTo(this.measurePoints[1]));}return;}
     if(!this.showColliders)return;const hit=ray.intersectObjects([...this.boxes.values()],false)[0];this.hooks.onSelect(hit?hit.object.userData.id:null);
   }
-  private clearSource(){this.transform.detach();this.cutaway?.dispose();this.cutaway=null;if(this.splat){this.splat.dispose();this.splat=null}if(this.mesh)this.mesh.traverse(o=>{if(o instanceof THREE.Mesh){o.geometry.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose()}});this.sourceRoot.clear();this.sourceRoot.position.set(0,0,0);this.sourceRoot.scale.setScalar(1);this.sourceRoot.quaternion.identity();this.mesh=null;this.points=new Float32Array();this.basePoints=new Float32Array();this.clearMeasure()}
+  private clearSource(){this.transform.detach();this.cutaway?.dispose();this.cutaway=null;this.crop?.dispose();this.crop=null;if(this.splat){this.splat.dispose();this.splat=null}if(this.mesh)this.mesh.traverse(o=>{if(o instanceof THREE.Mesh){o.geometry.dispose();if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose()}});this.sourceRoot.clear();this.sourceRoot.position.set(0,0,0);this.sourceRoot.scale.setScalar(1);this.sourceRoot.quaternion.identity();this.mesh=null;this.points=new Float32Array();this.basePoints=new Float32Array();this.clearMeasure()}
   unload(){this.generation++;this.clearSource()}
   dispose(){this.disposed=true;this.generation++;this.resize.disconnect();this.renderer.setAnimationLoop(null);this.clearSource();this.setBoxes([]);this.transform.dispose();this.orbit.dispose();this.renderer.dispose();this.renderer.domElement.remove()}
 }
