@@ -138,52 +138,11 @@ sequenceDiagram
 
 ## ▍Architecture
 
-```mermaid
-flowchart TB
-    classDef fe fill:#ffffff,stroke:#111,color:#111
-    classDef be fill:#0b0f0e,stroke:#19c37d,color:#e8f3ec
-    classDef data fill:#f4f6f5,stroke:#9aa5a2,color:#253236,stroke-dasharray:3 3
-    classDef ext fill:#111,stroke:#111,color:#fff
+![Morpheus architecture: room capture and task inputs flow through the React client to environment and object services, geometry validation, task planning and the object pipeline.](docs/media/architecture.svg)
 
-    subgraph L1["CLIENT · React + Three.js + Spark"]
-      direction LR
-      DEMO["/<br/>morph-to-sim demo"]:::fe
-      WS["?view=workspace<br/>tasks · POV · fly cam"]:::fe
-      OBJ["?view=objects<br/>select · identify · swap"]:::fe
-      BLD["?view=builder<br/>colliders · export"]:::fe
-    end
+The environment service serves scenes and planned replays and validates MJCF with MuJoCo. The object service manages catalogue matching and saved replacements. Object discovery can also run offline. Robot routes and manipulation are planned or scripted; they are not learned locomotion. The sample scene's scale is assumed.
 
-    subgraph L2["SERVICES · Python"]
-      direction LR
-      SRV["pipeline.server :8000<br/>environments · tasks · replays<br/>MJCF validate · export"]:::be
-      OS["pipeline.object_server :8001<br/>catalogue · Decisions match<br/>saved scene · assets"]:::be
-    end
-
-    subgraph L3["ENGINES"]
-      direction LR
-      PLAN["task_planner<br/>landmarks · room_mesh"]:::be
-      SIM["simready<br/>USD → GLB / OBJ"]:::be
-      DISC["discover-objects.py<br/>render · detect · apply"]:::be
-    end
-
-    subgraph L4["EXTERNAL"]
-      direction LR
-      MJ[["MuJoCo 3.17"]]:::ext
-      OAI[["OpenAI<br/>Decisions · Responses"]]:::ext
-      CDX[["Codex CLI<br/>codex exec"]]:::ext
-      HF[["HuggingFace<br/>nvidia/simready-assets"]]:::ext
-    end
-
-    L1 == "/api" ==> SRV
-    L1 == "/api/objects" ==> OS
-    SRV --> PLAN
-    SRV --> MJ
-    OS --> SIM --> HF
-    OS --> OAI
-    PLAN --> OAI
-    DISC --> OAI
-    DISC --> CDX
-```
+<sub>Visual direction inspired by [Supabase's architecture diagrams](https://supabase.com/docs/guides/getting-started/architecture).</sub>
 
 **Committed state the client reads:** `output/kitchen/scene.json` (111 colliders) · `rollouts/kitchen/*` (3 tasks × 3 robots) · `output/simready/` (prepared meshes + saved scene with Decisions traces) · `public/discovery/` (16 views + detections) · `src/robots/*.glb` (MuJoCo Menagerie meshes).
 
