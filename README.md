@@ -1,7 +1,7 @@
 <p align="center"><img src="src/assets/morpheus-gradient-logo-transparent.png" width="480" alt="Morpheus — gradient ribbon logo" /></p>
 
 <p align="center">
-  🏆 <b>1st Place — OpenAI DevDay Exchange Community Hackathon, London</b><br/>
+  🏆 <b>1st Place @ OpenAI DevDay Exchange Community Hackathon, London</b><br/>
   <sub>1 November 2026 · Built in one day · An event with 1,000+ applicants</sub>
 </p>
 
