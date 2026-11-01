@@ -89,6 +89,18 @@ Sequence: PRD -> ultra-compact brief -> implementation -> tests and actual rollo
 - [Modal GPU guide](https://modal.com/docs/guide/gpu), [pricing](https://modal.com/pricing), [timeouts](https://modal.com/docs/guide/timeouts).
 - [Hackathon deadline](https://luma.com/dde-ldn-hack), [Codex quickstart](https://developers.openai.com/codex/quickstart), [OpenAI developer documentation](https://developers.openai.com/), [Cookbook](https://developers.openai.com/cookbook). Codex agents produce this integration and verification; no OpenAI API call is required in the real-time control loop.
 
-## Implementation status after build
+## Initial implementation status (before upstream integration)
 
 Working G1 hierarchical control, controller configuration search, actual MuJoCo navigation, report/model/replay artifacts, source/asset/force/contact gates, 20-start qualification, TypeScript viewer bridge and native replay renderer are implemented. Source input geometry remains unchanged. Generic arm IK is kinematic only; Go2, learned manipulation, a GPU trainer, hardware transport, live dynamic perception and binding into the teammate's running viewer remain outside the delivered core. Public GitHub publishing and submission are not completed. See README/PROGRESS for exact observed checks and local demo paths.
+
+
+## Phase 2: integrated learning and exploration
+
+The authorized continuation integrates upstream `bede-lau/Morpheus` into one local checkout. Preserve the capture workbench. Train actual scene-specific PPO neural navigation policies for mobile footprint profiles (G1, Stretch, Go2), report held-out comparison with untrained and geometric baselines, and keep reduced-order dynamics distinct from actuated locomotion. SO-ARM100 has a stationary base and needs a tool/workstation contract before manipulation training.
+
+The core journey becomes: choose robot → load its learned scene run → compare distinct checked route alternatives → inspect explicit cleaning/inspection intent → play the learned trajectory or G1 native physics evidence → export an honest report. Native G1 validation remains subject to all existing gates; the preview robot models are not physics evidence. No cleaning achievement may be inferred from a proposed tool path. Improve viewer resolution and render native evidence at 1080p. Existing $180 Modal authorization remains available, but CPU-first training must establish a need before GPU expenditure.
+
+
+## Integrated implementation status
+
+The upstream viewer is now integrated. Three mobile footprint profiles have actual A*-imitation + PPO checkpoints and 16/16 held-out local-goal results each, with an A* comparison and explicit scope. The composite learned G1 controller passed 20/20 fresh native detour start perturbations after declared safety filtering; failed earlier experiments remain recorded. Four-profile visualization supports alternative paths, numerical tool intents, exact native body samples and 1080p output. The source floor/proxy audit found zero sampled support/clearance overlap and keeps this fixture PREVIEW_ONLY. Cleaning execution, non-G1 physical controllers and hardware commissioning remain unverified. README and DEMO contain reproducible commands and observed limitations.

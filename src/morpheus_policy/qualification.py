@@ -59,6 +59,9 @@ def _episode_reasons(report, index, expected_scene_hash):
         reasons.append(f"{prefix}: hashes must be an object")
     else:
         provenance = {key: hashes.get(key) for key in _PROVENANCE_KEYS}
+        for key in ("navigation_policy_sha256", "navigation_controller_sha256"):
+            if key in hashes:
+                provenance[key] = hashes[key]
         for key, value in provenance.items():
             if not isinstance(value, str) or not value:
                 reasons.append(f"{prefix}: missing {key}")

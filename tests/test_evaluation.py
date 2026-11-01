@@ -71,6 +71,21 @@ def test_invalid_actuation_stops_before_a_step(setup_scene):
     assert "invalid actuator controls" in report["failures"][0]
 
 
+@pytest.mark.parametrize("value", [[float("nan"), 0, 0], [.3, .3, 0], [0, 0, 2]])
+def test_injected_navigation_cannot_bypass_command_envelope(setup_scene, value):
+    scene, model = setup_scene
+
+    class BadNavigation:
+        def command(self, *args):
+            return value
+
+    report, _ = evaluate_episode(scene, model, TestPolicy(), Task((0, 0), (1, 0)),
+                                 model_hash="b" * 64, navigation_controller=BadNavigation())
+    assert report["execution"] == "failed"
+    assert report["metrics"]["physics_steps"] == 0
+    assert "Navigation returned invalid" in report["failures"][0]
+
+
 def test_no_teleporting_to_goal(setup_scene):
     scene, model = setup_scene
     report, replay = evaluate_episode(scene, model, TestPolicy(), Task((0, 0), (1, 0)),
@@ -138,6 +153,11 @@ def test_qualification_keeps_upstream_uncertainty_and_all_failures(setup_scene):
                 "controller_config": {"speed_m_s": 0.3}} for _ in range(20)]
     summary = summarize_qualification(scene, task, reports, seed=1)
     assert summary["readiness"] == "PREVIEW_ONLY"
+    reports[3]["hashes"]["navigation_policy_sha256"] = "c" * 64
+    summary = summarize_qualification(scene, task, reports, seed=1)
+    assert summary["readiness"] == "BLOCKED"
+    assert any("hashes differ" in reason for reason in summary["disqualifiers"])
+    del reports[3]["hashes"]["navigation_policy_sha256"]
     reports[3] = {"execution": "failed", "failures": ["fall"]}
     summary = summarize_qualification(scene, task, reports, seed=1)
     assert summary["readiness"] == "BLOCKED" and summary["coverage"]["successes"] == 19

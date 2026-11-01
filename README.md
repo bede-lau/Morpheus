@@ -1,136 +1,94 @@
 # Morpheus
 
-Explore a captured room, prepare its collision scene, and evaluate robot navigation policies in the same workspace. The integrated policy layer consumes the existing MJCF + Scene JSON without generating the environment.
+Choose a robot, train a navigation policy against a supplied room collision scene, compare routes, and inspect its simulation evidence in the existing Three.js + Spark workspace. The capture workbench remains available at `/?view=builder`.
 
-- **Viewer and capture setup:** follow this page.
-- **Policy installation, real G1 simulation, evidence and limitations:** [Policy guide](POLICY_README.md).
-- **Architecture and compact build contract:** [architecture](architecture.md), [build brief](BUILD_BRIEF.md).
+The policy package **consumes MJCF + Scene JSON**. Environment capture and collision authoring belong to the upstream workbench. [PRD](PRD.md) → [compact build brief](BUILD_BRIEF.md) → [architecture](architecture.md) → [policy methods](POLICY_TRAINING.md).
 
-Turn a captured room into an editable collision environment for robot simulation.
+## What is implemented
 
-Morpheus keeps a Gaussian splat as the visual reference, proposes simple collision geometry, lets a person correct it, and exports a MuJoCo scene with its provenance and validation status. The core journey is **load a room → establish scale → generate and review collision shapes → validate → export**. Robot models, controllers, policy training, and task evaluation are integrated through the policy package; see the policy guide above.
+| Layer | Method and reason |
+| --- | --- |
+| Global route calculation | Conservative A* with robot footprint inflation; returns up to three distinct checked routes. Predictable and cheap on static collision boxes. |
+| Learned local navigation | PyTorch actor/critic MLP, 23 observations and 3 bounded velocity actions. A* route imitation warm start, then clipped PPO with GAE. Separate scene/profile-bound checkpoints for G1, Stretch and Go2. |
+| Native G1 locomotion | Frozen official Unitree G1 12-DoF PPO/LSTM; 47 observations, 12 joint actions, 50 Hz actor, 500 Hz PD/physics. Exact model/checkpoint contract is verified before use. |
+| Robustness wrapper | Global waypoints feed the local actor; heading alignment, goal slowing and predictive footprint braking suppress unsafe translation. Per-step MuJoCo contact, clearance, fall, force and joint gates still decide success. |
+| Arm calculations | Generic bounded damped least-squares IK with explicit joint/site mapping. SO-ARM100 keeps a stationary preview base; no manipulation training or cleaning execution is claimed. |
+| Visualization | Four profiles, alternative paths, proposed wipe/sweep traces, trained trajectory playback, hash-checked native G1 body poses, high-DPI rendering and 1920×1080 capture/video. |
 
-Built during the DevDay Community Hackathon in London on 1 November 2026. See the [90-second demo outline](docs/DEMO.md), [environment handoff contract](docs/CONTRACT.md), and [sample asset provenance](docs/ASSETS.md).
+Stretch, Go2 and SO-ARM100 in the browser are procedural previews. Only G1 currently has a matched physical model and locomotion checkpoint. A shared navigation envelope does not make robot joint controllers interchangeable. Cleaning traces are numerical **tool intentions**: the supplied input has no verified surface, mounted tool, force controller or cleaning-effect model.
 
-## What works
+## Measured results
 
-- Open the synthetic reference kitchen, or import a Gaussian `.spz`, `.ply`, or `.splat`, optionally alongside an aligned `.glb` companion mesh.
-- Inspect the visual scan, reference mesh, and collision layer; select the source up-axis and calibrate scale from a known distance.
-- Generate editable obstacle columns from sampled geometry. A companion mesh is preferred; splat-center proposals are a rougher fallback.
-- Select, move, resize, rotate, rename, add, or remove box colliders. Save and reopen the collision manifest.
-- Export `environment.xml`, `scene.xml`, `scene.json`, `validation.json`, and integration notes in a ZIP.
-- With the local Python service running, compile the exported scene in native MuJoCo and run a sphere-drop floor-contact probe.
+All results below are from the supplied synthetic collision proxy, whose scale and review remain unconfirmed.
 
-## Local setup
+| Mobile profile | Untrained | After route imitation | After PPO | A* reference |
+| --- | ---: | ---: | ---: | ---: |
+| G1 | 0/16 | 5/16 | 16/16 | 16/16 |
+| Stretch | 0/16 | 3/16 | 16/16 | 16/16 |
+| Go2 | 0/16 | 3/16 | 16/16 | 16/16 |
 
-Tested development tools: Node.js 24, Python 3.12, and MuJoCo 3.17.0. Use a desktop browser with WebGL2; Chrome is the primary demo target. No OpenAI API key is required to run this version.
+The frozen final configuration uses 160 imitation epochs, then 32 PPO updates (16,384 transitions), about 20 CPU seconds per profile. Training seed 7; fresh held-out seed 10007. These are **local 0.75–2 m goals**, with initial heading noise σ=0.35 rad in the same scene; every held-out geometric route was straight. A* remains a strong reference. The first short G1 training run reached only 2/16.
 
-From the repository root:
+The learned G1 controller also ran real actuated MuJoCo tests. A straight-task start-pose qualification passed 20/20. The first unfiltered detour failed clearance; an initial safety wrapper passed 19/20. With the final braking buffer and a fresh native seed 20007, the detour passed **20/20**, zero forbidden contacts, minimum clearance **0.10535 m** against the unchanged 0.10 m gate. That tests one static task with starts perturbed ±0.02 m and yaw ±0.03 rad. It establishes neither arbitrary-room generalization nor hardware readiness. Raw failed runs are retained locally alongside successful evidence.
+
+**Input problem:** the mesh-support audit found 973 downward-ray-supported samples and zero overlap with positive 0.45 m-envelope clearance, over 4,556 grid samples. The occupied-column export blocks the visible aisle while proxy-free regions lack sampled mesh support. Runs therefore default to the supplied collision view, with this limitation visible. Corrected/reviewed upstream geometry is needed for a credible walk through the visible kitchen. This project does not silently repair it.
+
+Modal spending: **$0 of the available $180**. This small MLP trains quickly on CPU. GPU-backed robot gait or contact-rich manipulation training requires a separate, matched model/task contract; [the training guide](POLICY_TRAINING.md) explains that path.
+
+## Install and run
+
+Tested with Node.js 24, Python 3.12, MuJoCo 3.17.0, Torch 2.15.0 and a WebGL2 desktop browser. No OpenAI API key is required.
 
 ```sh
 npm ci
+uv sync --extra dev
 npm run fetch-sample
-uv venv pipeline/.venv
-uv pip install --python pipeline/.venv/bin/python -r requirements.txt
+uv run python scripts/fetch_g1.py
 ```
 
-The explicit sample-fetch command downloads the publisher's test assets into `public/samples/`, checks their sizes and SHA-256 hashes, and can resume interrupted transfers. Read [the asset notes](docs/ASSETS.md) before redistributing any sample files. They are excluded from Git.
+The explicit fetch commands download pinned/hashed third-party assets. They remain ignored by Git. Read [sample provenance](docs/ASSETS.md) and [third-party credits](THIRD_PARTY.md) before redistributing assets.
 
-Start the frontend in one terminal:
+Set the path to the teammate's existing export, then train and export the mobile profiles. The fixed arm skips base-navigation training.
 
 ```sh
+export SCENE_BUNDLE="/path/to/morpheus-kitchen.zip"
+uv run morpheus-policy inspect "$SCENE_BUNDLE"
+uv run morpheus-learn train "$SCENE_BUNDLE" --output outputs/home --demo-cleaning
+uv run morpheus-learn validate-g1 "$SCENE_BUNDLE" --output outputs/home --episodes 20
+uv run morpheus-learn export "$SCENE_BUNDLE" --output outputs/home --demo-cleaning --native-artifacts outputs/home/g1-native
 npm run dev
 ```
 
-Open [http://127.0.0.1:5174](http://127.0.0.1:5174). In a second terminal, start native validation:
+Open the Vite URL printed in the terminal (normally `http://127.0.0.1:5174`; this session uses `http://127.0.0.1:5175`). Choose a robot, compare route alternatives, preview a cleaning intention for Stretch/SO-ARM100, play the learned trajectory, and use **Replay native G1 dynamics** for separately verified physical evidence. Native playback uses exact recorded body samples. The optional full-model video link appears after a video is rendered and the run is exported again.
+
+The browser reads `public/policies/{g1,stretch,go2,soarm}.json`. Import/export also works through the UI. Generate artifacts before `npm run build`; the build copies policy evidence into `dist/policies`, while excluding downloaded scan binaries. Generated evidence can contain room data, so it stays ignored by Git. A static host does not run training or native validation.
+
+To reproduce the input audit without changing the scene:
 
 ```sh
-pipeline/.venv/bin/python -m pipeline.server
+node scripts/audit_floor_support.mjs --scene /path/to/scene.json --mesh public/samples/rustic-kitchen-collider.glb --output outputs/input-floor-audit.json
+uv run morpheus-learn export "$SCENE_BUNDLE" --output outputs/home --demo-cleaning --floor-audit outputs/input-floor-audit.json --native-artifacts outputs/home/g1-native
 ```
 
-The service listens on `127.0.0.1:8000`; Vite proxies `/api` to it. It accepts collision manifests, not scan binaries. Check [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health) for engine availability. The server preloads MuJoCo before announcing readiness because its first native import can take several seconds.
-
-## Use the app
-
-1. Click **Open sample kitchen**, or **Import your scan**. Select an aligned GLB in the same file selection if one is available.
-2. Inspect **Scale & alignment**. The sample's metre scale is assumed, not independently measured. For a real capture, select two known surface points and enter their measured separation. Do not invent a measurement for the synthetic sample.
-3. Click **Generate collision shapes**. Compare the **Scan**, **Reference mesh**, and **Collisions** views. Correct false obstacles and inspect passageways; review is part of the workflow.
-4. Click **Validate in MuJoCo** when the local service is running. Read compilation and floor-probe results separately.
-5. Click **Export environment** and hand the ZIP to the robot-training developer. A browser-only export is schema checked and explicitly marked `unverified` for native physics.
-
-Local imports are processed in the browser. Native validation sends only the collision manifest to the local Python service. Loading the sample in a production build fetches its files directly from the publisher's host.
-
-## Training handoff
-
-The scene uses metres, a right-handed Z-up frame, full box dimensions in JSON, and WXYZ quaternions. MuJoCo receives half-extents as required by MJCF. Static geometry names are prefixed `env_`.
-
-Unzip a bundle and load its standalone scene:
-
-```python
-import mujoco
-
-model = mujoco.MjModel.from_xml_path("scene.xml")
-data = mujoco.MjData(model)
-```
-
-To combine it with a robot scene, place this inside the robot's `<mujoco>` root:
-
-```xml
-<include file="environment.xml"/>
-```
-
-Reconcile the robot scene's existing floor to avoid duplicate overlapping geometry. Preserve the exported world frame; do not reapply `source.transform` to the colliders. See [CONTRACT.md](docs/CONTRACT.md) for the exact schema and validation meanings.
-
-## Reproduce the reference export
-
-After fetching the sample:
+To render native evidence in 1080p:
 
 ```sh
-npm run prepare-sample
-pipeline/.venv/bin/python -m pipeline validate output/kitchen/scene.json
-pipeline/.venv/bin/python -m pipeline package output/kitchen/scene.json -o output/kitchen/morpheus-kitchen.zip
+uv run --with pillow --with imageio --with imageio-ffmpeg python scripts/render_replay.py outputs/home/g1-native --width 1920 --height 1080
 ```
 
-The preparation script samples the companion mesh, applies a shared frame conversion, and writes an **assumed-scale, unreviewed** fixture. It does not infer semantic household objects. The output directory is ignored by Git.
+Existing outputs are protected: use a new training/native directory for another experiment. CLI options expose seeds, imitation/PPO settings, explicit start/goal and native episode counts. [The initial policy guide](POLICY_README.md) documents lower-level inspect/plan/run/qualify/optimize/reach commands; [UI handoff](UI_HANDOFF.md) describes the viewer's original preview contract; [environment contract](docs/CONTRACT.md) documents upstream MJCF/JSON.
 
-Recorded native check on 1 November 2026: the reference export contained 111 static colliders, compiled in MuJoCo 3.17.0, and passed the two-second floor-contact probe. A sphere of radius 0.04 m dropped from `[0, 0, 0.5]` rested at Z ≈ 0.03963 m against the floor. That evidence establishes basic physical support in the generated scene; it does not establish metric accuracy, reconstruction quality, or successful robot tasks.
-
-## Checks and builds
+## Checks and demo
 
 ```sh
+uv run pytest
 npm test
-pipeline/.venv/bin/python -m unittest discover -s tests -p 'test_pipeline.py' -v
+node --experimental-strip-types --test web/policy-bridge.test.ts
 npm run build
-npm run preview
+uv run morpheus-policy --help
+uv run morpheus-learn --help
 ```
 
-The recorded implementation checks comprise 11 TypeScript tests and 8 Python tests. They cover geometry proposal behavior, scale and transform math, manifest validation, MJCF export, disabled colliders, actual native floor contact, ZIP contents, and local API validation/export. Browser interaction checks and production deployment must be assessed separately; these test counts do not certify every UI interaction.
+The actual-bundle Python integration check is enabled by `MORPHEUS_SCENE_BUNDLE`. The legacy mesh-clearance test additionally needs the provided manifest at `output/kitchen/scene.json`; copying it there does not alter its geometry. See [DEMO.md](DEMO.md) for the ≤90-second core journey and exact recorded outputs.
 
-`npm run build` produces a static `dist/`. It deliberately does **not** copy downloaded sample binaries. Production sample loading uses official remote URLs and requires network access. A static host alone does not run the Python service, so its browser export records native validation as not run. The local Vite proxy is a development feature, not a deployed backend.
-
-## Scope and limitations
-
-- This is a reviewed collision-geometry preparation tool. It is not arbitrary splat-to-mesh reconstruction, semantic segmentation, exact furniture retrieval, or a robot policy trainer.
-- The sample kitchen is AI-generated by World Labs and uses its companion mesh. It is not a measured scan of a real home.
-- Proposals use occupied XY columns extending from the proposed floor to observed obstacle heights. This fills space beneath elevated surfaces and can block table openings, overhangs, and other real free space. Sparse or missing observations can also omit real obstacles. Unknown space is not certified free.
-- Floor estimation, cropping, scale, orientation, and collision proposals require review. Source provenance records whether scale is assumed or confirmed; validation does not change those claims.
-- Boxes are static and have assumed contact parameters. Doors, drawers, deformable objects, material identification, and articulated scene reconstruction are outside this version.
-- A passing floor probe proves only model compilation and contact support at the sampled point. It does not prove reachability, graspability, navigation safety, or task success.
-
-## Credits and Codex contribution
-
-The hackathon implementation includes the room-preparation interface, geometry proposal and editing flow, scene contract, dual browser/Python exporters, local validation service, and tests. It builds on existing libraries and a publisher-provided sample:
-
-| Component | Source |
-| --- | --- |
-| Gaussian splat rendering | [Spark 2.4.0](https://github.com/sparkjsdev/spark) |
-| 3D scene and interaction | [Three.js 0.180.0](https://github.com/mrdoob/three.js) |
-| UI | [React 19.2.0](https://github.com/facebook/react), [Lucide icons](https://github.com/lucide-icons/lucide) |
-| Development/build tools | [Vite](https://github.com/vitejs/vite), [TypeScript](https://github.com/microsoft/TypeScript) |
-| Physics validation | [MuJoCo 3.17.0](https://github.com/google-deepmind/mujoco) |
-| Browser ZIP export | [fflate](https://github.com/101arrowz/fflate) |
-| Synthetic sample and companion collider | [World Labs — Rustic kitchen with natural light](https://docs.worldlabs.ai/marble/export/specs) |
-
-Upstream code and assets retain their respective terms. No open redistribution license was established for the World Labs sample; downloaded binaries are not committed or bundled in the production build. Full file hashes and provenance are in [ASSETS.md](docs/ASSETS.md).
-
-Codex coordinated bounded research and implementation tasks, checked sample integrity and relative splat/mesh alignment, authored the collision preparation and export code, and ran the native tests. A concrete contribution was identifying the full-room convex-hull collision problem, exporting separate box colliders instead, and validating the actual generated 111-collider scene with a physical contact probe. The code, tests, and `validation.json` are inspectable evidence of that work.
+Codex coordinated research, implementation and independent review; built scene/profile/checkpoint contracts, trained and compared real PPO policies, found the floor/proxy mismatch, and caught a native high-level checkpoint provenance gap. The code, tests, failed/successful reports and audit are inspectable evidence. Existing libraries, model weights and sample assets retain their upstream terms; [THIRD_PARTY.md](THIRD_PARTY.md) records attribution.

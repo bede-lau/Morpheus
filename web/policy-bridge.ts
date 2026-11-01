@@ -134,7 +134,7 @@ function parseBodyPoses(value: unknown, path: string): Record<string, PoseWxyz> 
   const bodyPoses = requireRecord(value, path);
   return Object.fromEntries(Object.entries(bodyPoses).map(([name, pose]) => {
     const values = finiteVector(pose, 7, `${path}.${name}`);
-    return [name, values as PoseWxyz];
+    return [name, values as unknown as PoseWxyz];
   }));
 }
 
@@ -173,7 +173,7 @@ export function validateReplayBundle(value: unknown): PolicyReplayBundle {
     },
     frame: { units: "m", up_axis: "Z", quaternion_order: "wxyz" },
     route: {
-      points_m: requireArray(route.points_m, "bundle.route.points_m").map((point, index) => finiteVector(point, 3, `bundle.route.points_m[${index}]`) as Vec3),
+      points_m: requireArray(route.points_m, "bundle.route.points_m").map((point, index) => finiteVector(point, 3, `bundle.route.points_m[${index}]`) as unknown as Vec3),
       target_id: requireString(route.target_id, "bundle.route.target_id"),
     },
     samples: [],
@@ -189,7 +189,7 @@ export function validateReplayBundle(value: unknown): PolicyReplayBundle {
     const parsed: ReplaySample = { time_s, qpos: finiteVector(record.qpos, nq, `bundle.samples[${index}].qpos`) };
     if (record.qvel !== undefined) parsed.qvel = finiteNumbers(record.qvel, `bundle.samples[${index}].qvel`);
     if (record.ctrl !== undefined) parsed.ctrl = finiteNumbers(record.ctrl, `bundle.samples[${index}].ctrl`);
-    if (record.command !== undefined) parsed.command = finiteVector(record.command, 3, `bundle.samples[${index}].command`) as Vec3;
+    if (record.command !== undefined) parsed.command = finiteVector(record.command, 3, `bundle.samples[${index}].command`) as unknown as Vec3;
     if (record.body_poses !== undefined) parsed.body_poses = parseBodyPoses(record.body_poses, `bundle.samples[${index}].body_poses`);
     if (record.metrics !== undefined) parsed.metrics = parseMetrics(record.metrics, `bundle.samples[${index}].metrics`);
     return parsed;

@@ -2,6 +2,7 @@
 
 from dataclasses import asdict, dataclass
 import hashlib
+import json
 import math
 from pathlib import Path
 import time
@@ -92,7 +93,8 @@ def _readiness(execution, caveats, qualified):
 
 
 def evaluate_episode(scene, model, policy, task, *, model_hash, config=None, thresholds=None,
-                     initial_joint_positions=None, robot_id="unspecified", allowed_support_bodies=(), qualified=False):
+                     initial_joint_positions=None, robot_id="unspecified", allowed_support_bodies=(), qualified=False,
+                     navigation_controller=None, navigation_manifest=None):
     """Inject any contract-compatible policy; all failure gates stay in this loop."""
     cfg, limits = config or NavigationConfig(), thresholds or Thresholds()
     route = plan_route(scene, task.start_xy, task.goal_xy, radius_m=limits.radius_m,
@@ -103,7 +105,7 @@ def evaluate_episode(scene, model, policy, task, *, model_hash, config=None, thr
     data = mujoco.MjData(model)
     initialize(model, data, task, initial_joint_positions)
     policy.reset(model, data)
-    controller = RouteController(route, cfg)
+    controller = navigation_controller if navigation_controller is not None else RouteController(route, cfg)
     geom_names = _names(model, mujoco.mjtObj.mjOBJ_GEOM, model.ngeom)
     body_names = _names(model, mujoco.mjtObj.mjOBJ_BODY, model.nbody)
     joint_names = _names(model, mujoco.mjtObj.mjOBJ_JOINT, model.njnt)
@@ -157,7 +159,16 @@ def evaluate_episode(scene, model, policy, task, *, model_hash, config=None, thr
     sample()
     for step in range(math.ceil(limits.max_seconds / dt)):
         if step % actor_stride == 0:
-            command = controller.command(data.qpos[:2], yaw_from_wxyz(data.qpos[3:7]), float(data.time), 0.02)
+            try:
+                command = np.asarray(controller.command(data.qpos[:2], yaw_from_wxyz(data.qpos[3:7]), float(data.time), 0.02), dtype=float)
+            except (ValueError, RuntimeError) as error:
+                fail("contract_failure", f"Navigation strategy stopped: {error}")
+                break
+            if (command.shape != (3,) or not np.isfinite(command).all()
+                    or np.linalg.norm(command[:2]) > cfg.speed_m_s + 1e-6
+                    or abs(command[2]) > cfg.max_yaw_rate + 1e-6):
+                fail("contract_failure", "Navigation returned invalid or out-of-envelope velocity commands")
+                break
         controls = np.asarray(policy.step(model, data, command), dtype=float)
         if controls.shape != (model.nu,) or not np.isfinite(controls).all():
             fail("contract_failure", "Policy returned invalid actuator controls")
@@ -249,6 +260,9 @@ def evaluate_episode(scene, model, policy, task, *, model_hash, config=None, thr
                   mjcf_sha256=model_hash,
                   policy_sha256=manifest.get("policy_sha256", manifest.get("checkpoint_sha256", manifest.get("sha256", "0" * 64))),
                   evaluator_version=f"mujoco-{mujoco.__version__}/morpheus-0.1.0")
+    if navigation_manifest is not None:
+        hashes["navigation_policy_sha256"] = navigation_manifest["checkpoint_sha256"]
+        hashes["navigation_controller_sha256"] = hashlib.sha256(json.dumps(navigation_manifest, sort_keys=True).encode()).hexdigest()
     caveats = list(scene.caveats)
     if task.synthetic:
         caveats.append("Task start/goal were selected for a numerical demonstration, not a labelled kitchen application.")
@@ -259,6 +273,7 @@ def evaluate_episode(scene, model, policy, task, *, model_hash, config=None, thr
         "task": asdict(task), "controller_config": asdict(cfg), "thresholds": asdict(limits),
         "hashes": hashes, "policy": manifest, "metrics": metrics, "failures": failures, "caveats": caveats,
         "coverage": {"episodes": 1, "qualification_episodes_required": 20, "qualification_complete": False},
+        "navigation_policy": navigation_manifest or {"algorithm": "geometric_A_star_waypoint_tracking", "trained": False},
     }
     replay = {
         "schema_version": "1.0", "authority": "python-mujoco", "hashes": hashes,

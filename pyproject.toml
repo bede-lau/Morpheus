@@ -14,10 +14,11 @@ dev = ["pytest==9.2.0"]
 
 [project.scripts]
 morpheus-policy = "morpheus_policy.cli:main"
+morpheus-learn = "morpheus_policy.learn_cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/morpheus_policy"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "."]

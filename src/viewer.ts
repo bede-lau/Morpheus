@@ -20,7 +20,7 @@ export class RoomViewer {
   constructor(private host:HTMLElement,private hooks:Hooks){
     THREE.Object3D.DEFAULT_UP.set(0,0,1); this.camera.up.set(0,0,1);this.camera.position.set(8,-10,8);
     this.scene.background=new THREE.Color('#e4e9e6');
-    this.renderer=new THREE.WebGLRenderer({antialias:false});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.7));
+    this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});this.renderer.setPixelRatio(Math.min(devicePixelRatio,2));
     this.renderer.outputColorSpace=THREE.SRGBColorSpace;this.renderer.localClippingEnabled=true;this.host.append(this.renderer.domElement);
     const spark=new SparkRenderer({renderer:this.renderer});this.scene.add(spark,this.sourceRoot,this.colliderRoot,this.measureRoot);
     this.orbit=new OrbitControls(this.camera,this.renderer.domElement);this.orbit.enableDamping=true;this.orbit.maxDistance=60;this.orbit.minDistance=.3;
@@ -35,6 +35,12 @@ export class RoomViewer {
     this.renderer.domElement.addEventListener('pointerup',this.onClick);
     this.resize=new ResizeObserver(()=>{const w=this.host.clientWidth,h=this.host.clientHeight;this.camera.aspect=w/h;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h)});this.resize.observe(host);
     this.renderer.setAnimationLoop(()=>{if(!this.disposed){this.orbit.update();this.renderer.render(this.scene,this.camera)}});
+  }
+  setQuality(quality:'balanced'|'high'){this.renderer.setPixelRatio(quality==='high'?2:Math.min(devicePixelRatio,1.25));this.renderer.setSize(this.host.clientWidth,this.host.clientHeight);}
+  capture(width=1920,height=1080){
+    const oldSize=this.renderer.getSize(new THREE.Vector2()),oldRatio=this.renderer.getPixelRatio(),oldAspect=this.camera.aspect;
+    try{this.renderer.setPixelRatio(1);this.renderer.setSize(width,height,false);this.camera.aspect=width/height;this.camera.updateProjectionMatrix();this.renderer.render(this.scene,this.camera);return this.renderer.domElement.toDataURL('image/png');}
+    finally{this.renderer.setPixelRatio(oldRatio);this.renderer.setSize(oldSize.x,oldSize.y,false);this.camera.aspect=oldAspect;this.camera.updateProjectionMatrix();this.renderer.render(this.scene,this.camera);}
   }
   async load(splatUrl:string,meshUrl:string|undefined,name:string,kind:'sample'|'upload',fileName:string,up:'y-down'|'y-up'|'z-up'='y-down'){
     const token=++this.generation;this.hooks.onStatus('Loading splat and reference geometry…');this.clearSource();

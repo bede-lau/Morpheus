@@ -19,3 +19,6 @@ Full requirements/evidence: `PRD.md`. Written before implementation.
 **GPU:** not needed for pretrained inference/planning. Baseline before specialization; later exact-model PPO + domain randomization or demo-based ACT only. No Modal launch now; optional first budget $18 of $180 with full cost controls.
 
 **Delivery:** package/CLI + integration files; no public publishing or video falsely claimed. Feature freeze 16:15, README/<=90 s demo preparation by 16:40, submit 17:00 London. Active state/checkpoints: `PROGRESS.md`. Read `architecture.md`, `design.md`, `decisions.md`, `agents.md` before extending.
+
+
+**Phase 2 compact handoff (before edits):** integrate upstream 8a82dc8; real PyTorch PPO in a labelled reduced-order footprint environment; scene/profile-bound checkpoint + held-out metrics; frozen G1 physics validation separately; registries for G1/Stretch/Go2 navigation and stationary SO-ARM task intent; distinct collision-checked routes and explicit tool-unverified cleaning plans; consume artifacts inside existing viewer; improve DPR/1080p export. Never invent model contracts or upgrade scale/readiness. Workers: learning.py + tests; task_plans.py + tests; frontend; root orchestration/evaluation/profiles/docs. Reproducible train/export commands, tests, build, one desktop/mobile browser QA and real training/native runs required.

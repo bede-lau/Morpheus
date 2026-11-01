@@ -147,9 +147,10 @@ def _label(image: np.ndarray, report: dict[str, Any], sample: dict[str, Any]) ->
         raise ReplayRenderError("Install Pillow: add --with pillow to the uv command") from error
     canvas = Image.fromarray(image)
     draw = ImageDraw.Draw(canvas, "RGBA")
-    font = ImageFont.load_default()
+    scale = max(1.0, canvas.width / 960)
+    font = ImageFont.load_default(size=round(15 * scale))
     metrics = sample.get("metrics", {})
-    draw.rectangle((12, 12, 590, 92), fill=(8, 14, 24, 210))
+    draw.rectangle((12 * scale, 12 * scale, min(canvas.width - 12, 770 * scale), 116 * scale), fill=(8, 14, 24, 210))
     lines = [
         "UNITREE G1 · PPO/LSTM 12-DoF · actuated MuJoCo replay",
         f"{report.get('readiness', 'UNKNOWN')} · hardware {report.get('hardware_readiness', 'UNKNOWN')}",
@@ -157,7 +158,7 @@ def _label(image: np.ndarray, report: dict[str, Any], sample: dict[str, Any]) ->
         f"t={sample['time_s']:.2f}s  clearance={metrics.get('min_clearance_m', float('nan')):.2f}m",
     ]
     for row, line in enumerate(lines):
-        draw.text((20, 20 + row * 17), line, fill=(255, 214, 100, 255) if row == 1 else (244, 248, 255, 255), font=font)
+        draw.text((20 * scale, (20 + row * 23) * scale), line, fill=(255, 214, 100, 255) if row == 1 else (244, 248, 255, 255), font=font)
     return np.asarray(canvas)
 
 
@@ -197,8 +198,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--sample", type=int, default=-1, help="Replay sample for the still; -1 means final sample")
     parser.add_argument("--seconds", type=float, default=12.0)
     parser.add_argument("--fps", type=int, default=24)
-    parser.add_argument("--width", type=int, default=960)
-    parser.add_argument("--height", type=int, default=540)
+    parser.add_argument("--width", type=int, default=1920)
+    parser.add_argument("--height", type=int, default=1080)
     return parser
 
 
@@ -212,10 +213,12 @@ def main(argv: list[str] | None = None) -> int:
     replay, report, _, model = load_artifacts(args.artifacts)
     data = mujoco.MjData(model)
     sample_index = args.sample if args.sample >= 0 else len(replay["samples"]) - 1
-    # The exported visual config fixes an offscreen framebuffer. Render no larger
-    # than it declares rather than mutating this immutable evidence model.
-    width = min(args.width, int(model.vis.global_.offwidth))
-    height = min(args.height, int(model.vis.global_.offheight))
+    # Presentation-only settings on the freshly loaded in-memory model. Never
+    # rewrite the MJZ, dynamics, input scene, or recorded simulation state.
+    width, height = args.width, args.height
+    model.vis.global_.offwidth = width
+    model.vis.global_.offheight = height
+    model.vis.quality.offsamples = 4
     with mujoco.Renderer(model, height=height, width=width, max_geom=model.ngeom + len(replay.get("route", {}).get("points_m", [])) + 4) as renderer:
         if args.png is not None:
             image = _label(render_sample(renderer, model, data, replay, sample_index), report, _sample(replay, sample_index, model))

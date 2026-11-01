@@ -22,3 +22,6 @@ output/
 .openai/
 COORDINATION.md
 *.tsbuildinfo
+
+# Locally generated scene-specific training evidence (may contain private room data).
+public/policies/
