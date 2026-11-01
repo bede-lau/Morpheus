@@ -1,6 +1,11 @@
 <p align="center"><img src="src/assets/morpheus-gradient-logo-transparent.png" width="480" alt="Morpheus — gradient ribbon logo" /></p>
 
 <p align="center">
+  🏆 <b>1st Place — OpenAI DevDay Exchange Community Hackathon, London</b><br/>
+  <sub>1 November 2026 · Built in one day · An event with 1,000+ applicants</sub>
+</p>
+
+<p align="center">
   <b>Scan your room. Morph it into a simulation. Watch real robots do your chores in it.</b><br/>
   <sub>Gaussian splat → collision world → SimReady objects → planned robot rollouts → an honest verdict on which robot fits your home.</sub>
 </p>
@@ -333,3 +338,4 @@ We'd rather be precise than impressive.
 | Models | OpenAI Decisions API (`gpt-6-luna`), Responses API (`gpt-6.1-terra`), Codex CLI (`gpt-6-astra`) |
 
 <p align="center"><sub>Built in one day at the OpenAI DevDay Community Hackathon, London, 1 November 2026, with Codex.</sub></p>
+
