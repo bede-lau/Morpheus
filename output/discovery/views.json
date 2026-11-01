@@ -1,0 +1,109 @@
+{
+  "views": [
+    {
+      "view": 0,
+      "file": "view00.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 1,
+      "file": "view01.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 2,
+      "file": "view02.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 3,
+      "file": "view03.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 4,
+      "file": "view04.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 5,
+      "file": "view05.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 6,
+      "file": "view06.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 7,
+      "file": "view07.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 8,
+      "file": "view08.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 9,
+      "file": "view09.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 10,
+      "file": "view10.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 11,
+      "file": "view11.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 12,
+      "file": "view12.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 13,
+      "file": "view13.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 14,
+      "file": "view14.jpg",
+      "width": 850,
+      "height": 874
+    },
+    {
+      "view": 15,
+      "file": "view15.jpg",
+      "width": 850,
+      "height": 874
+    }
+  ],
+  "labels": [
+    "plate",
+    "bowl",
+    "mug",
+    "cup",
+    "glass",
+    "spoon"
+  ],
+  "instructions": "For each view image list movable tabletop objects (plate, bowl, mug, cup, glass, spoon) with pixel centres; write detections.json as {\"detections\":[{\"view\",\"label\",\"x\",\"y\",\"confidence\"}]}."
+}

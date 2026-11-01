@@ -7,656 +7,556 @@
   "version": 1,
   "source": "backend",
   "robot": "soarm",
-  "duration": 6.4,
+  "duration": 5.4,
   "frames": [
    {
     "time": 0.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.5708,
+    "yaw": 2.7977,
     "armExtension": 0.0
    },
    {
     "time": 0.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.7236,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.0588
    },
    {
     "time": 0.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.8763,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.1176
    },
    {
     "time": 0.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.0291,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.1765
    },
    {
     "time": 0.4,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.1818,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.2353
    },
    {
     "time": 0.5,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.3346,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.2941
    },
    {
     "time": 0.6,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.4873,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.3529
    },
    {
     "time": 0.7,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.6401,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.4118
    },
    {
     "time": 0.8,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.7929,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.4706
    },
    {
     "time": 0.9,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -2.9456,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.5294
    },
    {
     "time": 1.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
+    "yaw": 2.7977,
+    "armExtension": 0.5882
    },
    {
     "time": 1.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.0588
+    "yaw": 2.7977,
+    "armExtension": 0.6471
    },
    {
     "time": 1.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.1176
+    "yaw": 2.7977,
+    "armExtension": 0.7059
    },
    {
     "time": 1.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.1765
+    "yaw": 2.7977,
+    "armExtension": 0.7647
    },
    {
     "time": 1.4,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.2353
+    "yaw": 2.7977,
+    "armExtension": 0.8235
    },
    {
     "time": 1.5,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.2941
+    "yaw": 2.7977,
+    "armExtension": 0.8824
    },
    {
     "time": 1.6,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.3529
+    "yaw": 2.7977,
+    "armExtension": 0.9412
    },
    {
     "time": 1.7,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.4118
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 1.8,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.4706
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 1.9,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.5294
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.5882
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.6471
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.7059
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.7647
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.4,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.8235
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.5,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.8824
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.6,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.9412
+    "yaw": 2.7977,
+    "armExtension": 1.0
    },
    {
     "time": 2.7,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
+    "yaw": 2.7977,
     "armExtension": 1.0
    },
    {
     "time": 2.8,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.9412
    },
    {
     "time": 2.9,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.8824
    },
    {
     "time": 3.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.8235
    },
    {
     "time": 3.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.7647
    },
    {
     "time": 3.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.7059
    },
    {
     "time": 3.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.6471
    },
    {
     "time": 3.4,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.5882
    },
    {
     "time": 3.5,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.5294
    },
    {
     "time": 3.6,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.4706
    },
    {
     "time": 3.7,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 1.0
+    "yaw": 2.7977,
+    "armExtension": 0.4118
    },
    {
     "time": 3.8,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.9412
+    "yaw": 2.7977,
+    "armExtension": 0.3529
    },
    {
     "time": 3.9,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.8824
+    "yaw": 2.7977,
+    "armExtension": 0.2941
    },
    {
     "time": 4.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.8235
+    "yaw": 2.7977,
+    "armExtension": 0.2353
    },
    {
     "time": 4.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.7647
+    "yaw": 2.7977,
+    "armExtension": 0.1765
    },
    {
     "time": 4.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.7059
+    "yaw": 2.7977,
+    "armExtension": 0.1176
    },
    {
     "time": 4.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.6471
+    "yaw": 2.7977,
+    "armExtension": 0.0588
    },
    {
     "time": 4.4,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.5882
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 4.5,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.5294
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 4.6,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.4706
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 4.7,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.4118
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 4.8,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.3529
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 4.9,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.2941
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 5.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.2353
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 5.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.1765
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 5.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.1176
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 5.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.0588
+    "yaw": 2.7977,
+    "armExtension": 0.0
    },
    {
     "time": 5.4,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 5.5,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 5.6,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 5.7,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 5.8,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 5.9,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 6.0,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 6.1,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 6.2,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 6.3,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
-    "armExtension": 0.0
-   },
-   {
-    "time": 6.4,
-    "position": [
-     -2.8999,
-     0.4691,
-     0.0
-    ],
-    "yaw": -3.0984,
+    "yaw": 2.7977,
     "armExtension": 0.0
    }
   ],
@@ -664,30 +564,30 @@
   "events": [
    {
     "time": 0.0,
-    "label": "Spawned at the kitchen door"
+    "label": "Spawned at the kitchen entrance"
    },
    {
     "time": 0.0,
     "label": "SO-ARM100 has a stationary base and cannot drive to the counter"
    },
    {
-    "time": 6.4,
+    "time": 5.4,
     "label": "Task failed"
    }
   ],
   "verdict": {
    "status": "failed",
-   "summary": "SO-ARM100 could not complete 'fill a glass of water'. Failed at 'Navigate to counter': Stationary base; the counter is 3.14 m away, beyond its 0.36 m reach.",
+   "summary": "SO-ARM100 could not complete 'fill a glass of water'. Failed at 'Navigate to counter': Stationary base; the counter is 3.65 m away, beyond its 0.36 m reach.",
    "steps": [
     {
      "name": "Navigate to counter",
      "status": "failed",
-     "note": "Stationary base; the counter is 3.14 m away, beyond its 0.36 m reach."
+     "note": "Stationary base; the counter is 3.65 m away, beyond its 0.36 m reach."
     },
     {
      "name": "Fill glass at counter",
      "status": "skipped",
-     "note": "Skipped after an earlier step failed. Decisions (gpt-6-luna) feasibility estimate p=0.08."
+     "note": "Skipped after an earlier step failed. Decisions (gpt-6-luna) feasibility estimate p=0.01."
     },
     {
      "name": "Navigate to table",
@@ -697,7 +597,7 @@
     {
      "name": "Place glass on table",
      "status": "skipped",
-     "note": "Skipped after an earlier step failed. Decisions (gpt-6-luna) feasibility estimate p=0.00."
+     "note": "Skipped after an earlier step failed. Decisions (gpt-6-luna) feasibility estimate p=0.01."
     }
    ],
    "planner": "rules"
@@ -708,14 +608,14 @@
     "label": "Table",
     "kind": "table",
     "position": [
-     0.6601,
-     1.8391,
-     0.5
+     2.9251,
+     -0.7309,
+     0.351
     ],
     "size": [
-     0.44,
-     1.54,
-     1.0
+     0.45,
+     3.1,
+     0.7021
     ]
    },
    {
@@ -723,14 +623,89 @@
     "label": "Counter (sink assumed)",
     "kind": "sink",
     "position": [
-     -2.7499,
-     -3.0009,
-     0.4
+     0.5501,
+     -1.3559,
+     0.3369
     ],
     "size": [
-     1.1,
-     0.66,
-     0.8
+     0.4,
+     0.45,
+     0.6738
+    ]
+   },
+   {
+    "id": "counter_1",
+    "label": "Counter 1",
+    "kind": "counter",
+    "position": [
+     1.0501,
+     1.6941,
+     0.3332
+    ],
+    "size": [
+     0.8,
+     2.95,
+     0.6664
+    ]
+   },
+   {
+    "id": "counter_2",
+    "label": "Counter 2",
+    "kind": "counter",
+    "position": [
+     2.1501,
+     3.0191,
+     0.3547
+    ],
+    "size": [
+     2.0,
+     0.5,
+     0.7094
+    ]
+   },
+   {
+    "id": "counter_3",
+    "label": "Counter 3",
+    "kind": "counter",
+    "position": [
+     2.6751,
+     -2.2309,
+     0.344
+    ],
+    "size": [
+     0.95,
+     0.5,
+     0.688
+    ]
+   },
+   {
+    "id": "counter_4",
+    "label": "Counter 4",
+    "kind": "counter",
+    "position": [
+     2.9001,
+     2.4441,
+     0.365
+    ],
+    "size": [
+     0.4,
+     1.25,
+     0.73
+    ]
+   },
+   {
+    "id": "counter_5",
+    "label": "Counter 5",
+    "kind": "counter",
+    "position": [
+     2.3501,
+     -2.2559,
+     0.3363
+    ],
+    "size": [
+     0.5,
+     0.55,
+     0.6726
     ]
    },
    {
@@ -738,14 +713,14 @@
     "label": "Tall unit 1",
     "kind": "tall",
     "position": [
-     0.4401,
-     0.1891,
-     1.1
+     3.1251,
+     0.3691,
+     0.95
     ],
     "size": [
-     5.72,
-     6.6,
-     2.2
+     0.45,
+     5.7,
+     1.9
     ]
    },
    {
@@ -753,35 +728,96 @@
     "label": "Tall unit 2",
     "kind": "tall",
     "position": [
-     -0.4399,
-     -2.6709,
-     1.1
+     0.6251,
+     -1.0559,
+     0.95
     ],
     "size": [
-     0.44,
-     0.44,
-     2.2
+     0.75,
+     1.95,
+     1.9
+    ]
+   },
+   {
+    "id": "tall_3",
+    "label": "Tall unit 3",
+    "kind": "tall",
+    "position": [
+     2.0751,
+     3.1941,
+     0.95
+    ],
+    "size": [
+     2.15,
+     0.35,
+     1.8999
+    ]
+   },
+   {
+    "id": "tall_4",
+    "label": "Tall unit 4",
+    "kind": "tall",
+    "position": [
+     0.9501,
+     1.6191,
+     0.95
+    ],
+    "size": [
+     0.2,
+     3.3,
+     1.8999
+    ]
+   },
+   {
+    "id": "tall_5",
+    "label": "Tall unit 5",
+    "kind": "tall",
+    "position": [
+     1.2501,
+     -1.8059,
+     0.9499
+    ],
+    "size": [
+     0.7,
+     0.35,
+     1.8999
+    ]
+   },
+   {
+    "id": "tall_6",
+    "label": "Tall unit 6",
+    "kind": "tall",
+    "position": [
+     1.5501,
+     -2.1059,
+     0.9499
+    ],
+    "size": [
+     0.4,
+     0.95,
+     1.8999
     ]
    },
    {
     "id": "door",
-    "label": "Kitchen door",
+    "label": "Kitchen entrance (far end of the room)",
     "kind": "door",
     "position": [
-     -3.2999,
-     0.4691,
+     1.8751,
+     2.3441,
      1.0
     ],
     "size": [
-     0.1,
-     4.9,
+     0.6,
+     0.6,
      2.0
     ]
    }
   ],
   "plannerNotes": [
+   "16 of 110 collision columns stand on floor the mesh shows as open (they were filled up to the ceiling) and are ignored for planning; the mesh obstacle grid is used instead.",
    "No interior cluster met the table rule (0.65-1.00 m top, >=0.5 m2, >0.3 m from walls); the interior-most accessible counter-height cluster is labelled table.",
-   "No counter lies on the side opposite the door; sink is the counter closest to the room centre."
+   "Room interior, landmarks and spawn come from the companion collider mesh (public/samples/rustic-kitchen-collider.glb); heights are above the fitted floor plane."
   ]
  }
 }

@@ -24,6 +24,9 @@ output/simready/*
 !output/simready/catalogue.json
 !output/simready/scene.json
 !output/simready/prepared/
+!output/discovery/
+output/discovery/*
+!output/discovery/*.json
 .DS_Store
 .openai/
 COORDINATION.md

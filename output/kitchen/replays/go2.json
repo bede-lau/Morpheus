@@ -1,821 +1,931 @@
 {
  "environmentId": "kitchen",
  "environmentRevision": "70d7305ef6ed746478f73b0c2e8f39ee892142a745a7c672e2574a262383db14",
- "task": "wipe the table",
- "taskSlug": "wipe-the-table",
+ "task": "fill a glass of water",
+ "taskSlug": "fill-a-glass-of-water",
  "replay": {
   "version": 1,
   "source": "backend",
   "robot": "go2",
-  "duration": 7.6,
+  "duration": 8.6,
   "frames": [
    {
     "time": 0.0,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.5708,
+    "yaw": 2.7977,
     "armExtension": 0.0
    },
    {
     "time": 0.1,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.4198,
+    "yaw": 2.9123,
     "armExtension": 0.0
    },
    {
     "time": 0.2,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.2688,
+    "yaw": 3.027,
     "armExtension": 0.0
    },
    {
     "time": 0.3,
     "position": [
-     -2.8999,
-     0.4691,
+     1.8751,
+     2.3441,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 0.4,
     "position": [
-     -2.8293,
-     0.5034,
+     1.8751,
+     2.2644,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 0.5,
     "position": [
-     -2.7587,
-     0.5378,
+     1.8751,
+     2.1847,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 0.6,
     "position": [
-     -2.688,
-     0.5722,
+     1.8751,
+     2.105,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 0.7,
     "position": [
-     -2.6174,
-     0.6066,
+     1.8751,
+     2.0253,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 0.8,
     "position": [
-     -2.5468,
-     0.6409,
+     1.8751,
+     1.9456,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 0.9,
     "position": [
-     -2.4762,
-     0.6753,
+     1.8751,
+     1.8659,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.0,
     "position": [
-     -2.4055,
-     0.7097,
+     1.8751,
+     1.7862,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.1,
     "position": [
-     -2.3349,
-     0.7441,
+     1.8751,
+     1.7066,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.2,
     "position": [
-     -2.2643,
-     0.7784,
+     1.8751,
+     1.6269,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.3,
     "position": [
-     -2.1937,
-     0.8128,
+     1.8751,
+     1.5472,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.4,
     "position": [
-     -2.123,
-     0.8472,
+     1.8751,
+     1.4675,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.5,
     "position": [
-     -2.0524,
-     0.8816,
+     1.8751,
+     1.3878,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.6,
     "position": [
-     -1.9818,
-     0.9159,
+     1.8751,
+     1.3081,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.7,
     "position": [
-     -1.9112,
-     0.9503,
+     1.8751,
+     1.2284,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.8,
     "position": [
-     -1.8405,
-     0.9847,
+     1.8751,
+     1.1487,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 1.9,
     "position": [
-     -1.7699,
-     1.0191,
+     1.8751,
+     1.0691,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.0,
     "position": [
-     -1.6993,
-     1.0534,
+     1.8751,
+     0.9894,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.1,
     "position": [
-     -1.6287,
-     1.0878,
+     1.8751,
+     0.9097,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.2,
     "position": [
-     -1.558,
-     1.1222,
+     1.8751,
+     0.83,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.3,
     "position": [
-     -1.4874,
-     1.1566,
+     1.8751,
+     0.7503,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.4,
     "position": [
-     -1.4168,
-     1.1909,
+     1.8751,
+     0.6706,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.5,
     "position": [
-     -1.3462,
-     1.2253,
+     1.8751,
+     0.5909,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.6,
     "position": [
-     -1.2755,
-     1.2597,
+     1.8751,
+     0.5112,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.7,
     "position": [
-     -1.2049,
-     1.2941,
+     1.8751,
+     0.4316,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.8,
     "position": [
-     -1.1343,
-     1.3284,
+     1.8751,
+     0.3519,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 2.9,
     "position": [
-     -1.0637,
-     1.3628,
+     1.8751,
+     0.2722,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.0,
     "position": [
-     -0.993,
-     1.3972,
+     1.8751,
+     0.1925,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.1,
     "position": [
-     -0.9224,
-     1.4316,
+     1.8751,
+     0.1128,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.2,
     "position": [
-     -0.8518,
-     1.4659,
+     1.8751,
+     0.0331,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.3,
     "position": [
-     -0.7812,
-     1.5003,
+     1.8751,
+     -0.0466,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.4,
     "position": [
-     -0.7105,
-     1.5347,
+     1.8751,
+     -0.1263,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.5,
     "position": [
-     -0.6399,
-     1.5691,
+     1.8751,
+     -0.2059,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 3.1416,
     "armExtension": 0.0
    },
    {
     "time": 3.6,
     "position": [
-     -0.5693,
-     1.6034,
+     1.8751,
+     -0.2059,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.995,
     "armExtension": 0.0
    },
    {
     "time": 3.7,
     "position": [
-     -0.4987,
-     1.6378,
+     1.8751,
+     -0.2059,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.8484,
     "armExtension": 0.0
    },
    {
     "time": 3.8,
     "position": [
-     -0.428,
-     1.6722,
+     1.8751,
+     -0.2059,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 3.9,
     "position": [
-     -0.3574,
-     1.7066,
+     1.8417,
+     -0.2768,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.0,
     "position": [
-     -0.2868,
-     1.7409,
+     1.8084,
+     -0.3476,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.1,
     "position": [
-     -0.2162,
-     1.7753,
+     1.7751,
+     -0.4184,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.2,
     "position": [
-     -0.1455,
-     1.8097,
+     1.7417,
+     -0.4893,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.3,
     "position": [
-     -0.0749,
-     1.8441,
+     1.7084,
+     -0.5601,
      0.0
     ],
-    "yaw": -1.1178,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.4,
     "position": [
-     -0.0749,
-     1.8441,
+     1.6751,
+     -0.6309,
      0.0
     ],
-    "yaw": -1.2711,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.5,
     "position": [
-     -0.0749,
-     1.8441,
+     1.6417,
+     -0.7018,
      0.0
     ],
-    "yaw": -1.4243,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.6,
     "position": [
-     -0.0749,
-     1.8441,
+     1.6084,
+     -0.7726,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.7,
     "position": [
-     -0.0749,
-     1.8441,
+     1.5751,
+     -0.8434,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.8,
     "position": [
-     -0.0749,
-     1.8441,
+     1.5417,
+     -0.9143,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 4.9,
     "position": [
-     -0.0749,
-     1.8441,
+     1.5084,
+     -0.9851,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 5.0,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.7018,
     "armExtension": 0.0
    },
    {
     "time": 5.1,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.5655,
     "armExtension": 0.0
    },
    {
     "time": 5.2,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.4293,
     "armExtension": 0.0
    },
    {
     "time": 5.3,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.2931,
     "armExtension": 0.0
    },
    {
     "time": 5.4,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.1568,
     "armExtension": 0.0
    },
    {
     "time": 5.5,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 2.0206,
     "armExtension": 0.0
    },
    {
     "time": 5.6,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 5.7,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 5.8,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 5.9,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.0,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.1,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.2,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.3,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.4,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.5,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.6,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.7,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.8,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 6.9,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.0,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.1,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.2,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.3,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.4,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.5,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
     "armExtension": 0.0
    },
    {
     "time": 7.6,
     "position": [
-     -0.0749,
-     1.8441,
+     1.4751,
+     -1.0559,
      0.0
     ],
-    "yaw": -1.5775,
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 7.7,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 7.8,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 7.9,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.0,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.1,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.2,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.3,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.4,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.5,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
+    "armExtension": 0.0
+   },
+   {
+    "time": 8.6,
+    "position": [
+     1.4751,
+     -1.0559,
+     0.0
+    ],
+    "yaw": 1.8844,
     "armExtension": 0.0
    }
   ],
-  "task": "wipe the table",
+  "task": "fill a glass of water",
   "events": [
    {
     "time": 0.0,
-    "label": "Spawned at the kitchen door"
+    "label": "Spawned at the kitchen entrance"
    },
    {
     "time": 0.0,
-    "label": "Navigating to the table"
+    "label": "Navigating to the counter"
    },
    {
-    "time": 4.6,
-    "label": "Arrived at the table"
+    "time": 5.6,
+    "label": "Arrived at the counter"
    },
    {
-    "time": 4.6,
-    "label": "Go2 has no manipulator: cannot wipe the table"
+    "time": 5.6,
+    "label": "Go2 has no manipulator: cannot fill the counter"
    },
    {
-    "time": 7.6,
+    "time": 8.6,
     "label": "Task partially completed"
    }
   ],
   "verdict": {
    "status": "partial",
-   "summary": "Go2 partially completed 'wipe the table' (done: Navigate to table). Failed at 'Wipe table': Go2 has no arm. Decisions (gpt-6-luna) feasibility estimate p=0.00.",
+   "summary": "Go2 partially completed 'fill a glass of water' (done: Navigate to counter). Failed at 'Fill glass at counter': Go2 has no arm. Decisions (gpt-6-luna) feasibility estimate p=0.00.",
    "steps": [
     {
-     "name": "Navigate to table",
+     "name": "Navigate to counter",
      "status": "done",
-     "note": "3.1 m path, stopped 0.10 m from the surface."
+     "note": "3.5 m path, stopped 0.31 m from the surface."
     },
     {
-     "name": "Wipe table",
+     "name": "Fill glass at counter",
      "status": "failed",
      "note": "Go2 has no arm. Decisions (gpt-6-luna) feasibility estimate p=0.00."
+    },
+    {
+     "name": "Navigate to table",
+     "status": "skipped",
+     "note": "Skipped after an earlier step failed."
+    },
+    {
+     "name": "Place glass on table",
+     "status": "skipped",
+     "note": "Skipped after an earlier step failed. Decisions (gpt-6-luna) feasibility estimate p=0.00."
     }
    ],
    "planner": "rules"
@@ -826,14 +936,14 @@
     "label": "Table",
     "kind": "table",
     "position": [
-     0.6601,
-     1.8391,
-     0.5
+     2.9251,
+     -0.7309,
+     0.351
     ],
     "size": [
-     0.44,
-     1.54,
-     1.0
+     0.45,
+     3.1,
+     0.7021
     ]
    },
    {
@@ -841,14 +951,89 @@
     "label": "Counter (sink assumed)",
     "kind": "sink",
     "position": [
-     -2.7499,
-     -3.0009,
-     0.4
+     0.5501,
+     -1.3559,
+     0.3369
     ],
     "size": [
-     1.1,
-     0.66,
-     0.8
+     0.4,
+     0.45,
+     0.6738
+    ]
+   },
+   {
+    "id": "counter_1",
+    "label": "Counter 1",
+    "kind": "counter",
+    "position": [
+     1.0501,
+     1.6941,
+     0.3332
+    ],
+    "size": [
+     0.8,
+     2.95,
+     0.6664
+    ]
+   },
+   {
+    "id": "counter_2",
+    "label": "Counter 2",
+    "kind": "counter",
+    "position": [
+     2.1501,
+     3.0191,
+     0.3547
+    ],
+    "size": [
+     2.0,
+     0.5,
+     0.7094
+    ]
+   },
+   {
+    "id": "counter_3",
+    "label": "Counter 3",
+    "kind": "counter",
+    "position": [
+     2.6751,
+     -2.2309,
+     0.344
+    ],
+    "size": [
+     0.95,
+     0.5,
+     0.688
+    ]
+   },
+   {
+    "id": "counter_4",
+    "label": "Counter 4",
+    "kind": "counter",
+    "position": [
+     2.9001,
+     2.4441,
+     0.365
+    ],
+    "size": [
+     0.4,
+     1.25,
+     0.73
+    ]
+   },
+   {
+    "id": "counter_5",
+    "label": "Counter 5",
+    "kind": "counter",
+    "position": [
+     2.3501,
+     -2.2559,
+     0.3363
+    ],
+    "size": [
+     0.5,
+     0.55,
+     0.6726
     ]
    },
    {
@@ -856,14 +1041,14 @@
     "label": "Tall unit 1",
     "kind": "tall",
     "position": [
-     0.4401,
-     0.1891,
-     1.1
+     3.1251,
+     0.3691,
+     0.95
     ],
     "size": [
-     5.72,
-     6.6,
-     2.2
+     0.45,
+     5.7,
+     1.9
     ]
    },
    {
@@ -871,35 +1056,96 @@
     "label": "Tall unit 2",
     "kind": "tall",
     "position": [
-     -0.4399,
-     -2.6709,
-     1.1
+     0.6251,
+     -1.0559,
+     0.95
     ],
     "size": [
-     0.44,
-     0.44,
-     2.2
+     0.75,
+     1.95,
+     1.9
+    ]
+   },
+   {
+    "id": "tall_3",
+    "label": "Tall unit 3",
+    "kind": "tall",
+    "position": [
+     2.0751,
+     3.1941,
+     0.95
+    ],
+    "size": [
+     2.15,
+     0.35,
+     1.8999
+    ]
+   },
+   {
+    "id": "tall_4",
+    "label": "Tall unit 4",
+    "kind": "tall",
+    "position": [
+     0.9501,
+     1.6191,
+     0.95
+    ],
+    "size": [
+     0.2,
+     3.3,
+     1.8999
+    ]
+   },
+   {
+    "id": "tall_5",
+    "label": "Tall unit 5",
+    "kind": "tall",
+    "position": [
+     1.2501,
+     -1.8059,
+     0.9499
+    ],
+    "size": [
+     0.7,
+     0.35,
+     1.8999
+    ]
+   },
+   {
+    "id": "tall_6",
+    "label": "Tall unit 6",
+    "kind": "tall",
+    "position": [
+     1.5501,
+     -2.1059,
+     0.9499
+    ],
+    "size": [
+     0.4,
+     0.95,
+     1.8999
     ]
    },
    {
     "id": "door",
-    "label": "Kitchen door",
+    "label": "Kitchen entrance (far end of the room)",
     "kind": "door",
     "position": [
-     -3.2999,
-     0.4691,
+     1.8751,
+     2.3441,
      1.0
     ],
     "size": [
-     0.1,
-     4.9,
+     0.6,
+     0.6,
      2.0
     ]
    }
   ],
   "plannerNotes": [
+   "16 of 110 collision columns stand on floor the mesh shows as open (they were filled up to the ceiling) and are ignored for planning; the mesh obstacle grid is used instead.",
    "No interior cluster met the table rule (0.65-1.00 m top, >=0.5 m2, >0.3 m from walls); the interior-most accessible counter-height cluster is labelled table.",
-   "No counter lies on the side opposite the door; sink is the counter closest to the room centre."
+   "Room interior, landmarks and spawn come from the companion collider mesh (public/samples/rustic-kitchen-collider.glb); heights are above the fitted floor plane."
   ]
  }
 }

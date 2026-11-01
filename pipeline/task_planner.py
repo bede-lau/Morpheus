@@ -73,12 +73,18 @@ class World:
         self.door = info["door"]
         self.spawn = np.array(info["door"]["spawn"], float)
         self.spawn_yaw = float(info["door"]["yaw"])
+        self.mesh = info.get("mesh")                # room_mesh grids, or None (box-only fallback)
+        self.mesh_clear = info.get("meshClearance")  # metres to the nearest mesh obstacle cell
         self.grids = {}
 
     def grid(self, robot):
         if robot not in self.grids:
             r = ROBOTS[robot]["radius"]
             free, xs, ys = free_grid(self.floor, self.rects, r + MARGIN, floor_margin=r)
+            if self.mesh is not None:
+                # Union of mesh obstacles and boxes, inflated; never leave the mesh interior.
+                assert len(xs) == len(self.mesh["xs"]) and len(ys) == len(self.mesh["ys"])
+                free = free & self.mesh["interior"] & (self.mesh_clear >= r + MARGIN)
             self.grids[robot] = (free, xs, ys)
         return self.grids[robot]
 
@@ -90,7 +96,17 @@ class World:
         pts = a[None, :] + np.linspace(0, 1, n)[:, None] * (b - a)[None, :]
         x0, y0, x1, y1 = self.floor
         inside = (pts[:, 0] >= x0) & (pts[:, 0] <= x1) & (pts[:, 1] >= y0) & (pts[:, 1] <= y1)
-        return bool(inside.all() and self.clearance(pts).min() >= need)
+        if not (inside.all() and self.clearance(pts).min() >= need):
+            return False
+        return self.mesh_ok(pts, need)
+
+    def mesh_ok(self, pts, need):
+        """Every point lies in an interior cell whose mesh clearance is >= need (True without a mesh)."""
+        if self.mesh is None:
+            return True
+        from .room_mesh import cell_index
+        i, j, ok = cell_index(self.mesh, pts)
+        return bool(ok.all() and self.mesh["interior"][i, j].all() and (self.mesh_clear[i, j] >= need).all())
 
     def landmark_rect(self, lm):
         (x, y, _), (sx, sy, _) = lm["position"], lm["size"]
@@ -464,8 +480,11 @@ def arm_target(robot, distance):
 
 def simulate(world, robot, task, steps):
     prof = ROBOTS[robot]
-    tl = Timeline(world.spawn, world.spawn_yaw)
-    tl.event("Spawned at the kitchen door")
+    yaw0 = world.spawn_yaw
+    if steps and steps[0]["target"] in world.by_id:  # face the first target
+        yaw0 = yaw_towards(*(np.array(world.by_id[steps[0]["target"]]["position"][:2]) - world.spawn))
+    tl = Timeline(world.spawn, yaw0)
+    tl.event("Spawned at the kitchen entrance" if world.mesh is not None else "Spawned at the kitchen door")
     results, at, arrival = [], None, None
     aborted = False
     for i, step in enumerate(steps):

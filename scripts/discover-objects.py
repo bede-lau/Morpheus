@@ -13,6 +13,13 @@ already performs.
         {"detections":[{"view":3,"label":"bowl","x":512,"y":388,"confidence":0.8}, ...]}
         with labels from plate|bowl|mug|cup|glass|spoon and pixel centres.
 
+    python3 scripts/discover-objects.py detect [--parallel 8] [--model gpt-6-astra]
+        Fans out one `codex exec` subagent per rendered view (Codex CLI, logged
+        in with ChatGPT; no API key; gpt-6-astra, since terra is not offered
+        to ChatGPT-account logins) with the image attached, and merges their
+        answers into output/discovery/detections.json. Equivalent to the manual
+        step above.
+
     python3 scripts/discover-objects.py apply [output/discovery/detections.json]
         Re-renders the same views, raycasts every detection into the splat
         through the object workspace, de-duplicates the 3D hits, then drives the
@@ -26,7 +33,8 @@ cups, spoons); raycasts on blurry splats can land on walls, so hits outside
 0.35–1.6 m height or further than 0.6 m behind a counter edge are rejected.
 """
 from __future__ import annotations
-import argparse, json, re, sys, time
+import argparse, json, re, subprocess, sys, time
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -78,6 +86,44 @@ def render(args):
     (OUT / 'views.json').write_text(json.dumps({'views': views, 'labels': list(SIZES),
         'instructions': 'For each view image list movable tabletop objects (plate, bowl, mug, cup, glass, spoon) with pixel centres; write detections.json as {"detections":[{"view","label","x","y","confidence"}]}.'}, indent=2))
     print(f'{len(views)} views in {OUT}. Have the Codex CLI agent write {OUT / "detections.json"}, then run apply.')
+
+
+DETECT_PROMPT = ('The attached image is a {w}x{h} render of a kitchen Gaussian splat. List every movable tabletop object a home '
+                 'robot could pick up, using only these labels: plate, bowl, mug, cup, glass, spoon. Ignore plants, taps, '
+                 'appliances, furniture, wall decor, and anything too blurry to identify. Reply with ONLY a JSON object, no '
+                 'prose, no code fence: {{"detections":[{{"label":"bowl","x":<pixel x of centre>,"y":<pixel y of centre>,'
+                 '"confidence":<0-1>}}]}}')
+
+
+def detect_view(view, model):
+    """One Codex CLI subagent per view. Returns (view index, detections, note)."""
+    out = OUT / f'detections.view{view["view"]:02d}.json'
+    cmd = ['codex', 'exec', '--sandbox', 'read-only', '--skip-git-repo-check', '-m', model,
+           '-i', str(OUT / view['file']), '--output-last-message', str(out),
+           DETECT_PROMPT.format(w=view['width'], h=view['height'])]
+    try:
+        # stdin must be closed: codex exec otherwise waits on a piped stdin forever.
+        subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True, timeout=200, stdin=subprocess.DEVNULL)
+        text = out.read_text().strip() if out.exists() else ''
+        text = text[text.find('{'):text.rfind('}') + 1]
+        items = json.loads(text)['detections']
+        clean = [{'view': view['view'], 'label': d['label'], 'x': int(d['x']), 'y': int(d['y']), 'confidence': float(d.get('confidence', 1))}
+                 for d in items if d.get('label') in SIZES and 0 <= int(d['x']) < view['width'] and 0 <= int(d['y']) < view['height']]
+        return view['view'], clean, 'ok'
+    except Exception as e:
+        return view['view'], [], f'failed: {str(e).splitlines()[0] if str(e) else type(e).__name__}'
+
+
+def detect(args):
+    views = json.loads((OUT / 'views.json').read_text())['views']
+    print(f'fanning out {len(views)} Codex subagents ({args.model}), {args.parallel} at a time')
+    merged, notes = [], {}
+    with ThreadPoolExecutor(max_workers=args.parallel) as pool:
+        for v, items, note in pool.map(lambda view: detect_view(view, args.model), views):
+            notes[v] = note; merged.extend(items)
+            print(f'view {v}: {note}, {len(items)} detections', [(d["label"], d["x"], d["y"], round(d["confidence"], 2)) for d in items])
+    (OUT / 'detections.json').write_text(json.dumps({'source': f'codex exec ({args.model}), one subagent per view', 'notes': notes, 'detections': merged}, indent=2))
+    print(f'{len(merged)} detections written to {OUT / "detections.json"}')
 
 
 def apply(args):
@@ -157,11 +203,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest='phase', required=True)
     r = sub.add_parser('render'); r.add_argument('--views', type=int, default=16)
+    d = sub.add_parser('detect'); d.add_argument('--parallel', type=int, default=8); d.add_argument('--model', default='gpt-6-astra')
     a = sub.add_parser('apply'); a.add_argument('detections', nargs='?', default=str(OUT / 'detections.json'))
     a.add_argument('--min-confidence', type=float, default=0.5); a.add_argument('--min-score', type=float, default=0.5, help='minimum Decisions score (0-3) to accept a match')
     a.add_argument('--dry-run', action='store_true')
     args = ap.parse_args()
-    render(args) if args.phase == 'render' else apply(args)
+    {'render': render, 'detect': detect, 'apply': apply}[args.phase](args)
 
 
 if __name__ == '__main__': main()

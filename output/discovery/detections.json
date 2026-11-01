@@ -1,0 +1,233 @@
+{
+  "source": "codex exec (gpt-6-astra), one subagent per view",
+  "notes": {
+    "0": "ok",
+    "1": "ok",
+    "2": "ok",
+    "3": "ok",
+    "4": "ok",
+    "5": "ok",
+    "6": "ok",
+    "7": "ok",
+    "8": "ok",
+    "9": "ok",
+    "10": "ok",
+    "11": "ok",
+    "12": "ok",
+    "13": "ok",
+    "14": "ok",
+    "15": "ok"
+  },
+  "detections": [
+    {
+      "view": 0,
+      "label": "bowl",
+      "x": 566,
+      "y": 654,
+      "confidence": 0.93
+    },
+    {
+      "view": 0,
+      "label": "plate",
+      "x": 759,
+      "y": 534,
+      "confidence": 0.88
+    },
+    {
+      "view": 1,
+      "label": "bowl",
+      "x": 546,
+      "y": 721,
+      "confidence": 0.94
+    },
+    {
+      "view": 1,
+      "label": "plate",
+      "x": 756,
+      "y": 374,
+      "confidence": 0.91
+    },
+    {
+      "view": 2,
+      "label": "bowl",
+      "x": 327,
+      "y": 658,
+      "confidence": 0.96
+    },
+    {
+      "view": 3,
+      "label": "bowl",
+      "x": 339,
+      "y": 733,
+      "confidence": 0.86
+    },
+    {
+      "view": 3,
+      "label": "plate",
+      "x": 491,
+      "y": 660,
+      "confidence": 0.9
+    },
+    {
+      "view": 4,
+      "label": "bowl",
+      "x": 183,
+      "y": 625,
+      "confidence": 0.93
+    },
+    {
+      "view": 4,
+      "label": "plate",
+      "x": 369,
+      "y": 641,
+      "confidence": 0.84
+    },
+    {
+      "view": 5,
+      "label": "plate",
+      "x": 203,
+      "y": 637,
+      "confidence": 0.86
+    },
+    {
+      "view": 5,
+      "label": "bowl",
+      "x": 210,
+      "y": 661,
+      "confidence": 0.72
+    },
+    {
+      "view": 5,
+      "label": "plate",
+      "x": 377,
+      "y": 671,
+      "confidence": 0.95
+    },
+    {
+      "view": 6,
+      "label": "bowl",
+      "x": 197,
+      "y": 594,
+      "confidence": 0.87
+    },
+    {
+      "view": 6,
+      "label": "plate",
+      "x": 288,
+      "y": 621,
+      "confidence": 0.9
+    },
+    {
+      "view": 7,
+      "label": "bowl",
+      "x": 219,
+      "y": 535,
+      "confidence": 0.88
+    },
+    {
+      "view": 7,
+      "label": "plate",
+      "x": 219,
+      "y": 556,
+      "confidence": 0.76
+    },
+    {
+      "view": 7,
+      "label": "bowl",
+      "x": 304,
+      "y": 620,
+      "confidence": 0.83
+    },
+    {
+      "view": 9,
+      "label": "bowl",
+      "x": 309,
+      "y": 154,
+      "confidence": 0.9
+    },
+    {
+      "view": 11,
+      "label": "cup",
+      "x": 258,
+      "y": 41,
+      "confidence": 0.66
+    },
+    {
+      "view": 11,
+      "label": "cup",
+      "x": 290,
+      "y": 35,
+      "confidence": 0.75
+    },
+    {
+      "view": 11,
+      "label": "cup",
+      "x": 366,
+      "y": 41,
+      "confidence": 0.68
+    },
+    {
+      "view": 11,
+      "label": "mug",
+      "x": 397,
+      "y": 42,
+      "confidence": 0.7
+    },
+    {
+      "view": 11,
+      "label": "mug",
+      "x": 447,
+      "y": 42,
+      "confidence": 0.77
+    },
+    {
+      "view": 13,
+      "label": "plate",
+      "x": 239,
+      "y": 146,
+      "confidence": 0.87
+    },
+    {
+      "view": 13,
+      "label": "cup",
+      "x": 708,
+      "y": 45,
+      "confidence": 0.72
+    },
+    {
+      "view": 13,
+      "label": "cup",
+      "x": 749,
+      "y": 47,
+      "confidence": 0.76
+    },
+    {
+      "view": 13,
+      "label": "cup",
+      "x": 786,
+      "y": 44,
+      "confidence": 0.73
+    },
+    {
+      "view": 15,
+      "label": "bowl",
+      "x": 752,
+      "y": 169,
+      "confidence": 0.88
+    },
+    {
+      "view": 15,
+      "label": "cup",
+      "x": 665,
+      "y": 146,
+      "confidence": 0.73
+    },
+    {
+      "view": 15,
+      "label": "cup",
+      "x": 687,
+      "y": 143,
+      "confidence": 0.64
+    }
+  ]
+}

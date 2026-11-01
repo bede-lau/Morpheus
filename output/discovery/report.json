@@ -1,0 +1,168 @@
+{
+  "objects": [
+    {
+      "label": "bowl",
+      "view": 0,
+      "pixel": [
+        566,
+        654
+      ],
+      "position": [
+        1.248,
+        0.462,
+        0.645
+      ],
+      "confidence": 0.93,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "replaced",
+      "asset": "kitchenware bowl b01 | 5,360 triangles \u00b7 1.54/3"
+    },
+    {
+      "label": "plate",
+      "view": 0,
+      "pixel": [
+        759,
+        534
+      ],
+      "position": [
+        1.126,
+        1.866,
+        0.683
+      ],
+      "confidence": 0.88,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "plate",
+      "view": 3,
+      "pixel": [
+        491,
+        660
+      ],
+      "position": [
+        1.106,
+        0.822,
+        0.64
+      ],
+      "confidence": 0.9,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "bowl",
+      "view": 9,
+      "pixel": [
+        309,
+        154
+      ],
+      "position": [
+        3.123,
+        -2.209,
+        0.611
+      ],
+      "confidence": 0.9,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "replaced",
+      "asset": "kitchenware bowl c01 | 8,800 triangles \u00b7 1.35/3"
+    },
+    {
+      "label": "cup",
+      "view": 11,
+      "pixel": [
+        290,
+        35
+      ],
+      "position": [
+        3.137,
+        0.535,
+        1.361
+      ],
+      "confidence": 0.75,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "mug",
+      "view": 11,
+      "pixel": [
+        397,
+        42
+      ],
+      "position": [
+        3.214,
+        0.104,
+        1.311
+      ],
+      "confidence": 0.7,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "mug",
+      "view": 11,
+      "pixel": [
+        447,
+        42
+      ],
+      "position": [
+        3.139,
+        -0.075,
+        1.313
+      ],
+      "confidence": 0.77,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "replaced",
+      "asset": "kitchenware cup a01 | 3,200 triangles \u00b7 1.05/3"
+    },
+    {
+      "label": "plate",
+      "view": 13,
+      "pixel": [
+        239,
+        146
+      ],
+      "position": [
+        3.104,
+        2.8,
+        0.822
+      ],
+      "confidence": 0.87,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "cup",
+      "view": 13,
+      "pixel": [
+        708,
+        45
+      ],
+      "position": [
+        3.117,
+        0.779,
+        1.351
+      ],
+      "confidence": 0.72,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    },
+    {
+      "label": "cup",
+      "view": 15,
+      "pixel": [
+        665,
+        146
+      ],
+      "position": [
+        2.957,
+        3.265,
+        0.784
+      ],
+      "confidence": 0.73,
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "result": "unknown"
+    }
+  ],
+  "source": "codex-cli detections"
+}

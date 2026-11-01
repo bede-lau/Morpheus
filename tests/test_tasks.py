@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 from http.server import ThreadingHTTPServer
 import threading
 import unittest
@@ -7,6 +8,7 @@ import urllib.request
 
 import numpy as np
 
+from pipeline import room_mesh
 from pipeline.landmarks import rect_distance
 from pipeline.read_api import EnvironmentStore, validate_replay
 from pipeline.task_planner import ROBOT_IDS, ROBOTS, World, plan_task, rules_plan, validate_plan
@@ -75,6 +77,28 @@ class TaskPlannerTest(unittest.TestCase):
             validate_plan([{"action": "wipe", "target": "table"}], lms)
         with self.assertRaises(ValueError):
             validate_plan([{"action": "navigate", "target": "../etc"}], lms)
+
+
+ROLLOUT_ROOT = Path(__file__).resolve().parents[1] / "rollouts" / "kitchen"
+
+
+@unittest.skipUnless(room_mesh.GLB.exists(), "companion collider GLB missing")
+class RolloutsInsideRoomTest(unittest.TestCase):
+    def test_committed_rollouts_stay_inside_the_mesh_interior(self):
+        grids = room_mesh.load_grids()
+        clear = room_mesh.obstacle_distance(grids)
+        files = sorted(ROLLOUT_ROOT.glob("**/*.json"))
+        self.assertGreaterEqual(len(files), 9)
+        for path in files:
+            replay = json.loads(path.read_text())["replay"]
+            radius = ROBOTS[replay["robot"]]["radius"]
+            pts = np.array([f["position"][:2] for f in replay["frames"]])
+            i, j, ok = room_mesh.cell_index(grids, pts)
+            name = str(path.relative_to(ROLLOUT_ROOT))
+            self.assertTrue(ok.all(), name)
+            outside = ~grids["interior"][i, j]
+            self.assertFalse(outside.any(), (name, pts[outside][:3].tolist()))
+            self.assertGreaterEqual(float(clear[i, j].min()), radius, name)
 
 
 class TaskApiTest(unittest.TestCase):

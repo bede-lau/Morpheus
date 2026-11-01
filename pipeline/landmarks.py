@@ -192,11 +192,20 @@ def landmark(ident, label, kind, rect, top, **extra):
     return out
 
 
-def compute_landmarks(scene=None):
-    """Return {landmarks, door, floor, rects, notes}. Deterministic."""
+def compute_landmarks(scene=None, use_mesh=True):
+    """Return {landmarks, door, floor, rects, notes, mesh}. Deterministic.
+
+    Uses the companion collider mesh (pipeline.room_mesh) for the room interior,
+    landmarks and spawn when the GLB is present; otherwise the box-only heuristic.
+    """
     scene = load_scene() if scene is None else scene
     floor, floor_z, boxes = split_boxes(scene)
     rects = np.array([b["rect"] for b in boxes]) if boxes else np.zeros((0, 4))
+    if use_mesh:
+        from . import room_mesh
+        grids = room_mesh.load_grids(scene)
+        if grids is not None:
+            return compute_mesh_landmarks(floor, floor_z, boxes, rects, grids)
     door = find_door(floor, rects)
     notes = []
     cells, ox, oy = column_grid(boxes)
@@ -253,14 +262,198 @@ def compute_landmarks(scene=None):
     out.append(landmark("door", "Kitchen door", "door",
                         (min(a[0], b[0]), min(a[1], b[1]), max(a[0], b[0]), max(a[1], b[1])), 2.0))
     out[-1]["size"] = [max(s, 0.1) for s in out[-1]["size"][:2]] + [2.0]
-    return {"landmarks": out, "door": door, "floor": floor, "floorZ": floor_z, "rects": rects, "boxes": boxes, "notes": notes}
+    return {"landmarks": out, "door": door, "floor": floor, "floorZ": floor_z, "rects": rects, "boxes": boxes, "notes": notes,
+            "mesh": None}
+
+
+# ---------------------------------------------------------------- mesh-based landmarks
+MIN_SURFACE_AREA = 0.08     # m2; smaller horizontal patches are clutter
+ACCESS_BAND = 0.75          # surface cells further than this from the interior are behind walls
+
+
+def mesh_free(grids, rects, clearance):
+    """Interior cells whose centre is >= clearance from every mesh obstacle cell and every box."""
+    from .room_mesh import obstacle_distance
+    xs, ys = grids["xs"], grids["ys"]
+    gx, gy = np.meshgrid(xs, ys)
+    box_ok = (rect_distance(np.stack([gx.ravel(), gy.ravel()], 1), rects) >= clearance).reshape(gx.shape)
+    return grids["interior"] & (obstacle_distance(grids) >= clearance) & box_ok
+
+
+def geodesic(free, sources):
+    """8-connected Dijkstra distance in cells over `free` from source cells (list of (i, j))."""
+    import heapq
+    h, w = free.shape
+    dist = np.full(free.shape, np.inf)
+    heap = []
+    for s in sources:
+        dist[s] = 0.0
+        heap.append((0.0, s))
+    heapq.heapify(heap)
+    moves = [(-1, 0, 1.0), (1, 0, 1.0), (0, -1, 1.0), (0, 1, 1.0), (-1, -1, 2 ** 0.5), (-1, 1, 2 ** 0.5), (1, -1, 2 ** 0.5), (1, 1, 2 ** 0.5)]
+    while heap:
+        d, (i, j) = heapq.heappop(heap)
+        if d > dist[i, j]:
+            continue
+        for di, dj, c in moves:
+            a, b = i + di, j + dj
+            if 0 <= a < h and 0 <= b < w and free[a, b] and d + c < dist[a, b]:
+                dist[a, b] = d + c
+                heapq.heappush(heap, (d + c, (a, b)))
+    return dist
+
+
+def mesh_clusters(grids, values, predicate, side, min_area=MIN_SURFACE_AREA):
+    """4-connected clusters of cells passing predicate, split by which side of the room they face."""
+    from scipy import ndimage
+    step = GRID
+    out = []
+    keep = predicate(values) & grids["obstacle"]
+    for s in np.unique(side[keep]):
+        mask = keep & (side == s)
+        labels, n = ndimage.label(mask)
+        for k in range(1, n + 1):
+            cells = labels == k
+            if cells.sum() * step * step < min_area:
+                continue
+            out.append(cells)
+    return out
+
+
+def describe_mesh(cells, values, grids, void_dist):
+    xs, ys = grids["xs"], grids["ys"]
+    ii, jj = np.nonzero(cells)
+    rect = (xs[jj].min() - GRID / 2, ys[ii].min() - GRID / 2, xs[jj].max() + GRID / 2, ys[ii].max() + GRID / 2)
+    tops = values[cells]
+    return {"cells": int(cells.sum()), "mask": cells, "rect": tuple(float(v) for v in rect), "top": float(np.median(tops)),
+            "maxTop": float(tops.max()), "area": float(cells.sum() * GRID * GRID),
+            "boundaryGap": float(void_dist[cells].min()), "centre": ((rect[0] + rect[2]) / 2, (rect[1] + rect[3]) / 2)}
+
+
+BOX_INTERIOR_DROP = 0.10    # boxes whose footprint is >=10% observed open floor are ceiling-filled columns
+
+
+def filter_boxes(boxes, grids):
+    """Split boxes into (kept, dropped). The 0.22 m columns fill everything under the ceiling, so columns standing
+    on floor the mesh shows as open interior contradict the mesh; the mesh obstacle grid covers what they meant."""
+    xs, ys = grids["xs"], grids["ys"]
+    kept, dropped = [], []
+    for b in boxes:
+        x0, y0, x1, y1 = b["rect"]
+        sub = grids["interior"][np.ix_((ys > y0) & (ys < y1), (xs > x0) & (xs < x1))]
+        (dropped if sub.size and sub.mean() >= BOX_INTERIOR_DROP else kept).append(b)
+    return kept, dropped
+
+
+def compute_mesh_landmarks(floor, floor_z, boxes, rects, grids):
+    from scipy import ndimage
+    from .room_mesh import obstacle_distance
+    notes = []
+    xs, ys = grids["xs"], grids["ys"]
+    all_boxes = boxes
+    boxes, dropped = filter_boxes(boxes, grids)
+    rects = np.array([b["rect"] for b in boxes]) if boxes else np.zeros((0, 4))
+    if dropped:
+        notes.append(f"{len(dropped)} of {len(all_boxes)} collision columns stand on floor the mesh shows as open "
+                     "(they were filled up to the ceiling) and are ignored for planning; the mesh obstacle grid is used instead.")
+    interior, obstacle = grids["interior"], grids["obstacle"]
+    # Distance to the outside of the room (cells that are neither interior floor nor scanned obstacle).
+    void = ~(interior | obstacle | grids["floor"])
+    void_dist = ndimage.distance_transform_edt(~void) * GRID
+    # Which side of the interior each obstacle cell faces (offset to its nearest interior cell).
+    idist, (ni, nj) = ndimage.distance_transform_edt(~interior, return_indices=True)
+    di, dj = np.indices(interior.shape)[0] - ni, np.indices(interior.shape)[1] - nj
+    side = np.where(np.abs(dj) >= np.abs(di), np.where(dj >= 0, 1, 3), np.where(di >= 0, 0, 2))  # 0 N,1 E,2 S,3 W
+    near = idist * GRID <= ACCESS_BAND
+    work = np.where(grids["surface"] > 0, grids["surface"], grids["top"])
+
+    # Reachability: stretch-sized free interior, largest component.
+    reach = mesh_free(grids, rects, 0.39)
+    labels, n = ndimage.label(reach, structure=np.ones((3, 3)))
+    main = int(np.argmax(ndimage.sum(reach, labels, range(1, n + 1)))) + 1 if n else 0
+    gx, gy = np.meshgrid(xs, ys)
+    reachable_pts = np.stack([gx[labels == main], gy[labels == main]], 1) if main else np.zeros((0, 2))
+
+    def accessible(rect):
+        return bool(len(reachable_pts)) and rect_distance(reachable_pts, [rect]).min() <= 0.39 + 0.25
+
+    surfaces = [describe_mesh(c, work, grids, void_dist) for c in
+                mesh_clusters(grids, np.where(near, work, 0), lambda t: (t >= SURFACE_BAND[0]) & (t <= SURFACE_BAND[1]), side)]
+    for s in surfaces:
+        s["accessible"] = accessible(s["rect"])
+    talls = [describe_mesh(c, grids["top"], grids, void_dist) for c in
+             mesh_clusters(grids, np.where(near, grids["top"], 0), lambda t: t > TALL_MIN, side)]
+
+    usable = [s for s in surfaces if s["accessible"]] or surfaces
+    tables = [s for s in usable if s["boundaryGap"] > 0.3 and 0.65 <= s["top"] <= 1.0 and s["area"] >= 0.5]
+    if tables:
+        table = max(tables, key=lambda s: s["area"])
+    else:
+        big = [s for s in usable if s["area"] >= 0.2] or usable
+        table = sorted(big, key=lambda s: (-round(s["boundaryGap"], 1), -s["area"]))[0]
+        notes.append("No interior cluster met the table rule (0.65-1.00 m top, >=0.5 m2, >0.3 m from walls); "
+                     "the interior-most accessible counter-height cluster is labelled table.")
+    counters = [s for s in usable if s is not table and s["boundaryGap"] <= 0.3 and 0.6 <= s["top"] <= 1.1]
+    if not counters:
+        counters = [s for s in usable if s is not table]
+        notes.append("No wall-touching cluster met the 0.80-1.00 m counter rule; using remaining surfaces.")
+    counters.sort(key=lambda s: -s["cells"])
+
+    # Spawn: interior cell with Go2 clearance, geodesically farthest from the table/counters.
+    spawn_free = mesh_free(grids, rects, DOOR_CLEARANCE)
+    labels, n = ndimage.label(spawn_free, structure=np.ones((3, 3)))
+    if not n:
+        raise ValueError("no interior cell has Go2 clearance")
+    big = labels == int(np.argmax(ndimage.sum(spawn_free, labels, range(1, n + 1)))) + 1
+    fi, fj = np.nonzero(big)
+    pts = np.stack([xs[fj], ys[fi]], 1)
+    # Counters line both long walls of the galley, so the distance to the *nearest* surface peaks mid-aisle.
+    # Use the mean geodesic distance to the table and every counter instead: it peaks at the far end.
+    dists = []
+    for s in [table] + counters:
+        k = int(np.argmin(np.linalg.norm(pts - np.array(s["centre"]), axis=1)))
+        dists.append(geodesic(big, [(int(fi[k]), int(fj[k]))]))
+    dist = np.mean(dists, axis=0)
+    dist[~big] = -1
+    # Tie-break deterministically by clearance (prefer the centre of the aisle).
+    clear = obstacle_distance(grids)
+    score = np.where(big, dist + 1e-3 * clear, -1)
+    si, sj = np.unravel_index(int(np.argmax(score)), score.shape)
+    spawn = np.array([xs[sj], ys[si]])
+    tc = np.array(table["centre"])
+    yaw = math.atan2(-(tc - spawn)[0], (tc - spawn)[1])
+    room_centre = np.array([xs[np.nonzero(interior)[1]].mean(), ys[np.nonzero(interior)[0]].mean()])
+    door = {"side": "far end", "centre": spawn, "width": float(2 * clear[si, sj]), "along": (1.0, 0.0),
+            "normal": (-math.sin(yaw), math.cos(yaw)), "spawn": spawn, "yaw": yaw,
+            "geodesicFromSurfaces": float(dist[si, sj] * GRID), "clearance": float(clear[si, sj])}
+
+    opposite = [s for s in counters if np.dot(np.array(s["centre"]) - room_centre, spawn - room_centre) < 0]
+    pool = opposite or counters
+    sink = min(pool, key=lambda s: float(np.linalg.norm(np.array(s["centre"]) - room_centre))) if pool else None
+    if sink is not None and not opposite:
+        notes.append("No counter lies on the side opposite the door; sink is the counter closest to the room centre.")
+
+    out = [landmark("table", "Table", "table", table["rect"], table["top"])]
+    if sink is not None:
+        out.append(landmark("sink", "Counter (sink assumed)", "sink", sink["rect"], sink["top"]))
+    for n, s in enumerate([c for c in counters if c is not sink], 1):
+        out.append(landmark(f"counter_{n}", f"Counter {n}", "counter", s["rect"], s["top"]))
+    for n, s in enumerate(sorted(talls, key=lambda s: -s["cells"])[:6], 1):
+        out.append(landmark(f"tall_{n}", f"Tall unit {n}", "tall", s["rect"], s["maxTop"]))
+    half = 0.3
+    out.append(landmark("door", "Kitchen entrance (far end of the room)", "door",
+                        (spawn[0] - half, spawn[1] - half, spawn[0] + half, spawn[1] + half), 2.0))
+    notes.append("Room interior, landmarks and spawn come from the companion collider mesh "
+                 "(public/samples/rustic-kitchen-collider.glb); heights are above the fitted floor plane.")
+    return {"landmarks": out, "door": door, "floor": floor, "floorZ": floor_z, "rects": rects, "boxes": boxes,
+            "notes": notes, "mesh": grids, "meshClearance": clear, "droppedBoxes": [b["id"] for b in dropped]}
 
 
 def main():
     result = compute_landmarks()
     d = result["door"]
     print(f"floor {np.round(result['floor'], 3).tolist()}  obstacles {len(result['boxes'])}")
-    print(f"door: {d['side']} side, centre {np.round(d['centre'], 2).tolist()}, gap {d['width']:.2f} m, "
+    print(f"door: {d['side']}, centre {np.round(d['centre'], 2).tolist()}, gap {d['width']:.2f} m, "
           f"spawn {np.round(d['spawn'], 2).tolist()}, yaw {d['yaw']:.3f}")
     for lm in result["landmarks"]:
         print(f"{lm['id']:<10} {lm['kind']:<8} {lm['label']:<24} pos {lm['position']} size {lm['size']}")
