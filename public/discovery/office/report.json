@@ -1,0 +1,2788 @@
+{
+  "objects": [
+    {
+      "label": "armchair",
+      "view": 0,
+      "pixel": [
+        324,
+        444
+      ],
+      "position": [
+        -2.185,
+        0.59,
+        0.892
+      ],
+      "confidence": 0.96,
+      "result": "weak",
+      "decision": {
+        "category": "armchair",
+        "candidates": [
+          {
+            "asset": {
+              "id": "sofa_soft_b01",
+              "category": "armchair",
+              "name": "sofa soft b01",
+              "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/sofa_soft_b01",
+              "license": "CC-BY-4.0",
+              "attribution": "NVIDIA SimReady Assets",
+              "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+              "dimensions": [
+                0.7082616686820984,
+                0.7127461135387421,
+                0.7275429368019104
+              ],
+              "meshCount": 1,
+              "triangles": 45640,
+              "units": "m",
+              "upAxis": "Z",
+              "sourceMetersPerUnit": 1.0,
+              "sourceUpAxis": "Z",
+              "sourceCenterMeters": [
+                -0.0009542703628540039,
+                -0.0005377978086471558,
+                0.3637714684009552
+              ],
+              "sourceRoot": "simready_usd/sm_sofa_soft_b01_01.usd",
+              "geometrySha256": "4eaa7b1dfb731fe787d5072c142b39c9188d9dc6a18dfdc30150a42254991d4e",
+              "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+              "physicsStatus": "not_validated"
+            },
+            "score": 0.04,
+            "confidence": 0.96,
+            "probabilities": [
+              {
+                "value": 0,
+                "label": "Mismatch",
+                "probability": 0.96
+              },
+              {
+                "value": 1,
+                "label": "Weak",
+                "probability": 0.04
+              },
+              {
+                "value": 2,
+                "label": "Plausible",
+                "probability": 0.0
+              },
+              {
+                "value": 3,
+                "label": "Close",
+                "probability": 0.0
+              }
+            ]
+          }
+        ],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "armchair",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.37
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.34
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.28
+                  }
+                ],
+                "confidence": 0.33
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.14
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.05
+              }
+            ],
+            "requestId": null
+          },
+          {
+            "stage": "candidate_comparison",
+            "answers": [
+              {
+                "type": "score",
+                "name": "sofa_soft_b01",
+                "score": 0.04,
+                "probabilities": [
+                  {
+                    "value": 0,
+                    "label": "Mismatch",
+                    "probability": 0.96
+                  },
+                  {
+                    "value": 1,
+                    "label": "Weak",
+                    "probability": 0.04
+                  },
+                  {
+                    "value": 2,
+                    "label": "Plausible",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": 3,
+                    "label": "Close",
+                    "probability": 0.0
+                  }
+                ],
+                "confidence": 0.96
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "Scores rank this prepared catalogue only. Review the crop and fit before replacement."
+      },
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "evidenceViews": 3,
+      "asset": "sofa_soft_b01"
+    },
+    {
+      "label": "armchair",
+      "view": 0,
+      "pixel": [
+        507,
+        727
+      ],
+      "position": [
+        2.612,
+        -2.139,
+        1.226
+      ],
+      "confidence": 0.93,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.99
+                  }
+                ],
+                "confidence": 0.99
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.07
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.04
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "bin",
+      "view": 0,
+      "pixel": [
+        426,
+        484
+      ],
+      "position": [
+        -0.902,
+        1.155,
+        0.493
+      ],
+      "confidence": 0.82,
+      "result": "weak",
+      "decision": {
+        "category": "bin",
+        "candidates": [
+          {
+            "asset": {
+              "id": "trashCan_domed_blue_b01",
+              "category": "bin",
+              "name": "trash Can domed blue b01",
+              "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/trashCan_domed_blue_b01",
+              "license": "CC-BY-4.0",
+              "attribution": "NVIDIA SimReady Assets",
+              "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+              "dimensions": [
+                0.4714759588241577,
+                0.4716079831123352,
+                1.0645963044574591
+              ],
+              "meshCount": 3,
+              "triangles": 7332,
+              "units": "m",
+              "upAxis": "Z",
+              "sourceMetersPerUnit": 1.0,
+              "sourceUpAxis": "Z",
+              "sourceCenterMeters": [
+                5.471511910215554e-09,
+                0.0014615412800200178,
+                0.5329331114290952
+              ],
+              "sourceRoot": "simready_usd/sm_trashCan_domed_blue_b01_01.usd",
+              "geometrySha256": "7579c7fb131f2f39223dc629f0264d519c68df80f79ff19a056ded9d34e0efa9",
+              "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+              "physicsStatus": "not_validated"
+            },
+            "score": 0.22,
+            "confidence": 0.78,
+            "probabilities": [
+              {
+                "value": 0,
+                "label": "Mismatch",
+                "probability": 0.8
+              },
+              {
+                "value": 1,
+                "label": "Weak",
+                "probability": 0.18
+              },
+              {
+                "value": 2,
+                "label": "Plausible",
+                "probability": 0.02
+              },
+              {
+                "value": 3,
+                "label": "Close",
+                "probability": 0.0
+              }
+            ]
+          }
+        ],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "bin",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.28
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.16
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.28
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.14
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.07
+                  }
+                ],
+                "confidence": 0.23
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.1
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.05
+              }
+            ],
+            "requestId": null
+          },
+          {
+            "stage": "candidate_comparison",
+            "answers": [
+              {
+                "type": "score",
+                "name": "trashCan_domed_blue_b01",
+                "score": 0.22,
+                "probabilities": [
+                  {
+                    "value": 0,
+                    "label": "Mismatch",
+                    "probability": 0.8
+                  },
+                  {
+                    "value": 1,
+                    "label": "Weak",
+                    "probability": 0.18
+                  },
+                  {
+                    "value": 2,
+                    "label": "Plausible",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": 3,
+                    "label": "Close",
+                    "probability": 0.0
+                  }
+                ],
+                "confidence": 0.78
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "Scores rank this prepared catalogue only. Review the crop and fit before replacement."
+      },
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "evidenceViews": 1,
+      "asset": "trashCan_domed_blue_b01"
+    },
+    {
+      "label": "book",
+      "view": 0,
+      "pixel": [
+        231,
+        584
+      ],
+      "position": [
+        -1.768,
+        -1.532,
+        0.11
+      ],
+      "confidence": 0.93,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.08
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.84
+                  }
+                ],
+                "confidence": 0.83
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.05
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.34
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 2
+    },
+    {
+      "label": "book",
+      "view": 0,
+      "pixel": [
+        199,
+        629
+      ],
+      "position": [
+        -1.394,
+        -2.336,
+        0.186
+      ],
+      "confidence": 0.88,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.35
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.62
+                  }
+                ],
+                "confidence": 0.59
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.05
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.15
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 3
+    },
+    {
+      "label": "book",
+      "view": 0,
+      "pixel": [
+        195,
+        644
+      ],
+      "position": [
+        -1.223,
+        -2.535,
+        0.208
+      ],
+      "confidence": 0.72,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.37
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.55
+                  }
+                ],
+                "confidence": 0.52
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.09
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.28
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "book",
+      "view": 0,
+      "pixel": [
+        330,
+        542
+      ],
+      "position": [
+        -1.258,
+        -0.328,
+        0.261
+      ],
+      "confidence": 0.82,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.16
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.1
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.17
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.39
+                  }
+                ],
+                "confidence": 0.35
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.11
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.06
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 3
+    },
+    {
+      "label": "armchair",
+      "view": 1,
+      "pixel": [
+        496,
+        712
+      ],
+      "position": [
+        2.277,
+        -1.618,
+        0.794
+      ],
+      "confidence": 0.78,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.05
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.88
+                  }
+                ],
+                "confidence": 0.87
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.08
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.04
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 3
+    },
+    {
+      "label": "book",
+      "view": 2,
+      "pixel": [
+        554,
+        202
+      ],
+      "position": [
+        -3.568,
+        1.309,
+        3.658
+      ],
+      "confidence": 0.69,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.06
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.05
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.7
+                  }
+                ],
+                "confidence": 0.68
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.03
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.03
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 2
+    },
+    {
+      "label": "book",
+      "view": 2,
+      "pixel": [
+        578,
+        207
+      ],
+      "position": [
+        -3.45,
+        1.609,
+        3.649
+      ],
+      "confidence": 0.72,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.05
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.09
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.69
+                  }
+                ],
+                "confidence": 0.67
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.06
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.05
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 2
+    },
+    {
+      "label": "book",
+      "view": 2,
+      "pixel": [
+        602,
+        211
+      ],
+      "position": [
+        -3.362,
+        1.916,
+        3.637
+      ],
+      "confidence": 0.7,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.09
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.75
+                  }
+                ],
+                "confidence": 0.73
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.05
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.0
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 2
+    },
+    {
+      "label": "book",
+      "view": 2,
+      "pixel": [
+        626,
+        215
+      ],
+      "position": [
+        -3.123,
+        2.204,
+        3.678
+      ],
+      "confidence": 0.67,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.12
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.8
+                  }
+                ],
+                "confidence": 0.79
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.16
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.09
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "book",
+      "view": 2,
+      "pixel": [
+        288,
+        531
+      ],
+      "position": [
+        3.603,
+        -0.585,
+        3.519
+      ],
+      "confidence": 0.67,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.04
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.05
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.82
+                  }
+                ],
+                "confidence": 0.81
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.12
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.05
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 3
+    },
+    {
+      "label": "book",
+      "view": 2,
+      "pixel": [
+        321,
+        523
+      ],
+      "position": [
+        3.43,
+        -0.379,
+        3.48
+      ],
+      "confidence": 0.67,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.08
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.83
+                  }
+                ],
+                "confidence": 0.82
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.19
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.06
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "armchair",
+      "view": 8,
+      "pixel": [
+        369,
+        707
+      ],
+      "position": [
+        -2.916,
+        0.469,
+        1.049
+      ],
+      "confidence": 0.72,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.99
+                  }
+                ],
+                "confidence": 0.99
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.11
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.05
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "candle",
+      "view": 10,
+      "pixel": [
+        343,
+        321
+      ],
+      "position": [
+        0.026,
+        1.98,
+        2.739
+      ],
+      "confidence": 0.8,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.05
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.95
+                  }
+                ],
+                "confidence": 0.95
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.12
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.06
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "candle",
+      "view": 10,
+      "pixel": [
+        551,
+        357
+      ],
+      "position": [
+        1.711,
+        0.022,
+        2.662
+      ],
+      "confidence": 0.72,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.09
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.89
+                  }
+                ],
+                "confidence": 0.88
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.22
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.15
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "book",
+      "view": 10,
+      "pixel": [
+        458,
+        574
+      ],
+      "position": [
+        0.493,
+        0.022,
+        -0.044
+      ],
+      "confidence": 0.93,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.28
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.62
+                  }
+                ],
+                "confidence": 0.59
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.17
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.11
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 2
+    },
+    {
+      "label": "book",
+      "view": 10,
+      "pixel": [
+        519,
+        504
+      ],
+      "position": [
+        1.478,
+        0.148,
+        0.583
+      ],
+      "confidence": 0.7,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.02
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.91
+                  }
+                ],
+                "confidence": 0.9
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.24
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.14
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "book",
+      "view": 10,
+      "pixel": [
+        625,
+        619
+      ],
+      "position": [
+        1.222,
+        -2.166,
+        0.577
+      ],
+      "confidence": 0.9,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.2
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.76
+                  }
+                ],
+                "confidence": 0.74
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.09
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.16
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "book",
+      "view": 10,
+      "pixel": [
+        609,
+        648
+      ],
+      "position": [
+        0.953,
+        -2.254,
+        0.357
+      ],
+      "confidence": 0.74,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.3
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.67
+                  }
+                ],
+                "confidence": 0.65
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.13
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.16
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    },
+    {
+      "label": "book",
+      "view": 10,
+      "pixel": [
+        328,
+        623
+      ],
+      "position": [
+        -1.43,
+        -0.267,
+        0.283
+      ],
+      "confidence": 0.77,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.95
+                  }
+                ],
+                "confidence": 0.95
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.7
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.17
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 2
+    },
+    {
+      "label": "book",
+      "view": 10,
+      "pixel": [
+        426,
+        776
+      ],
+      "position": [
+        -1.5,
+        -2.507,
+        0.12
+      ],
+      "confidence": 0.8,
+      "result": "unknown",
+      "decision": {
+        "category": "unknown",
+        "candidates": [],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "unknown",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.08
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.03
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.81
+                  }
+                ],
+                "confidence": 0.8
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.14
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.12
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "No supported match. Select a clearer object or prepare more catalogue assets."
+      },
+      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
+      "evidenceViews": 1
+    }
+  ],
+  "source": "detections.json",
+  "priorRevision": null,
+  "saved": false
+}

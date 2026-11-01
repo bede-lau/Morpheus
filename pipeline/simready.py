@@ -20,6 +20,12 @@ API = f'https://huggingface.co/api/datasets/{REPO}'
 DEFAULT_IDS = ['dishware_plastic_bigPlate_a01', 'dishware_plastic_smallPlate_a01',
                'kitchenware_bowl_b01', 'kitchenware_bowl_c01', 'kitchenware_mug_a01',
                'kitchenware_mug_b01', 'kitchenware_cup_a01', 'kitchenware_spoon_h01']
+# Study/office set for the office scan: indexed alongside the kitchenware so Decisions can match them.
+OFFICE_IDS = ['book_open_a01', 'magazines_stack_a01', 'misc_notebook_a01', 'bin_waste_a01', 'misc_basket_plastic_a01',
+              'storage_basket_plastic_a01', 'decor_candle_a01', 'misc_glass_vase_a01', 'measurement_clock_alarm_a01',
+              'sofa_soft_b01', 'chair_office_fabric_manager_a01', 'computer_monitor_office_a01', 'computer_keyboard_a01',
+              'misc_notebook_a02', 'trashCan_domed_blue_b01', 'chair_office_amf_black_a01']
+MAX_BYTES = 100 * 1024 * 1024
 
 def fetch_json(url):
     with urllib.request.urlopen(url, timeout=45) as response:
@@ -39,7 +45,10 @@ def category(asset_id):
     words = asset_id.lower()
     for token, label in [('plate', 'plate'), ('bowl', 'bowl'), ('mug', 'mug'), ('cup', 'cup'),
                          ('spoon', 'spoon'), ('fork', 'fork'), ('knife', 'knife'), ('kettle', 'kettle'),
-                         ('cuttingboard', 'cutting board'), ('jug', 'jug'), ('pan', 'pan'), ('tray', 'tray')]:
+                         ('cuttingboard', 'cutting board'), ('jug', 'jug'), ('pan', 'pan'), ('tray', 'tray'),
+                         ('book', 'book'), ('notebook', 'book'), ('magazine', 'book'), ('sofa', 'armchair'), ('chair', 'chair'),
+                         ('bin_waste', 'bin'), ('trashcan', 'bin'), ('basket', 'basket'), ('candle', 'candle'), ('vase', 'vase'), ('clock', 'clock'),
+                         ('monitor', 'monitor'), ('keyboard', 'keyboard')]:
         if token in words: return label
     return 'other'
 
@@ -48,7 +57,7 @@ def index_catalogue():
     entries = []
     for row in tree(revision):
         ident = row['path']
-        if row['type'] != 'directory' or not ident.startswith(('kitchenware_', 'dishware_')): continue
+        if row['type'] != 'directory' or not (ident.startswith(('kitchenware_', 'dishware_')) or ident in OFFICE_IDS): continue
         entries.append({'id': ident, 'category': category(ident),
                         'name': re.sub(r'([a-z])([A-Z])', r'\1 \2', ident).replace('_', ' '),
                         'sourceUrl': f'{BASE}/tree/{revision}/{ident}', 'license': 'CC-BY-4.0',
@@ -80,7 +89,7 @@ def download_asset(entry):
     rows = [r for r in rows if '/source_assets/' not in r['path'] and
             ('/.thumbs/' not in r['path'] or '/.thumbs/256x256/sm_' in r['path'])]
     total = sum(r.get('size', 0) for r in rows)
-    if total > 100 * 1024 * 1024: raise ValueError('Asset exceeds the 100 MB per-object download limit.')
+    if total > MAX_BYTES: raise ValueError(f'Asset exceeds the {MAX_BYTES // 2**20} MB per-object download limit.')
     def download(row):
         rel = Path(row['path']).relative_to(ident)
         if '..' in rel.parts: raise ValueError('Invalid catalogue path')
@@ -89,7 +98,7 @@ def download_asset(entry):
         if not dest.exists() or dest.stat().st_size != row['size']:
             url = f'{BASE}/resolve/{revision}/{row["path"]}'
             with urllib.request.urlopen(url, timeout=90) as response:
-                data = response.read(100 * 1024 * 1024 + 1)
+                data = response.read(MAX_BYTES + 1)
             if len(data) != row['size']: raise ValueError(f'Incomplete asset file: {rel}')
             expected = row.get('lfs', {}).get('oid')
             if expected and hashlib.sha256(data).hexdigest() != expected: raise ValueError('Asset hash mismatch')
@@ -190,12 +199,17 @@ def main():
     parser.add_argument('--prepare', action='store_true')
     parser.add_argument('--ids', nargs='+')
     parser.add_argument('--refresh', action='store_true')
+    parser.add_argument('--office', action='store_true', help='prepare the study/office set')
+    parser.add_argument('--max-mb', type=int, default=100, help='per-object download cap (default 100 MB)')
     args = parser.parse_args()
+    global MAX_BYTES
+    MAX_BYTES = args.max_mb * 1024 * 1024
     data = index_catalogue() if args.refresh or not (CACHE/'catalogue.json').exists() else catalogue()
-    print(f'Indexed {len(data["assets"])} kitchen/dishware assets at {data["revision"]}', flush=True)
-    if args.prepare or args.ids:
-        for ident in args.ids or DEFAULT_IDS:
-            result = convert_asset(asset_entry(ident))
+    print(f'Indexed {len(data["assets"])} kitchen/dishware/office assets at {data["revision"]}', flush=True)
+    if args.prepare or args.ids or args.office:
+        for ident in args.ids or (OFFICE_IDS if args.office else DEFAULT_IDS):
+            try: result = convert_asset(asset_entry(ident))
+            except Exception as exc: print(f'{ident}: skipped ({exc})', flush=True); continue
             print(f'{ident}: {result["triangles"]} triangles, {result["dimensions"]} m', flush=True)
 
 if __name__ == '__main__': main()

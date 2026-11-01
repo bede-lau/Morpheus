@@ -3,6 +3,69 @@
   "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
   "assets": [
     {
+      "id": "bin_waste_a01",
+      "category": "bin",
+      "name": "bin waste a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/bin_waste_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "book_open_a01",
+      "category": "book",
+      "name": "book open a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/book_open_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "chair_office_amf_black_a01",
+      "category": "chair",
+      "name": "chair office amf black a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/chair_office_amf_black_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "chair_office_fabric_manager_a01",
+      "category": "chair",
+      "name": "chair office fabric manager a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/chair_office_fabric_manager_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "computer_keyboard_a01",
+      "category": "keyboard",
+      "name": "computer keyboard a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/computer_keyboard_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "computer_monitor_office_a01",
+      "category": "monitor",
+      "name": "computer monitor office a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/computer_monitor_office_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "decor_candle_a01",
+      "category": "candle",
+      "name": "decor candle a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/decor_candle_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
       "id": "dishware_bowl_a01",
       "category": "bowl",
       "name": "dishware bowl a01",
@@ -1807,6 +1870,87 @@
       "category": "tray",
       "name": "kitchenware tray a01",
       "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_tray_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "magazines_stack_a01",
+      "category": "book",
+      "name": "magazines stack a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/magazines_stack_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "measurement_clock_alarm_a01",
+      "category": "clock",
+      "name": "measurement clock alarm a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/measurement_clock_alarm_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "misc_basket_plastic_a01",
+      "category": "basket",
+      "name": "misc basket plastic a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/misc_basket_plastic_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "misc_glass_vase_a01",
+      "category": "vase",
+      "name": "misc glass vase a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/misc_glass_vase_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "misc_notebook_a01",
+      "category": "book",
+      "name": "misc notebook a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/misc_notebook_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "misc_notebook_a02",
+      "category": "book",
+      "name": "misc notebook a02",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/misc_notebook_a02",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "sofa_soft_b01",
+      "category": "armchair",
+      "name": "sofa soft b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/sofa_soft_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "storage_basket_plastic_a01",
+      "category": "basket",
+      "name": "storage basket plastic a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/storage_basket_plastic_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "trashCan_domed_blue_b01",
+      "category": "bin",
+      "name": "trash Can domed blue b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/trashCan_domed_blue_b01",
       "license": "CC-BY-4.0",
       "attribution": "NVIDIA SimReady Assets",
       "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"

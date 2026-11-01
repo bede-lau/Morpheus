@@ -6,18 +6,23 @@ import {validateManifest} from './export';
 import './object-workspace.css';
 type Match={category:string;candidates:{asset:Asset;score:number;confidence:number}[];trace:unknown[];message:string};
 const sample='/samples/rustic-kitchen-500k.spz',mesh='/samples/rustic-kitchen-collider.glb';
+// `?view=objects&scan=office` opens the office scan instead of the kitchen (used by scripts/discover-objects.py --room office).
+const SCANS:Record<string,{url:string;file:string;name:string}>={office:{url:'/samples/spark-fireplace.spz',file:'spark-fireplace.spz',name:'Office (sparkjs.dev fireplace sample)'}};
+const scanParam=SCANS[new URLSearchParams(location.search).get('scan')??''];
 async function api(path:string,body?:unknown){const response=await fetch(`/api/objects/${path}`,body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}:undefined);if(!response.ok){const error=await response.json().catch(()=>({error:'Object service unavailable. Start python -m pipeline.object_server.'}));throw new Error(error.error)}return response;}
 function save(blob:Blob,name:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000)}
 export default function ObjectWorkspace(){
  const host=useRef<HTMLDivElement>(null),view=useRef<RoomViewer|null>(null),objects=useRef<ObjectScene|null>(null),selectionVersion=useRef(0),input=useRef<HTMLInputElement>(null),environmentInput=useRef<HTMLInputElement>(null);
- const [ready,setReady]=useState(false),[status,setStatus]=useState('Opening the kitchen…'),[error,setError]=useState(''),[busy,setBusy]=useState('');
+ const [ready,setReady]=useState(false),[status,setStatus]=useState(scanParam?'Opening the office…':'Opening the kitchen…'),[error,setError]=useState(''),[busy,setBusy]=useState('');
  const [assets,setAssets]=useState<Asset[]>([]),[catalogueCount,setCatalogueCount]=useState(0),[keyReady,setKeyReady]=useState(false);
  const [selection,setSelection]=useState<Selection|null>(null),[picking,setPicking]=useState(false),[images,setImages]=useState<string[]>([]),[match,setMatch]=useState<Match|null>(null);
  const [preview,setPreview]=useState<Asset|null>(null),[scale,setScale]=useState(1),[rotation,setRotation]=useState([0,0,0]),[position,setPosition]=useState([0,0,0]),[replacements,setReplacements]=useState<Replacement[]>([]),[filter,setFilter]=useState('all');
  const [source,setSource]=useState('Synthetic World Labs kitchen'),[sourceFile,setSourceFile]=useState('rustic-kitchen-500k.spz'),[sourceSha,setSourceSha]=useState('351f5f2ceb6ee9095a4b4100f864db9780a21cc6bdb8a70c6f88117cbb1d5fe0'),[environment,setEnvironment]=useState<unknown>(null),[sceneRevision,setSceneRevision]=useState(0);
  function selected(s:Selection){selectionVersion.current++;setSelection(s);setPosition(s.position);setImages([]);setMatch(null);setPicking(false);setPreview(null);objects.current?.clearPreview();setError('');setStatus('Adjust the selection box to contain only the object.');}
  useEffect(()=>{let cancelled=false;const v=new RoomViewer(host.current!,{onSelect:()=>{},onChange:()=>{},onMeasure:()=>{},onStatus:setStatus});view.current=v;objects.current=new ObjectScene(v,selected);
-  void v.load(import.meta.env.DEV?sample:'https://wlt-ai-cdn.art/example_exports/rustic_kitchen_with_natural_light/rustic_kitchen_with_natural_light_500k.spz',import.meta.env.DEV?mesh:'https://wlt-ai-cdn.art/example_exports/rustic_kitchen_with_natural_light/rustic_kitchen_with_natural_light_collider.glb','Kitchen','sample','room.spz').then(()=>{if(cancelled)return;v.setLayers(true,false,false);setReady(true);setStatus('Select an object in the scan to begin.')}).catch(e=>{if(!cancelled)setError(String(e))});
+  const opened=scanParam?v.load(scanParam.url,undefined,scanParam.name,'sample',scanParam.file,'y-down').then(async()=>{setSource(scanParam.name);setSourceFile(scanParam.file);setSourceSha([...new Uint8Array(await crypto.subtle.digest('SHA-256',await(await fetch(scanParam.url)).arrayBuffer()))].map(x=>x.toString(16).padStart(2,'0')).join(''))}):
+  v.load(import.meta.env.DEV?sample:'https://wlt-ai-cdn.art/example_exports/rustic_kitchen_with_natural_light/rustic_kitchen_with_natural_light_500k.spz',import.meta.env.DEV?mesh:'https://wlt-ai-cdn.art/example_exports/rustic_kitchen_with_natural_light/rustic_kitchen_with_natural_light_collider.glb','Kitchen','sample','room.spz');
+  void opened.then(()=>{if(cancelled)return;v.setLayers(true,false,false);setReady(true);setStatus('Select an object in the scan to begin.')}).catch(e=>{if(!cancelled)setError(String(e))});
   void refreshCatalogue();void api('scene').then(r=>r.json()).then(s=>setSceneRevision(s.revision)).catch(()=>{});return()=>{cancelled=true;objects.current?.dispose();v.dispose()};
  },[]);
  async function refreshCatalogue(){try{const [data,health]=await Promise.all([(await api('catalogue')).json(),(await api('status')).json()]);setAssets(data.assets);setCatalogueCount(data.catalogueCount);setKeyReady(health.decisionsConfigured)}catch(e){setError(String(e))}}

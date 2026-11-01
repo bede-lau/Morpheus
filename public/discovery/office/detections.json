@@ -1,0 +1,474 @@
+{
+  "source": "Responses API (gpt-6.1-terra), one request per view",
+  "notes": {
+    "0": "ok (gpt-6.1-terra)",
+    "1": "ok (gpt-6.1-terra)",
+    "2": "ok (gpt-6.1-terra)",
+    "3": "ok (gpt-6.1-terra)",
+    "4": "ok (gpt-6.1-terra)",
+    "5": "ok (gpt-6.1-terra)",
+    "6": "ok (gpt-6.1-terra)",
+    "7": "ok (gpt-6.1-terra)",
+    "8": "ok (gpt-6.1-terra)",
+    "9": "ok (gpt-6.1-terra)",
+    "10": "ok (gpt-6.1-terra)",
+    "11": "ok (gpt-6.1-terra)"
+  },
+  "detections": [
+    {
+      "view": 0,
+      "label": "armchair",
+      "x": 324,
+      "y": 444,
+      "confidence": 0.96
+    },
+    {
+      "view": 0,
+      "label": "armchair",
+      "x": 507,
+      "y": 727,
+      "confidence": 0.93
+    },
+    {
+      "view": 0,
+      "label": "bin",
+      "x": 426,
+      "y": 484,
+      "confidence": 0.82
+    },
+    {
+      "view": 0,
+      "label": "bin",
+      "x": 146,
+      "y": 584,
+      "confidence": 0.62
+    },
+    {
+      "view": 0,
+      "label": "book",
+      "x": 231,
+      "y": 584,
+      "confidence": 0.93
+    },
+    {
+      "view": 0,
+      "label": "book",
+      "x": 199,
+      "y": 629,
+      "confidence": 0.88
+    },
+    {
+      "view": 0,
+      "label": "book",
+      "x": 195,
+      "y": 644,
+      "confidence": 0.72
+    },
+    {
+      "view": 0,
+      "label": "book",
+      "x": 331,
+      "y": 550,
+      "confidence": 0.81
+    },
+    {
+      "view": 0,
+      "label": "book",
+      "x": 330,
+      "y": 542,
+      "confidence": 0.82
+    },
+    {
+      "view": 0,
+      "label": "book",
+      "x": 329,
+      "y": 534,
+      "confidence": 0.75
+    },
+    {
+      "view": 1,
+      "label": "armchair",
+      "x": 319,
+      "y": 355,
+      "confidence": 0.92
+    },
+    {
+      "view": 1,
+      "label": "armchair",
+      "x": 496,
+      "y": 712,
+      "confidence": 0.78
+    },
+    {
+      "view": 1,
+      "label": "basket",
+      "x": 426,
+      "y": 390,
+      "confidence": 0.66
+    },
+    {
+      "view": 1,
+      "label": "basket",
+      "x": 160,
+      "y": 535,
+      "confidence": 0.54
+    },
+    {
+      "view": 1,
+      "label": "book",
+      "x": 218,
+      "y": 584,
+      "confidence": 0.72
+    },
+    {
+      "view": 1,
+      "label": "book",
+      "x": 242,
+      "y": 519,
+      "confidence": 0.58
+    },
+    {
+      "view": 1,
+      "label": "book",
+      "x": 336,
+      "y": 474,
+      "confidence": 0.7
+    },
+    {
+      "view": 1,
+      "label": "book",
+      "x": 335,
+      "y": 465,
+      "confidence": 0.68
+    },
+    {
+      "view": 1,
+      "label": "book",
+      "x": 332,
+      "y": 456,
+      "confidence": 0.6
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 554,
+      "y": 202,
+      "confidence": 0.69
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 566,
+      "y": 204,
+      "confidence": 0.71
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 578,
+      "y": 207,
+      "confidence": 0.72
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 590,
+      "y": 209,
+      "confidence": 0.72
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 602,
+      "y": 211,
+      "confidence": 0.7
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 614,
+      "y": 213,
+      "confidence": 0.69
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 626,
+      "y": 215,
+      "confidence": 0.67
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 288,
+      "y": 531,
+      "confidence": 0.67
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 299,
+      "y": 530,
+      "confidence": 0.69
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 310,
+      "y": 527,
+      "confidence": 0.7
+    },
+    {
+      "view": 2,
+      "label": "book",
+      "x": 321,
+      "y": 523,
+      "confidence": 0.67
+    },
+    {
+      "view": 3,
+      "label": "armchair",
+      "x": 489,
+      "y": 337,
+      "confidence": 0.84
+    },
+    {
+      "view": 3,
+      "label": "armchair",
+      "x": 259,
+      "y": 631,
+      "confidence": 0.72
+    },
+    {
+      "view": 3,
+      "label": "bin",
+      "x": 273,
+      "y": 339,
+      "confidence": 0.57
+    },
+    {
+      "view": 3,
+      "label": "book",
+      "x": 270,
+      "y": 405,
+      "confidence": 0.71
+    },
+    {
+      "view": 5,
+      "label": "armchair",
+      "x": 200,
+      "y": 457,
+      "confidence": 0.7
+    },
+    {
+      "view": 5,
+      "label": "armchair",
+      "x": 607,
+      "y": 464,
+      "confidence": 0.75
+    },
+    {
+      "view": 5,
+      "label": "chair",
+      "x": 500,
+      "y": 307,
+      "confidence": 0.58
+    },
+    {
+      "view": 6,
+      "label": "armchair",
+      "x": 346,
+      "y": 402,
+      "confidence": 0.48
+    },
+    {
+      "view": 7,
+      "label": "armchair",
+      "x": 371,
+      "y": 320,
+      "confidence": 0.86
+    },
+    {
+      "view": 7,
+      "label": "armchair",
+      "x": 564,
+      "y": 634,
+      "confidence": 0.64
+    },
+    {
+      "view": 8,
+      "label": "armchair",
+      "x": 546,
+      "y": 424,
+      "confidence": 0.96
+    },
+    {
+      "view": 8,
+      "label": "armchair",
+      "x": 369,
+      "y": 707,
+      "confidence": 0.72
+    },
+    {
+      "view": 9,
+      "label": "armchair",
+      "x": 550,
+      "y": 334,
+      "confidence": 0.94
+    },
+    {
+      "view": 9,
+      "label": "armchair",
+      "x": 365,
+      "y": 690,
+      "confidence": 0.74
+    },
+    {
+      "view": 10,
+      "label": "armchair",
+      "x": 213,
+      "y": 582,
+      "confidence": 0.98
+    },
+    {
+      "view": 10,
+      "label": "armchair",
+      "x": 664,
+      "y": 542,
+      "confidence": 0.99
+    },
+    {
+      "view": 10,
+      "label": "bin",
+      "x": 299,
+      "y": 535,
+      "confidence": 0.65
+    },
+    {
+      "view": 10,
+      "label": "candle",
+      "x": 343,
+      "y": 321,
+      "confidence": 0.8
+    },
+    {
+      "view": 10,
+      "label": "candle",
+      "x": 551,
+      "y": 357,
+      "confidence": 0.72
+    },
+    {
+      "view": 10,
+      "label": "candle",
+      "x": 566,
+      "y": 346,
+      "confidence": 0.62
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 458,
+      "y": 574,
+      "confidence": 0.93
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 519,
+      "y": 504,
+      "confidence": 0.7
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 625,
+      "y": 619,
+      "confidence": 0.9
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 615,
+      "y": 635,
+      "confidence": 0.83
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 609,
+      "y": 648,
+      "confidence": 0.74
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 328,
+      "y": 623,
+      "confidence": 0.77
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 330,
+      "y": 638,
+      "confidence": 0.68
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 350,
+      "y": 720,
+      "confidence": 0.76
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 428,
+      "y": 753,
+      "confidence": 0.88
+    },
+    {
+      "view": 10,
+      "label": "book",
+      "x": 426,
+      "y": 776,
+      "confidence": 0.8
+    },
+    {
+      "view": 11,
+      "label": "armchair",
+      "x": 211,
+      "y": 532,
+      "confidence": 0.94
+    },
+    {
+      "view": 11,
+      "label": "armchair",
+      "x": 657,
+      "y": 502,
+      "confidence": 0.97
+    },
+    {
+      "view": 11,
+      "label": "book",
+      "x": 458,
+      "y": 506,
+      "confidence": 0.72
+    },
+    {
+      "view": 11,
+      "label": "basket",
+      "x": 302,
+      "y": 463,
+      "confidence": 0.56
+    },
+    {
+      "view": 11,
+      "label": "clock",
+      "x": 431,
+      "y": 312,
+      "confidence": 0.51
+    }
+  ]
+}

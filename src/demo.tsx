@@ -22,7 +22,7 @@ type Candidate={asset:{id:string;name:string;category:string;dimensions:number[]
 type Answer={type:string;name:string;choice?:string;probability?:number;probabilities?:Prob[];score?:number;confidence?:number};
 type Decision={category:string;candidates:Candidate[];trace:{stage:string;answers:Answer[];requestId:string|null}[]};
 type Replacement={id:string;assetId:string;position:number[];quaternion:number[];scale:number;selection:{position:number[];size:number[]};chosenBy:string;decision?:Decision;match?:ReportObject};
-type Data={tasks:{slug:string;task:string}[];env:BackendEnvironment;views:View[];detections:Detection[];source:string;report:ReportObject[];replacements:Replacement[];task:{slug:string;task:string};replay:Replay;numSplats:number;samples:number;floor:number;top:number;cut:number;size:THREE.Vector3};
+type Data={base:string;office?:boolean;tasks:{slug:string;task:string}[];env:BackendEnvironment;views:View[];detections:Detection[];source:string;report:ReportObject[];replacements:Replacement[];task:{slug:string;task:string};replay:Replay;numSplats:number;samples:number;floor:number;top:number;cut:number;size:THREE.Vector3};
 type Log={id:number;at:string;text:string;tone:'ok'|'warn'|'dim'|'hi'};
 type RobotRun={robot:RobotId;replay:Replay;start:number;speed:number};
 type UI={stage:'empty'|'loading'|'ready'|'morph';status:string;error:string;data:Data|null;phase:number;now:number;paused:boolean;logs:Log[];crops:Record<string,string>;robot:{id:RobotId;time:number;replay:Replay}|null;verdicts:Partial<Record<RobotId,{verdict:Verdict|'missing';task:string}>>;panel:boolean;running:boolean;pick:{robot:RobotId;slug:string};room:string};
@@ -68,7 +68,7 @@ class Show {
     v.applyWorldTransform(env.visual.transform.matrix);v.setCrop(true);v.setCutaway(true);v.setLayers(true,false,false);
     const b=computeBounds(v.points,.008),min=new THREE.Vector3(...b.min),max=new THREE.Vector3(...b.max);
     const reps=((objects as {replacements?:Replacement[]}).replacements??[]).map(r=>({...r,match:(report.objects as ReportObject[]).map(o=>({o,d:Math.hypot(o.position[0]-r.position[0],o.position[1]-r.position[1])})).filter(x=>x.d<.35).sort((a,b)=>a.d-b.d)[0]?.o}));
-    this.data={tasks:tasks.map(t=>({slug:t.slug,task:t.task})),env,views:views.views,detections:detections.detections,source:detections.source,report:report.objects,replacements:reps,task:{slug:chosen.slug,task:chosen.task},replay,numSplats:v.splat?.numSplats??0,samples:v.points.length/3,floor:min.z,top:max.z,cut:suggestedCutawayHeight(min.z,max.z),size:max.clone().sub(min)};
+    this.data={base:'/discovery',tasks:tasks.map(t=>({slug:t.slug,task:t.task})),env,views:views.views,detections:detections.detections,source:detections.source,report:report.objects,replacements:reps,task:{slug:chosen.slug,task:chosen.task},replay,numSplats:v.splat?.numSplats??0,samples:v.points.length/3,floor:min.z,top:max.z,cut:suggestedCutawayHeight(min.z,max.z),size:max.clone().sub(min)};
     this.center.set((min.x+max.x)/2,(min.y+max.y)/2,min.z);this.revealRadius=Math.hypot(max.x-min.x,max.y-min.y,max.z-min.z)*.62;
     // Oversize the sweep so it covers every visible splat, not just the trimmed mesh bounds.
     const pad=Math.max(2,Math.hypot(max.x-min.x,max.y-min.y)*.35);
@@ -102,7 +102,21 @@ class Show {
     this.home.target.set(fc.x,fc.y,fb.min[2]+fs.z*.35);this.home.pos.copy(this.home.target).add(dir.multiplyScalar(radius*1.9));
     const offset=this.home.pos.clone().sub(this.home.target).applyAxisAngle(new THREE.Vector3(0,0,1),-.55).multiplyScalar(1.75);offset.z*=1.25;
     this.cameraTo(this.home.pos,this.home.target,4.6,[this.home.target.clone().add(offset),this.home.target.clone().add(new THREE.Vector3(0,0,-.3))]);
-    this.set(u=>({...u,stage:'ready',data:null,status:''}));
+    if(room.discovery){
+      // Office: real Terra detections and Luna decisions from scripts/discover-objects.py --room office (no collider scene, so the morph stops after Luna).
+      const base=room.discovery,[views,detections,report]=await Promise.all(['views','detections','report'].map(n=>fetch(`${base}/${n}.json`).then(r=>{if(!r.ok)throw new Error(`${base}/${n}.json ${r.status}`);return r.json()})));
+      if(this.disposed)return;
+      // One Luna card per category Luna chose (matched categories first, then one honest "unknown"), at most three.
+      const best=(o:{decision?:Decision})=>o.decision?.candidates?.[0]?.score??-1;
+      const objects=(report.objects as (ReportObject&{decision?:Decision})[]).filter(o=>o.decision);
+      const picks=[...objects].sort((a,b)=>best(b)-best(a)).filter((o,i,all)=>all.findIndex(x=>x.decision!.category===o.decision!.category)===i).slice(0,3);
+      const reps:Replacement[]=picks.map((o,i)=>({id:`office-${pad(i)}-${o.label}`,assetId:o.decision!.candidates?.[0]?.asset.id??'',position:o.position,quaternion:[1,0,0,0],scale:1,selection:{position:o.position,size:[.2,.2,.2]},chosenBy:'decisions',decision:o.decision,match:o}));
+      const b=computeBounds(v.points,.02),min=new THREE.Vector3(...b.min),max=new THREE.Vector3(...b.max);
+      const env={id:'office',revision:'scan-only',scene:{name:room.name,objects:[]},validation:{},visual:{sourceUpAxis:'Y-down'}} as unknown as BackendEnvironment;
+      this.data={base,office:true,tasks:[],env,views:views.views,detections:detections.detections,source:detections.source,report:report.objects,replacements:reps,task:{slug:'',task:''},replay:{frames:[],landmarks:[],duration:0} as unknown as Replay,
+        numSplats:v.splat?.numSplats??0,samples:v.points.length/3,floor:min.z,top:max.z,cut:suggestedCutawayHeight(min.z,max.z),size:max.clone().sub(min)};
+    }
+    this.set(u=>({...u,stage:'ready',data:this.data,status:''}));
   }
   cameraTo(pos:THREE.Vector3,target:THREE.Vector3,dur:number,from?:[THREE.Vector3,THREE.Vector3]){const c=this.viewer.camera,o=this.viewer.orbit;if(from){c.position.copy(from[0]);o.target.copy(from[1])}
     this.tween={from:[c.position.clone(),o.target.clone()],to:[pos.clone(),target.clone()],start:performance.now(),dur:dur*1000}}
@@ -117,7 +131,7 @@ class Show {
     // 01 SCAN
     this.phase(0);
     this.at(.3,()=>this.log(`spz parsed · ${fmt(d.numSplats)} splats`,'ok'));
-    this.at(1.4,()=>this.log(`companion mesh sampled · ${fmt(d.samples)} surface points`,'ok'));
+    this.at(1.4,()=>this.log(d.office?`splat surface sampled · ${fmt(d.samples)} points`:`companion mesh sampled · ${fmt(d.samples)} surface points`,'ok'));
     this.at(2.6,()=>this.log(`floor plane fitted · z≈${d.floor.toFixed(3)} m`,'ok'));
     this.at(3.8,()=>this.log(`room bounds ${d.size.x.toFixed(2)} × ${d.size.y.toFixed(2)} × ${d.size.z.toFixed(2)} m`));
     this.at(5,()=>this.log(`display cutaway @ ${d.cut.toFixed(2)} m · room crop on`));
@@ -126,17 +140,18 @@ class Show {
     this.phase(1);
     this.at(START[1]+.15,()=>this.log(d.source,'dim'));
     this.at(START[1]+.3,()=>this.log(`${d.views.length} orbit views rendered · ${d.views[0]?.width}×${d.views[0]?.height}`));
-    d.views.forEach((view,i)=>this.at(SHEET_T+i*VIEW_DT+.2,()=>{const found=d.detections.filter(x=>x.view===view.view);this.log(found.length?`gpt-6.1-terra · view ${pad(view.view)} → ${found.map(x=>`${x.label} ${pct(x.confidence)}`).join(', ')}`:`gpt-6.1-terra · view ${pad(view.view)} → no tableware`,found.length?'ok':'dim')}));
-    this.at(RINGS_T,()=>{for(const o of d.report)this.rings.push(createRing(v.scene,o.position,o.result==='replaced'?GREEN:o.result==='unknown'?AMBER:0x8a8f8c));
-      const n=(r:string)=>d.report.filter(o=>o.result===r).length;this.log(`${d.detections.length} detections → ${d.report.length} lifted to 3D · ${n('replaced')} replaced · ${n('weak')} weak · ${n('unknown')} unknown`,'ok')});
+    d.views.forEach((view,i)=>this.at(SHEET_T+i*VIEW_DT+.2,()=>{const found=d.detections.filter(x=>x.view===view.view);this.log(found.length?`gpt-6.1-terra · view ${pad(view.view)} → ${found.map(x=>`${x.label} ${pct(x.confidence)}`).join(', ')}`:`gpt-6.1-terra · view ${pad(view.view)} → nothing found`,found.length?'ok':'dim')}));
+    this.at(RINGS_T,()=>{for(const o of d.report)this.rings.push(createRing(v.scene,o.position,o.result==='replaced'||o.result==='matched'?GREEN:o.result==='unknown'?AMBER:0x8a8f8c));
+      const n=(r:string)=>d.report.filter(o=>o.result===r).length;this.log(`${d.detections.length} detections → ${d.report.length} lifted to 3D · ${d.office?`${n('matched')} matched`:`${n('replaced')} replaced`} · ${n('weak')} weak · ${n('unknown')} unknown`,'ok')});
     // 03 LUNA DECISIONS
     this.phase(2);
     d.replacements.forEach((r,i)=>{const t0=START[2]+i*LUNA_SLOT,dec=r.decision,cat=dec?.trace[0]?.answers.find(a=>a.type==='choice');
-      this.at(t0,()=>{this.lookAt(r.position,2.6);const top=[...(cat?.probabilities??[])].sort((a,b)=>b.probability-a.probability)[0];this.log(`POST /v1/decisions gpt-6-luna · category=${dec?.category??'?'}${top?` p=${pct(top.probability)}`:''}`,'ok')});
+      this.at(t0,()=>{this.lookAt(r.position,d.office?5.5:2.6);const top=[...(cat?.probabilities??[])].sort((a,b)=>b.probability-a.probability)[0];this.log(`POST /v1/decisions gpt-6-luna · category=${dec?.category??'?'}${top?` p=${pct(top.probability)}`:''}`,'ok')});
       if(!r.match)this.at(t0+1.2,()=>{let url:string|null=null;try{url=captureAround(v,new THREE.Vector3(...r.position),190)}catch(e){console.warn('live crop failed',e)}if(url)this.set(u=>({...u,crops:{...u.crops,[r.id]:url!}}));else console.warn('live crop unavailable')});
       this.at(t0+RANK_AT,()=>this.log(`candidate_comparison · ${dec?.candidates.map(c=>`${c.asset.id} ${c.score.toFixed(2)}`).join(' · ')}`));
-      this.at(t0+DECIDE_AT,()=>{const win=dec?.candidates.find(c=>c.asset.id===r.assetId);this.log(`→ ${r.assetId} ${win?`score ${win.score.toFixed(2)}/3 (${bandOf(win)})`:''} · ${win?.asset.license??''} · ${r.chosenBy}`,'ok')});
+      this.at(t0+DECIDE_AT,()=>{const win=dec?.candidates.find(c=>c.asset.id===r.assetId);this.log(!r.assetId?`→ no catalogue match · left as scan`:`→ ${r.assetId} ${win?`score ${win.score.toFixed(2)}/3 (${bandOf(win)})`:''} · ${win?.asset.license??''} · ${r.chosenBy}`,'ok')});
     });
+    if(d.office){this.at(START[3],()=>{this.cameraTo(this.home.pos,this.home.target,1.4);this.log('office · Terra + Luna complete · physics and robots need a collider scene (kitchen only for now)','hi')});return}
     // 04 SIMREADY SWAP
     this.phase(3);
     d.replacements.forEach((r,i)=>this.at(SWAP_T-.55+i*SWAP_DT,()=>this.lookAt(r.position,2,.6)));
@@ -199,30 +214,30 @@ class Show {
 }
 
 const INITIAL:UI={stage:'empty',status:'',error:'',data:null,phase:-1,now:0,paused:false,logs:[],crops:{},robot:null,verdicts:{},panel:false,running:false,pick:{robot:'stretch',slug:''},room:''};
-type Room={name:string;meta:string;image:string;kind:'kitchen'|'splat';splat?:string;file?:string;up?:'y-down'|'y-up'|'z-up';credit?:string};
+type Room={name:string;meta:string;image:string;kind:'kitchen'|'splat';discovery?:string;splat?:string;file?:string;up?:'y-down'|'y-up'|'z-up';credit?:string};
 const ROOMS:Room[]=[
   {name:'Rustic kitchen',meta:'500k gaussians',image:'/rooms/rustic-kitchen.jpg',kind:'kitchen'},
   {name:'Hackney flat',meta:'scan only',image:'/rooms/hackney-flat.jpg',kind:'splat',splat:'/samples/hackney-room.spz',file:'hackney-room.spz',up:'y-down',credit:'Scaniverse capture · hackney-room'},
   {name:'Studio',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',splat:'/samples/mipnerf-room.splat',file:'mipnerf-room.splat',up:'y-down',credit:'Mip-NeRF 360 “room” · antimatter15 .splat'},
-  {name:'Fireplace',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',splat:'/samples/spark-fireplace.spz',file:'spark-fireplace.spz',up:'y-down',credit:'sparkjs.dev sample'}];
+  {name:'Fireplace',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',discovery:'/discovery/office',splat:'/samples/spark-fireplace.spz',file:'spark-fireplace.spz',up:'y-down',credit:'sparkjs.dev sample'}];
 
 function Glyph({id}:{id:RobotId}){const c={fill:'none',stroke:'currentColor',strokeWidth:1.4,strokeLinecap:'square' as const};
   return <svg viewBox="0 0 64 44" width="64" height="44" aria-hidden="true">{id==='go2'?<g {...c}><rect x="14" y="14" width="30" height="9"/><rect x="44" y="11" width="9" height="8"/><path d="M18 23l-3 9 3 7M26 23l2 9-2 7M36 23l-3 9 3 7M42 23l2 9-2 7"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
     :id==='g1'?<g {...c}><circle cx="32" cy="7" r="4"/><path d="M26 13h12v14H26z"/><path d="M26 15l-7 10M38 15l7 10"/><path d="M28 27l-3 14M36 27l3 14"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
     :<g {...c}><rect x="10" y="31" width="18" height="8"/><circle cx="13" cy="39" r="2"/><circle cx="25" cy="39" r="2"/><path d="M22 31V4"/><rect x="19" y="15" width="7" height="5"/><path d="M26 17h24M50 15v5M53 15v5"/><path d="M4 41h56" strokeDasharray="2 3"/></g>}</svg>}
 
-function Crop({view,pixel,size,span=230}:{view:number;pixel:[number,number];size:number;span?:number}){const s=size/span;
-  return <div className="d-crop" style={{width:size,height:size,backgroundImage:`url(/discovery/view${pad(view)}.jpg)`,backgroundSize:`${850*s}px ${874*s}px`,backgroundPosition:`${-(pixel[0]*s-size/2)}px ${-(pixel[1]*s-size/2)}px`}}><i/><i/><i/><i/></div>}
+function Crop({base,view,pixel,size,span=230}:{base:string;view:number;pixel:[number,number];size:number;span?:number}){const s=size/span;
+  return <div className="d-crop" style={{width:size,height:size,backgroundImage:`url(${base}/view${pad(view)}.jpg)`,backgroundSize:`${850*s}px ${874*s}px`,backgroundPosition:`${-(pixel[0]*s-size/2)}px ${-(pixel[1]*s-size/2)}px`}}><i/><i/><i/><i/></div>}
 
 function Sheet({data,now}:{data:Data;now:number}){
   const active=Math.floor((now-SHEET_T)/VIEW_DT),cw=104,ch=Math.round(cw*874/850),focus=data.views[Math.max(0,Math.min(data.views.length-1,active))],fw=262,fs=fw/850,out=now>RINGS_T+.4;
   return <div className={`d-sheet ${out?'out':''}`}>
     <div className="d-grid">{data.views.map((view,i)=>{const s=cw/850,dets=data.detections.filter(d=>d.view===view.view);
       return <div key={view.view} className={`d-thumb ${i<active?'seen':''} ${i===active?'live':''} ${i>active?'wait':''}`} style={{width:cw,height:ch,animationDelay:`${i*22}ms`}}>
-        <img src={`/discovery/${view.file}`} alt={`Discovery view ${view.view}`}/>{i===active&&<span className="d-scan"/>}
+        <img src={`${data.base}/${view.file}`} alt={`Discovery view ${view.view}`}/>{i===active&&<span className="d-scan"/>}
         {i<=active&&dets.map((d,j)=><span key={j} className={`d-box ${d.label}`} style={{left:d.x*s-11,top:d.y*s-11}}/>)}
         <small>{pad(view.view)}</small></div>})}</div>
-    {focus&&active>=0&&<div className="d-focus" style={{width:fw}}><div className="d-focus-img" style={{height:Math.round(fw*874/850)}}><img src={`/discovery/${focus.file}`} alt=""/><span className="d-scan big" key={focus.view}/>
+    {focus&&active>=0&&<div className="d-focus" style={{width:fw}}><div className="d-focus-img" style={{height:Math.round(fw*874/850)}}><img src={`${data.base}/${focus.file}`} alt=""/><span className="d-scan big" key={focus.view}/>
       {data.detections.filter(d=>d.view===focus.view).map((d,j)=><span key={`${focus.view}-${j}`} className={`d-bracket ${d.label}`} style={{left:d.x*fs-30,top:d.y*fs-30}}><b>{d.label} {pct(d.confidence)}</b></span>)}</div>
       <div className="d-focus-meta"><span>VIEW {pad(focus.view)}</span><span>{focus.width}×{focus.height}</span><span>{data.detections.filter(d=>d.view===focus.view).length} hits</span></div></div>}
   </div>;
@@ -233,7 +248,7 @@ function LunaCard({data,item,crop,local}:{data:Data;item:Replacement;crop?:strin
   const probs=[...(choice?.probabilities??[])].sort((a,b)=>b.probability-a.probability).slice(0,4);const ranked=[...(dec?.candidates??[])].sort((a,b)=>b.score-a.score);const showRank=local>RANK_AT,decided=local>DECIDE_AT;
   return <div className="d-luna glass">
     <div className="d-luna-head"><span>{item.id.slice(0,8)}</span><span>POST /v1/decisions · gpt-6-luna</span></div>
-    <div className="d-luna-top">{item.match?<Crop view={item.match.view} pixel={item.match.pixel} size={128}/>:crop?<div className="d-crop" style={{width:128,height:128,backgroundImage:`url(${crop})`,backgroundSize:'cover'}}><i/><i/><i/><i/></div>:<div className="d-crop empty" style={{width:128,height:128}}>live crop</div>}
+    <div className="d-luna-top">{item.match?<Crop base={data.base} view={item.match.view} pixel={item.match.pixel} size={128}/>:crop?<div className="d-crop" style={{width:128,height:128,backgroundImage:`url(${crop})`,backgroundSize:'cover'}}><i/><i/><i/><i/></div>:<div className="d-crop empty" style={{width:128,height:128}}>live crop</div>}
       <div className="d-cat"><div className="d-k">CATEGORY · {choice?.choice?.toUpperCase()}</div>
         {probs.map((p,i)=><div key={String(p.value)} className={`d-bar ${p.value===choice?.choice?'win':''}`} style={{animationDelay:`${.3+i*.25}s`}}><span>{String(p.value)}</span><em><i style={{width:`${p.probability*100}%`}}/></em><b>{pct(p.probability)}</b></div>)}
         <div className="d-preds">{preds.map(p=><span key={p.name}>{p.name} p={pct(p.probability??0)}</span>)}</div>
@@ -295,16 +310,16 @@ export default function Demo(){
       <footer className="home-footer"><span><i aria-hidden="true"/>Start with a space. Find what fits.</span><nav aria-label="Preparation tools"><a href="/?view=objects">Object library</a><a href="/?view=builder">Environment builder <span aria-hidden="true">↗</span></a></nav></footer>
     </main>}
     {ui.stage==='loading'&&<div className="d-loading"><span className="d-spin"/>{ui.status||'loading'}</div>}
-    {ui.stage==='ready'&&(d?<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>scan → objects → physics → robots</small></div>
+    {ui.stage==='ready'&&(d?<div className="d-cta"><button onClick={()=>show.current?.startMorph()}>MORPH TO SIM <span>→</span></button><small>{d.office?'scan → terra → luna':'scan → objects → physics → robots'}</small></div>
       :<div className="d-cta"><small>{ui.room} · {ROOMS.find(r=>r.name===ui.room)?.credit??'scan preview'}</small><button onClick={back}>← CHOOSE ROOM</button><small>pipeline demo runs on the rustic kitchen</small></div>)}
     {ui.stage==='morph'&&d&&<>
-      <nav className="d-phases">{PHASES.map((p,i)=><span key={p} className={i===phase?'on':i<phase?'past':''}><b>{pad(i+1)}</b>{p}</span>)}</nav>
+      <nav className="d-phases">{PHASES.slice(0,d.office?3:PHASES.length).map((p,i)=><span key={p} className={i===phase?'on':i<phase?'past':''}><b>{pad(i+1)}</b>{p}</span>)}</nav>
       <aside className="d-console glass"><div className="d-console-head"><span>BUILD LOG</span><span className={ui.paused?'warn':'ok'}>{ui.paused?'❚❚ paused':'● live'} · {stamp(now)}</span></div>
         <div className="d-log">{ui.logs.map(l=><div key={l.id} className={`l ${l.tone}`}><time>{l.at}</time><span>{l.text}</span></div>)}<div ref={logEnd}/></div>
         <div className="d-console-foot"><span>space pause</span><span>→ next</span><span>r restart</span></div></aside>
       {phase===0&&<div className="d-counters"><div><b>{fmt(Math.round(d.numSplats*scanK))}</b><small>gaussians</small></div><div><b>{fmt(Math.round(d.samples*easeOutCubic(progress(now,1.2,2.2))))}</b><small>surface samples</small></div><div><b>{now>2.6?`z≈${d.floor.toFixed(3)}`:'—'}</b><small>floor plane fitted</small></div><div><b>{floor?`${floor.size[0].toFixed(2)}×${floor.size[1].toFixed(2)}`:'—'}</b><small>floor collider · m</small></div><div><b>{(d.cut).toFixed(2)} m</b><small>cutaway</small></div></div>}
       {phase===1&&<Sheet data={d} now={now}/>}
-      {phase===2&&<div className="d-luna-wrap">{d.replacements.slice(0,Math.max(0,lunaIndex)).map(r=><div key={r.id} className="d-done-chip glass">✓ {r.decision?.category} → {r.assetId}</div>)}{luna&&<LunaCard key={luna.id} data={d} item={luna} crop={ui.crops[luna.id]} local={now-START[2]-lunaIndex*LUNA_SLOT}/>}</div>}
+      {phase===2&&<div className="d-luna-wrap">{d.replacements.slice(0,Math.max(0,lunaIndex)).map(r=><div key={r.id} className="d-done-chip glass">✓ {r.decision?.category} → {r.assetId||'kept as scan'}</div>)}{luna&&<LunaCard key={luna.id} data={d} item={luna} crop={ui.crops[luna.id]} local={now-START[2]-lunaIndex*LUNA_SLOT}/>}</div>}
       {phase===3&&<div className="d-swap glass">{d.replacements.map((r,i)=><div key={r.id} className={now>=SWAP_T+i*SWAP_DT?'on':''}><img src={`/api/objects/assets/${encodeURIComponent(r.assetId)}/preview.jpg`} alt=""/><span>{r.assetId}<small>×{r.scale.toFixed(2)} · [{r.position.map(n=>n.toFixed(2)).join(', ')}]</small></span></div>)}</div>}
       {phase===4&&val&&now>START[4]+3.3&&<div className="d-stamp"><b>{val.engine} {String(val.engineVersion).split('.').slice(0,2).join('.')}</b><span>compiled {val.compile==='passed'?'✓':'✗'}</span><span>floor-contact probe {val.dropProbe?.status==='passed'?'✓':'✗'}</span><small>{val.compiledGeomCount} geoms · rest z {Number(val.dropProbe?.actualRestZ).toFixed(3)} m</small></div>}
       {phase===5&&<>
