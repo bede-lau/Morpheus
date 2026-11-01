@@ -1,0 +1,325 @@
+{
+  "version": 1,
+  "kind": "simready-replacements",
+  "units": "m",
+  "upAxis": "Z",
+  "source": {
+    "name": "Synthetic World Labs kitchen",
+    "fileName": "rustic-kitchen-500k.spz",
+    "sha256": "351f5f2ceb6ee9095a4b4100f864db9780a21cc6bdb8a70c6f88117cbb1d5fe0",
+    "transform": {
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2.220446049250313e-16,
+        -1,
+        0,
+        0,
+        1,
+        2.220446049250313e-16,
+        0,
+        1.8172071323394776,
+        -0.7313317480087278,
+        0.934302,
+        1
+      ],
+      "matrixOrder": "column-major",
+      "unitsPerSourceUnit": 1
+    },
+    "scaleConfirmed": false
+  },
+  "replacements": [
+    {
+      "id": "a2b75870-70f2-476e-9c84-bd75f84a9e6d",
+      "assetId": "kitchenware_bowl_c01",
+      "position": [
+        1.2439414976455265,
+        0.48215968944440113,
+        0.628
+      ],
+      "quaternion": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": 2.0451256024285933,
+      "selection": {
+        "position": [
+          1.2439414976455265,
+          0.48215968944440113,
+          0.628
+        ],
+        "size": [
+          0.3,
+          0.3,
+          0.07
+        ]
+      },
+      "chosenBy": "decisions",
+      "decision": {
+        "category": "bowl",
+        "candidates": [
+          {
+            "asset": {
+              "id": "kitchenware_bowl_c01",
+              "category": "bowl",
+              "name": "kitchenware bowl c01",
+              "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_c01",
+              "license": "CC-BY-4.0",
+              "attribution": "NVIDIA SimReady Assets",
+              "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+              "dimensions": [
+                0.1466902568936348,
+                0.1466902270913124,
+                0.06288689307802997
+              ],
+              "meshCount": 1,
+              "triangles": 8800,
+              "units": "m",
+              "upAxis": "Z",
+              "sourceMetersPerUnit": 1,
+              "sourceUpAxis": "Z",
+              "sourceCenterMeters": [
+                1.1175870895385742e-08,
+                3.725290298461914e-09,
+                0.03146027062120993
+              ],
+              "sourceRoot": "simready_usd/sm_kitchenware_bowl_c01_01.usd",
+              "geometrySha256": "e96f70b2e65eba009160f2266e371146941d3b030c420967445ffaa2d542e1ce",
+              "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+              "physicsStatus": "not_validated"
+            },
+            "score": 0.62,
+            "confidence": 0.38,
+            "probabilities": [
+              {
+                "value": 0,
+                "label": "Mismatch",
+                "probability": 0.49
+              },
+              {
+                "value": 1,
+                "label": "Weak",
+                "probability": 0.4
+              },
+              {
+                "value": 2,
+                "label": "Plausible",
+                "probability": 0.11
+              },
+              {
+                "value": 3,
+                "label": "Close",
+                "probability": 0
+              }
+            ]
+          },
+          {
+            "asset": {
+              "id": "kitchenware_bowl_b01",
+              "category": "bowl",
+              "name": "kitchenware bowl b01",
+              "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_b01",
+              "license": "CC-BY-4.0",
+              "attribution": "NVIDIA SimReady Assets",
+              "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+              "dimensions": [
+                0.12985689142597656,
+                0.1298568834293837,
+                0.05999999511607257
+              ],
+              "meshCount": 1,
+              "triangles": 5360,
+              "units": "m",
+              "upAxis": "Z",
+              "sourceMetersPerUnit": 1,
+              "sourceUpAxis": "Z",
+              "sourceCenterMeters": [
+                3.284451821627954e-09,
+                2.282519349916523e-08,
+                0.03000058224614577
+              ],
+              "sourceRoot": "simready_usd/sm_kitchenware_bowl_b01_01.usd",
+              "geometrySha256": "96d1b3785de5460ccfef377106e140c9b99d615a6de6ea183c89121729769949",
+              "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+              "physicsStatus": "not_validated"
+            },
+            "score": 0.55,
+            "confidence": 0.45,
+            "probabilities": [
+              {
+                "value": 0,
+                "label": "Mismatch",
+                "probability": 0.57
+              },
+              {
+                "value": 1,
+                "label": "Weak",
+                "probability": 0.31
+              },
+              {
+                "value": 2,
+                "label": "Plausible",
+                "probability": 0.12
+              },
+              {
+                "value": 3,
+                "label": "Close",
+                "probability": 0
+              }
+            ]
+          }
+        ],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "bowl",
+                "probabilities": [
+                  {
+                    "value": "bowl",
+                    "probability": 0.64
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.26
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.09
+                  }
+                ],
+                "confidence": 0.57
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.01
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.91
+              }
+            ],
+            "requestId": null
+          },
+          {
+            "stage": "candidate_comparison",
+            "answers": [
+              {
+                "type": "score",
+                "name": "kitchenware_bowl_b01",
+                "score": 0.55,
+                "probabilities": [
+                  {
+                    "value": 0,
+                    "label": "Mismatch",
+                    "probability": 0.57
+                  },
+                  {
+                    "value": 1,
+                    "label": "Weak",
+                    "probability": 0.31
+                  },
+                  {
+                    "value": 2,
+                    "label": "Plausible",
+                    "probability": 0.12
+                  },
+                  {
+                    "value": 3,
+                    "label": "Close",
+                    "probability": 0
+                  }
+                ],
+                "confidence": 0.45
+              },
+              {
+                "type": "score",
+                "name": "kitchenware_bowl_c01",
+                "score": 0.62,
+                "probabilities": [
+                  {
+                    "value": 0,
+                    "label": "Mismatch",
+                    "probability": 0.49
+                  },
+                  {
+                    "value": 1,
+                    "label": "Weak",
+                    "probability": 0.4
+                  },
+                  {
+                    "value": 2,
+                    "label": "Plausible",
+                    "probability": 0.11
+                  },
+                  {
+                    "value": 3,
+                    "label": "Close",
+                    "probability": 0
+                  }
+                ],
+                "confidence": 0.38
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "Scores rank this prepared catalogue only. Review the crop and fit before replacement."
+      },
+      "asset": {
+        "id": "kitchenware_bowl_c01",
+        "category": "bowl",
+        "name": "kitchenware bowl c01",
+        "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_c01",
+        "license": "CC-BY-4.0",
+        "attribution": "NVIDIA SimReady Assets",
+        "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+        "dimensions": [
+          0.1466902568936348,
+          0.1466902270913124,
+          0.06288689307802997
+        ],
+        "meshCount": 1,
+        "triangles": 8800,
+        "units": "m",
+        "upAxis": "Z",
+        "sourceMetersPerUnit": 1.0,
+        "sourceUpAxis": "Z",
+        "sourceCenterMeters": [
+          1.1175870895385742e-08,
+          3.725290298461914e-09,
+          0.03146027062120993
+        ],
+        "sourceRoot": "simready_usd/sm_kitchenware_bowl_c01_01.usd",
+        "geometrySha256": "e96f70b2e65eba009160f2266e371146941d3b030c420967445ffaa2d542e1ce",
+        "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+        "physicsStatus": "not_validated"
+      }
+    }
+  ],
+  "interactionValidated": false,
+  "revision": 1
+}

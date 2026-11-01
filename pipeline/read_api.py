@@ -11,7 +11,23 @@ from .export import export_files, validate_manifest, validate_physics
 
 ROOT = Path(__file__).resolve().parents[1] / "output"
 ROBOTS = ("go2", "soarm", "stretch")
+# Committed pre-rendered rollouts (docs/TASKS.md); used when output/kitchen/replays/<robot>.json is absent.
+DEFAULT_ROLLOUTS = Path(__file__).resolve().parents[1] / "rollouts" / "kitchen" / "default"
 CDN = "https://wlt-ai-cdn.art/example_exports/rustic_kitchen_with_natural_light/rustic_kitchen_with_natural_light"
+# SHA-256 of the full SPZ bytes, verified against the downloaded official sample.
+# Pinned with the CDN asset (also checked by scripts/fetch-sample.mjs), not the
+# scene manifest: exposing provenance must not invalidate existing rollouts.
+SOURCE_SHA256 = "351f5f2ceb6ee9095a4b4100f864db9780a21cc6bdb8a70c6f88117cbb1d5fe0"
+# Local copies fetched by `npm run fetch-sample` (served by Vite under /samples/). The CDN
+# is the fallback: it is the same bytes but far slower, which stalls the demo load.
+SAMPLES = Path(__file__).resolve().parents[1] / "public" / "samples"
+LOCAL_SPLAT, LOCAL_MESH = "rustic-kitchen-500k.spz", "rustic-kitchen-collider.glb"
+
+
+def visual_urls():
+    splat = "/samples/" + LOCAL_SPLAT if (SAMPLES / LOCAL_SPLAT).is_file() else CDN + "_500k.spz"
+    mesh = "/samples/" + LOCAL_MESH if (SAMPLES / LOCAL_MESH).is_file() else CDN + "_collider.glb"
+    return splat, mesh
 
 
 def finite_number(value):
@@ -46,8 +62,10 @@ def validate_replay(value, robot, revision):
 
 
 class EnvironmentStore:
-    def __init__(self, root=ROOT):
+    def __init__(self, root=ROOT, fallback=None):
         self.root = Path(root)
+        # Only the real output root falls back to the repository rollouts; temporary roots stay isolated.
+        self.fallback = Path(fallback) if fallback else (DEFAULT_ROLLOUTS if self.root == ROOT else None)
         self.lock = threading.Lock()
         self.cached = None
 
@@ -71,6 +89,8 @@ class EnvironmentStore:
         if robot not in ROBOTS:
             raise FileNotFoundError("Unknown robot")
         path = self.root / "kitchen" / "replays" / f"{robot}.json"
+        if not path.is_file() and self.fallback is not None:
+            path = self.fallback / f"{robot}.json"
         if not path.is_file():
             raise FileNotFoundError("No teammate rollout supplied for this robot")
         if path.stat().st_size > 32 * 1024 * 1024:
@@ -87,8 +107,9 @@ class EnvironmentStore:
                 statuses[robot] = {"status": "unavailable", "url": None, "reason": str(exc)}
             except (ValueError, TypeError) as exc:
                 statuses[robot] = {"status": "invalid", "url": None, "reason": str(exc)}
+        splat_url, mesh_url = visual_urls()
         return {"version": 1, "id": "kitchen", **snapshot,
-                "visual": {"splatUrl": CDN + "_500k.spz", "meshUrl": CDN + "_collider.glb",
+                "visual": {"splatUrl": splat_url, "meshUrl": mesh_url, "sourceSha256": SOURCE_SHA256,
                            "sourceUpAxis": "Y-down", "transform": snapshot["scene"].get("source", {}).get("transform")},
                 "replays": statuses}
 

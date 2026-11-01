@@ -29,7 +29,12 @@ class ReadApiTest(unittest.TestCase):
         return json.loads(body)
 
     def test_scene_transform_and_native_evidence_share_revision(self):
+        snapshot_before = self.store.snapshot()
         detail = self.detail()
+        self.assertEqual(detail['visual']['sourceSha256'], '351f5f2ceb6ee9095a4b4100f864db9780a21cc6bdb8a70c6f88117cbb1d5fe0')
+        self.assertEqual(detail['revision'], snapshot_before['revision'])
+        self.assertEqual(detail['scene'], snapshot_before['scene'])
+        self.assertNotIn('sha256', detail['scene']['source'])
         self.assertEqual(detail['visual']['transform'], self.scene['source']['transform'])
         self.assertFalse(detail['scene']['source']['scaleConfirmed'])
         self.assertEqual(detail['validation']['status'], 'passed')

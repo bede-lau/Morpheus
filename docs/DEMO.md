@@ -1,20 +1,22 @@
 # 90-second demonstration
 
-Before presenting, run `node scripts/fetch-sample.mjs` for the local sample, start the frontend and native validation service, and check the complete flow once. The sample must not be silently bundled into a public release; see [ASSETS.md](ASSETS.md). Pause at actual loading or validation completion rather than narrating a result early.
+Before presenting: `npm run fetch-sample`, start `npm run dev`, `python -m pipeline.server` (8000) and, if stage 2 is shown live, `python -m pipeline.object_server` (8001). Rollouts for both demo tasks are already committed under `rollouts/kitchen/`; run the planner again only if the scene changes. Pause at actual loading or verdicts rather than narrating a result early.
+
+**Problem statement.** Robots are coming into homes. The question becomes *which* robot is right for *my* home. Morpheus captures your room, reconstructs it for simulation, and lets several robots attempt your chores inside it so you can choose.
 
 | Time | Action | What to say |
 | --- | --- | --- |
-| 0–12 s | Open **sample kitchen**; orbit the room. | “A scan looks like a room, but a robot simulator also needs solid geometry. This is a synthetic World Labs kitchen with a companion mesh, used to test our pipeline.” |
-| 12–25 s | Inspect **Scale & alignment**, toggle **Reference mesh**. | “We keep the visual scan and geometry aligned. Scale is still assumed here. For a real capture, we select two points and enter a measured distance.” Do not invent a measurement for this synthetic fixture. |
-| 25–40 s | Click **Generate collision shapes**, then **Collisions**. | “Morpheus proposes editable collision shapes from the companion mesh. The proposal is approximate: columns can fill open space beneath furniture.” |
-| 40–58 s | Select one obstructing shape, move or resize it; show the scan again. | “We review the physical layer against the room and correct false obstacles. These are geometry proposals, not automatic object recognition.” |
-| 58–75 s | Mark the shapes reviewed, click **Validate in MuJoCo**. | If the report passes: “MuJoCo compiled this environment and its floor-contact probe passed.” If unavailable: “Native validation is offline; the export will record that it was not run.” |
-| 75–90 s | Click **Export environment**, inspect the downloaded bundle. | “We hand off MJCF collision geometry, a scene manifest, provenance, and validation status. Our teammate’s robot training pipeline consumes this environment. Robot behavior and task success have not been evaluated here.” |
+| 0–10 s | Open `/?view=builder`, orbit the kitchen scan, toggle **Collisions**. | "We start from a Gaussian splat of a kitchen. Morpheus proposes editable collision geometry, validates it in MuJoCo, and exports a scene any robot stack can load." |
+| 10–25 s | Open `/?view=objects`, show a replaced mug/bowl (pre-replaced if the key is offline). | "Objects a robot can interact with are swapped for real NVIDIA SimReady meshes. With the OpenAI Decisions API we rank which catalogue asset matches the selected splats; the original scan stays intact underneath." |
+| 25–45 s | Open `/`, pick **Wipe the table**, robot **Stretch**, press play. Point at the POV inset and the event captions. | "Now the part we care about. A robot spawns at the door and is told to wipe the table. The planner labels the table, counters and door from the reconstructed geometry, plans a collision-free route, and the inset is the robot's own camera." |
+| 45–60 s | Switch to **Go2**, play. Then **SO-ARM100**. | "Same task, same kitchen, different robot. The quadruped gets there but has nothing to wipe with. The desk arm cannot leave the door. The verdict panel says exactly which step failed." |
+| 60–75 s | Pick **Fill a glass of water**, Stretch, play; swap POV to fullscreen for the pour. | "A two-stop task: counter first, then the table. Still collision-free, still from the robot's eyes." |
+| 75–90 s | Click **Compare robots**. | "Three robots, one home, one honest answer per task. That is how you choose. Everything here is reproducible from the repository: scan in, verdict out." |
 
 ## Evidence of Codex contribution
 
-Codex created the Three.js/Spark interface, authored the editable collision-geometry and export workflow, researched the official sample assets, and verified binary integrity and splat/mesh coordinate alignment. The recorded asset check compares 20,000 splat centers with mesh vertices; it is documented in [ASSETS.md](ASSETS.md). The frontend and Python validation source provide inspectable implementation evidence. Run the repository's checks before claiming a test pass; a recorded code change is not evidence that every interaction works.
+Codex built the Three.js/Spark workbench, the collision-geometry proposal and MuJoCo export/validation, the SimReady conversion and Decisions matching service, the landmark labelling and task planner, the POV renderer, and the tests that check every rollout against the reference mesh. Run the repository's checks before claiming a test pass.
 
 ## Demo boundaries
 
-The kitchen walkthrough is mesh-assisted and synthetic. It does not demonstrate arbitrary splat-to-mesh reconstruction, exact furniture retrieval, semantic segmentation, verified real-world scale, or robot policy training. Export status must distinguish a schema-checked bundle from a scene actually compiled and probed by MuJoCo.
+The kitchen is a synthetic World Labs sample with a companion mesh, not a measured scan of a real home, and its scale is assumed. Landmarks are inferred from collision boxes, not recognised semantically. Rollouts are planned motions reviewed against collision geometry, not physics simulations, trained policies, or proof of task success. Robot bodies are preview models, not URDFs. The Decisions and Responses API calls are optional and the UI records whether a plan came from rules or from the model.

@@ -1,0 +1,29 @@
+{
+  "id": "dishware_plastic_bigPlate_a01",
+  "category": "plate",
+  "name": "dishware plastic big Plate a01",
+  "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_bigPlate_a01",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA SimReady Assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "dimensions": [
+    0.1720000058412552,
+    0.1770000010728836,
+    0.025608320236206045
+  ],
+  "meshCount": 1,
+  "triangles": 19488,
+  "units": "m",
+  "upAxis": "Z",
+  "sourceMetersPerUnit": 1.0,
+  "sourceUpAxis": "Z",
+  "sourceCenterMeters": [
+    0.0,
+    0.0,
+    0.012892390879858197
+  ],
+  "sourceRoot": "simready_usd/sm_dishware_plastic_bigPlate_a01_01.usd",
+  "geometrySha256": "74474131161d2dfb323caf39611aa9762d1b559160552f6010e03e98694ad05b",
+  "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+  "physicsStatus": "not_validated"
+}

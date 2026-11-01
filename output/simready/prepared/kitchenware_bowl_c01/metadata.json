@@ -1,0 +1,29 @@
+{
+  "id": "kitchenware_bowl_c01",
+  "category": "bowl",
+  "name": "kitchenware bowl c01",
+  "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_c01",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA SimReady Assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "dimensions": [
+    0.1466902568936348,
+    0.1466902270913124,
+    0.06288689307802997
+  ],
+  "meshCount": 1,
+  "triangles": 8800,
+  "units": "m",
+  "upAxis": "Z",
+  "sourceMetersPerUnit": 1.0,
+  "sourceUpAxis": "Z",
+  "sourceCenterMeters": [
+    1.1175870895385742e-08,
+    3.725290298461914e-09,
+    0.03146027062120993
+  ],
+  "sourceRoot": "simready_usd/sm_kitchenware_bowl_c01_01.usd",
+  "geometrySha256": "e96f70b2e65eba009160f2266e371146941d3b030c420967445ffaa2d542e1ce",
+  "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+  "physicsStatus": "not_validated"
+}

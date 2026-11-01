@@ -1,0 +1,1815 @@
+{
+  "dataset": "nvidia/simready-assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "assets": [
+    {
+      "id": "dishware_bowl_a01",
+      "category": "bowl",
+      "name": "dishware bowl a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_bowl_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_cup_paper_a01",
+      "category": "cup",
+      "name": "dishware cup paper a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_cup_paper_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_cup_paper_stacked_a01",
+      "category": "cup",
+      "name": "dishware cup paper stacked a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_cup_paper_stacked_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_cup_tea_a01",
+      "category": "cup",
+      "name": "dishware cup tea a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_cup_tea_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_glass_8oz_a01",
+      "category": "other",
+      "name": "dishware glass 8oz a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_glass_8oz_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_glass_tumbler_a01",
+      "category": "other",
+      "name": "dishware glass tumbler a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_glass_tumbler_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_glass_wineFlute_a01",
+      "category": "other",
+      "name": "dishware glass wine Flute a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_glass_wineFlute_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_glass_wine_a01",
+      "category": "other",
+      "name": "dishware glass wine a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_glass_wine_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_mug_a01",
+      "category": "mug",
+      "name": "dishware mug a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_mug_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_mug_a02",
+      "category": "mug",
+      "name": "dishware mug a02",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_mug_a02",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_mug_b01",
+      "category": "mug",
+      "name": "dishware mug b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_mug_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_mug_c01",
+      "category": "mug",
+      "name": "dishware mug c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_mug_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_mug_coffee_a01",
+      "category": "mug",
+      "name": "dishware mug coffee a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_mug_coffee_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_mug_coffee_b01",
+      "category": "mug",
+      "name": "dishware mug coffee b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_mug_coffee_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_plastic_bigPlate_a01",
+      "category": "plate",
+      "name": "dishware plastic big Plate a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_bigPlate_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_plastic_cup_a01",
+      "category": "cup",
+      "name": "dishware plastic cup a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_cup_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_plastic_fork_a01",
+      "category": "fork",
+      "name": "dishware plastic fork a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_fork_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_plastic_smallPlate_a01",
+      "category": "plate",
+      "name": "dishware plastic small Plate a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_smallPlate_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_plastic_spoon_a01",
+      "category": "spoon",
+      "name": "dishware plastic spoon a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_spoon_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_plastic_tray_a01",
+      "category": "tray",
+      "name": "dishware plastic tray a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_plastic_tray_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_thermos_a01",
+      "category": "other",
+      "name": "dishware thermos a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_thermos_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "dishware_utah_teapot_a01",
+      "category": "other",
+      "name": "dishware utah teapot a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/dishware_utah_teapot_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_b01",
+      "category": "bowl",
+      "name": "kitchenware bowl b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_c01",
+      "category": "bowl",
+      "name": "kitchenware bowl c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_d01",
+      "category": "bowl",
+      "name": "kitchenware bowl d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_e01",
+      "category": "bowl",
+      "name": "kitchenware bowl e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_f01",
+      "category": "bowl",
+      "name": "kitchenware bowl f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_g01",
+      "category": "bowl",
+      "name": "kitchenware bowl g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_h01",
+      "category": "bowl",
+      "name": "kitchenware bowl h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_i01",
+      "category": "bowl",
+      "name": "kitchenware bowl i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_j01",
+      "category": "bowl",
+      "name": "kitchenware bowl j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_k01",
+      "category": "bowl",
+      "name": "kitchenware bowl k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_l01",
+      "category": "bowl",
+      "name": "kitchenware bowl l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_m01",
+      "category": "bowl",
+      "name": "kitchenware bowl m01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_m01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_n01",
+      "category": "bowl",
+      "name": "kitchenware bowl n01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_n01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_o01",
+      "category": "bowl",
+      "name": "kitchenware bowl o01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_o01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_p01",
+      "category": "bowl",
+      "name": "kitchenware bowl p01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_p01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_q01",
+      "category": "bowl",
+      "name": "kitchenware bowl q01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_q01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_r01",
+      "category": "bowl",
+      "name": "kitchenware bowl r01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_r01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_s01",
+      "category": "bowl",
+      "name": "kitchenware bowl s01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_s01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_bowl_u01",
+      "category": "bowl",
+      "name": "kitchenware bowl u01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_bowl_u01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cup_a01",
+      "category": "cup",
+      "name": "kitchenware cup a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cup_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cup_b01",
+      "category": "cup",
+      "name": "kitchenware cup b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cup_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cup_c01",
+      "category": "cup",
+      "name": "kitchenware cup c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cup_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cup_d01",
+      "category": "cup",
+      "name": "kitchenware cup d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cup_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_a01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_b01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_c01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_d01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_e01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_f01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_g01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_h01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_i01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_j01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_k01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_cuttingBoard_l01",
+      "category": "cutting board",
+      "name": "kitchenware cutting Board l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cuttingBoard_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_a01",
+      "category": "fork",
+      "name": "kitchenware fork a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_b01",
+      "category": "fork",
+      "name": "kitchenware fork b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_c01",
+      "category": "fork",
+      "name": "kitchenware fork c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_d01",
+      "category": "fork",
+      "name": "kitchenware fork d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_e01",
+      "category": "fork",
+      "name": "kitchenware fork e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_f01",
+      "category": "fork",
+      "name": "kitchenware fork f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_g01",
+      "category": "fork",
+      "name": "kitchenware fork g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_h01",
+      "category": "fork",
+      "name": "kitchenware fork h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_i01",
+      "category": "fork",
+      "name": "kitchenware fork i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_j01",
+      "category": "fork",
+      "name": "kitchenware fork j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_fork_k01",
+      "category": "fork",
+      "name": "kitchenware fork k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_fork_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_a01",
+      "category": "jug",
+      "name": "kitchenware jug a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_b01",
+      "category": "jug",
+      "name": "kitchenware jug b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_c01",
+      "category": "jug",
+      "name": "kitchenware jug c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_d01",
+      "category": "jug",
+      "name": "kitchenware jug d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_e01",
+      "category": "jug",
+      "name": "kitchenware jug e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_f01",
+      "category": "jug",
+      "name": "kitchenware jug f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_g01",
+      "category": "jug",
+      "name": "kitchenware jug g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_h01",
+      "category": "jug",
+      "name": "kitchenware jug h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_jug_i01",
+      "category": "jug",
+      "name": "kitchenware jug i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_jug_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_a01",
+      "category": "kettle",
+      "name": "kitchenware kettle a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_b01",
+      "category": "kettle",
+      "name": "kitchenware kettle b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_c01",
+      "category": "kettle",
+      "name": "kitchenware kettle c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_d01",
+      "category": "kettle",
+      "name": "kitchenware kettle d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_e01",
+      "category": "kettle",
+      "name": "kitchenware kettle e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_f01",
+      "category": "kettle",
+      "name": "kitchenware kettle f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_g01",
+      "category": "kettle",
+      "name": "kitchenware kettle g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_h01",
+      "category": "kettle",
+      "name": "kitchenware kettle h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_i01",
+      "category": "kettle",
+      "name": "kitchenware kettle i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_j01",
+      "category": "kettle",
+      "name": "kitchenware kettle j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_k01",
+      "category": "kettle",
+      "name": "kitchenware kettle k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_l01",
+      "category": "kettle",
+      "name": "kitchenware kettle l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_m01",
+      "category": "kettle",
+      "name": "kitchenware kettle m01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_m01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_n01",
+      "category": "kettle",
+      "name": "kitchenware kettle n01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_n01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_o01",
+      "category": "kettle",
+      "name": "kitchenware kettle o01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_o01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_p01",
+      "category": "kettle",
+      "name": "kitchenware kettle p01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_p01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_q01",
+      "category": "kettle",
+      "name": "kitchenware kettle q01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_q01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_r01",
+      "category": "kettle",
+      "name": "kitchenware kettle r01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_r01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_s01",
+      "category": "kettle",
+      "name": "kitchenware kettle s01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_s01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_t01",
+      "category": "kettle",
+      "name": "kitchenware kettle t01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_t01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_u01",
+      "category": "kettle",
+      "name": "kitchenware kettle u01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_u01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_v01",
+      "category": "kettle",
+      "name": "kitchenware kettle v01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_v01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_w01",
+      "category": "kettle",
+      "name": "kitchenware kettle w01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_w01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_x01",
+      "category": "kettle",
+      "name": "kitchenware kettle x01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_x01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_kettle_y01",
+      "category": "kettle",
+      "name": "kitchenware kettle y01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_kettle_y01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_a01",
+      "category": "knife",
+      "name": "kitchenware knife a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_b01",
+      "category": "knife",
+      "name": "kitchenware knife b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_c01",
+      "category": "knife",
+      "name": "kitchenware knife c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_d01",
+      "category": "knife",
+      "name": "kitchenware knife d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_e01",
+      "category": "knife",
+      "name": "kitchenware knife e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_f01",
+      "category": "knife",
+      "name": "kitchenware knife f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_g01",
+      "category": "knife",
+      "name": "kitchenware knife g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_h01",
+      "category": "knife",
+      "name": "kitchenware knife h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_i01",
+      "category": "knife",
+      "name": "kitchenware knife i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_j01",
+      "category": "knife",
+      "name": "kitchenware knife j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_k01",
+      "category": "knife",
+      "name": "kitchenware knife k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_l01",
+      "category": "knife",
+      "name": "kitchenware knife l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_m01",
+      "category": "knife",
+      "name": "kitchenware knife m01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_m01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_n01",
+      "category": "knife",
+      "name": "kitchenware knife n01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_n01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_o01",
+      "category": "knife",
+      "name": "kitchenware knife o01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_o01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_p01",
+      "category": "knife",
+      "name": "kitchenware knife p01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_p01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_q01",
+      "category": "knife",
+      "name": "kitchenware knife q01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_q01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_r01",
+      "category": "knife",
+      "name": "kitchenware knife r01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_r01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_s01",
+      "category": "knife",
+      "name": "kitchenware knife s01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_s01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_t01",
+      "category": "knife",
+      "name": "kitchenware knife t01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_t01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_u01",
+      "category": "knife",
+      "name": "kitchenware knife u01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_u01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_v01",
+      "category": "knife",
+      "name": "kitchenware knife v01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_v01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_w01",
+      "category": "knife",
+      "name": "kitchenware knife w01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_w01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_x01",
+      "category": "knife",
+      "name": "kitchenware knife x01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_x01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_y01",
+      "category": "knife",
+      "name": "kitchenware knife y01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_y01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_knife_z01",
+      "category": "knife",
+      "name": "kitchenware knife z01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_knife_z01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_ladle_a01",
+      "category": "other",
+      "name": "kitchenware ladle a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_ladle_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_ladle_b01",
+      "category": "other",
+      "name": "kitchenware ladle b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_ladle_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_ladle_c01",
+      "category": "other",
+      "name": "kitchenware ladle c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_ladle_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_ladle_d01",
+      "category": "other",
+      "name": "kitchenware ladle d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_ladle_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_a01",
+      "category": "mug",
+      "name": "kitchenware mug a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_b01",
+      "category": "mug",
+      "name": "kitchenware mug b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_c01",
+      "category": "mug",
+      "name": "kitchenware mug c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_d01",
+      "category": "mug",
+      "name": "kitchenware mug d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_e01",
+      "category": "mug",
+      "name": "kitchenware mug e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_f01",
+      "category": "mug",
+      "name": "kitchenware mug f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_g01",
+      "category": "mug",
+      "name": "kitchenware mug g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_h01",
+      "category": "mug",
+      "name": "kitchenware mug h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_i01",
+      "category": "mug",
+      "name": "kitchenware mug i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_j01",
+      "category": "mug",
+      "name": "kitchenware mug j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_k01",
+      "category": "mug",
+      "name": "kitchenware mug k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_l01",
+      "category": "mug",
+      "name": "kitchenware mug l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_m01",
+      "category": "mug",
+      "name": "kitchenware mug m01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_m01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_n01",
+      "category": "mug",
+      "name": "kitchenware mug n01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_n01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_o01",
+      "category": "mug",
+      "name": "kitchenware mug o01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_o01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_p01",
+      "category": "mug",
+      "name": "kitchenware mug p01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_p01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_q01",
+      "category": "mug",
+      "name": "kitchenware mug q01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_q01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_mug_r01",
+      "category": "mug",
+      "name": "kitchenware mug r01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_r01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_a01",
+      "category": "pan",
+      "name": "kitchenware pan a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_b01",
+      "category": "pan",
+      "name": "kitchenware pan b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_c01",
+      "category": "pan",
+      "name": "kitchenware pan c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_d01",
+      "category": "pan",
+      "name": "kitchenware pan d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_e01",
+      "category": "pan",
+      "name": "kitchenware pan e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_f01",
+      "category": "pan",
+      "name": "kitchenware pan f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_g01",
+      "category": "pan",
+      "name": "kitchenware pan g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_h01",
+      "category": "pan",
+      "name": "kitchenware pan h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_i01",
+      "category": "pan",
+      "name": "kitchenware pan i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_j01",
+      "category": "pan",
+      "name": "kitchenware pan j01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_j01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_k01",
+      "category": "pan",
+      "name": "kitchenware pan k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_l01",
+      "category": "pan",
+      "name": "kitchenware pan l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_m01",
+      "category": "pan",
+      "name": "kitchenware pan m01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_m01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_n01",
+      "category": "pan",
+      "name": "kitchenware pan n01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_n01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_o01",
+      "category": "pan",
+      "name": "kitchenware pan o01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_o01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_p01",
+      "category": "pan",
+      "name": "kitchenware pan p01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_p01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_q01",
+      "category": "pan",
+      "name": "kitchenware pan q01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_q01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_r01",
+      "category": "pan",
+      "name": "kitchenware pan r01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_r01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_s01",
+      "category": "pan",
+      "name": "kitchenware pan s01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_s01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_t01",
+      "category": "pan",
+      "name": "kitchenware pan t01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_t01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_u01",
+      "category": "pan",
+      "name": "kitchenware pan u01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_u01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_pan_v01",
+      "category": "pan",
+      "name": "kitchenware pan v01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_pan_v01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_rollingPin_a01",
+      "category": "other",
+      "name": "kitchenware rolling Pin a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_rollingPin_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_rollingPin_b01",
+      "category": "other",
+      "name": "kitchenware rolling Pin b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_rollingPin_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_rollingPin_c01",
+      "category": "other",
+      "name": "kitchenware rolling Pin c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_rollingPin_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_rollingPin_d01",
+      "category": "other",
+      "name": "kitchenware rolling Pin d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_rollingPin_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_rollingPin_e01",
+      "category": "other",
+      "name": "kitchenware rolling Pin e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_rollingPin_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_rollingPin_f01",
+      "category": "other",
+      "name": "kitchenware rolling Pin f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_rollingPin_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_shaker_a01",
+      "category": "other",
+      "name": "kitchenware shaker a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_shaker_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_shaker_b01",
+      "category": "other",
+      "name": "kitchenware shaker b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_shaker_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_shaker_c01",
+      "category": "other",
+      "name": "kitchenware shaker c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_shaker_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_shaker_d01",
+      "category": "other",
+      "name": "kitchenware shaker d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_shaker_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_b01",
+      "category": "other",
+      "name": "kitchenware spatula b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_c01",
+      "category": "other",
+      "name": "kitchenware spatula c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_d01",
+      "category": "other",
+      "name": "kitchenware spatula d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_e01",
+      "category": "other",
+      "name": "kitchenware spatula e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_f01",
+      "category": "other",
+      "name": "kitchenware spatula f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_g01",
+      "category": "other",
+      "name": "kitchenware spatula g01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_g01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_h01",
+      "category": "other",
+      "name": "kitchenware spatula h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_i01",
+      "category": "other",
+      "name": "kitchenware spatula i01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_i01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_i02",
+      "category": "other",
+      "name": "kitchenware spatula i02",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_i02",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_l01",
+      "category": "other",
+      "name": "kitchenware spatula l01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_l01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spatula_m01",
+      "category": "other",
+      "name": "kitchenware spatula m01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spatula_m01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_b01",
+      "category": "spoon",
+      "name": "kitchenware spoon b01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_b01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_c01",
+      "category": "spoon",
+      "name": "kitchenware spoon c01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_c01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_d01",
+      "category": "spoon",
+      "name": "kitchenware spoon d01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_d01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_e01",
+      "category": "spoon",
+      "name": "kitchenware spoon e01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_e01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_f01",
+      "category": "spoon",
+      "name": "kitchenware spoon f01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_f01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_h01",
+      "category": "spoon",
+      "name": "kitchenware spoon h01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_h01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_spoon_k01",
+      "category": "spoon",
+      "name": "kitchenware spoon k01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_k01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    },
+    {
+      "id": "kitchenware_tray_a01",
+      "category": "tray",
+      "name": "kitchenware tray a01",
+      "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_tray_a01",
+      "license": "CC-BY-4.0",
+      "attribution": "NVIDIA SimReady Assets",
+      "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5"
+    }
+  ]
+}

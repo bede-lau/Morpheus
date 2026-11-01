@@ -1,0 +1,29 @@
+{
+  "id": "kitchenware_mug_a01",
+  "category": "mug",
+  "name": "kitchenware mug a01",
+  "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_mug_a01",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA SimReady Assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "dimensions": [
+    0.11790136992931366,
+    0.13486528024077415,
+    0.06347209587693214
+  ],
+  "meshCount": 1,
+  "triangles": 16192,
+  "units": "m",
+  "upAxis": "Z",
+  "sourceMetersPerUnit": 1.0,
+  "sourceUpAxis": "Z",
+  "sourceCenterMeters": [
+    7.358565926551819e-05,
+    -0.008721897378563881,
+    0.03177350573241711
+  ],
+  "sourceRoot": "simready_usd/sm_kitchenware_mug_a01_01.usd",
+  "geometrySha256": "62257fe7eeb35fe38f5e99487c50451bf619b2f225e4111f21d409f65228b873",
+  "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+  "physicsStatus": "not_validated"
+}

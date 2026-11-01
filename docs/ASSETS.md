@@ -58,3 +58,7 @@ The collider is a coarse static environment surface, not a collection of simulat
 ## Alternative with explicit reuse terms
 
 [Kitchen by parkerlreed on SuperSplat](https://superspl.at/scene/59aca460) displays a download option and CC BY 4.0 licensing. The listing reports 2.96 MB, 141.9k splats, and Quest 3 / vid2scene capture. No corresponding collider, calibrated scale, or camera package was confirmed. It has not been downloaded or visually qualified in this project. It is a useful potential real-scan fixture, separate from the synthetic Marble room.
+
+## NVIDIA SimReady assets
+
+Eight kitchenware/dishware assets from [nvidia/simready-assets](https://huggingface.co/datasets/nvidia/simready-assets) (revision recorded in `output/simready/catalogue.json`) are converted to centred, metre-scale, Z-up GLB/OBJ meshes under `output/simready/prepared/`. They are licensed CC-BY-4.0 by NVIDIA; the original USD packages and their license files stay in the ignored `output/simready/source/` cache and are re-downloaded by `python -m pipeline.simready --prepare`. Physics metadata is not carried into the GLBs. The saved replacement scene `output/simready/scene.json` records which asset replaced which scan region and whether the Decisions API or a person chose it.

@@ -10,6 +10,7 @@ from urllib.parse import urlparse
 
 from .export import ManifestError, package_environment, validate_physics
 from .read_api import EnvironmentStore
+from .task_api import TaskStore
 
 MAX_BODY = 5 * 1024 * 1024
 
@@ -17,6 +18,7 @@ MAX_BODY = 5 * 1024 * 1024
 class Handler(BaseHTTPRequestHandler):
     server_version = "MorpheusLocal/1"
     environment_store = EnvironmentStore()
+    task_store = TaskStore(environment=environment_store)
 
     def _allowed_origin(self):
         origin = self.headers.get("Origin")
@@ -56,6 +58,8 @@ class Handler(BaseHTTPRequestHandler):
         path = urlparse(self.path).path
         try:
             result = self.environment_store.read(path)
+            if result is None:
+                result = self.task_store.read(path)
         except Exception as exc:
             self.log_error("Environment read failed: %s", exc)
             self._json(500, {"error": "Local environment read failed; see server log"})
@@ -76,7 +80,7 @@ class Handler(BaseHTTPRequestHandler):
         if not self._allowed_origin():
             self._json(403, {"error": "Only localhost browser origins are allowed"})
             return
-        if self.path not in {"/api/validate", "/api/export"}:
+        if self.path not in {"/api/validate", "/api/export", "/api/tasks/plan"}:
             self._json(404, {"error": "Not found"})
             return
         try:
@@ -94,7 +98,9 @@ class Handler(BaseHTTPRequestHandler):
             return
         try:
             manifest = json.loads(self.rfile.read(size))
-            if self.path == "/api/validate":
+            if self.path == "/api/tasks/plan":
+                self._send(*self.task_store.plan(manifest))
+            elif self.path == "/api/validate":
                 self._json(200, validate_physics(manifest))
             else:
                 package, report = package_environment(manifest)

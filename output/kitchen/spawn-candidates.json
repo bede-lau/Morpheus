@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "sourceManifest": "scene.json",
+  "sourceSha256": "230727d51e315f72a721113cf1bad8fa31989ac143567d5707fb6a173afc6c7c",
+  "units": "m",
+  "upAxis": "Z",
+  "scaleStatus": "assumed",
+  "scaleConfirmed": false,
+  "reviewed": false,
+  "footprintRadiusMeters": 0.3,
+  "additionalMarginMeters": 0.1,
+  "gridStepMeters": 0.1,
+  "evaluatedGridPoints": 4556,
+  "eligibleGridPoints": 1393,
+  "method": "Sample XY grid inside proposed floor boundary. Reject points within radius + margin of the XY axis-aligned bounding projection of any enabled non-floor box. All heights are included conservatively. Select separated high-clearance points.",
+  "limitations": [
+    "Derived only from the exported approximate collision columns, not independently checked against the visual scan.",
+    "Metre scale is assumed and the scene remains unreviewed.",
+    "A circular footprint clearance check is not a robot spawn collision check: body height, limbs, arm geometry, joint pose and floor-origin offset remain robot-specific.",
+    "No controller, dynamics, support stability, path connectivity or task feasibility was tested.",
+    "robotBodyOriginZ is deliberately null. Use floorZ plus the actual robot model origin-to-contact height.",
+    "Do not interpolate a path between candidates without swept-volume or full-model collision checks."
+  ],
+  "candidates": [
+    {
+      "id": "candidate_1",
+      "x": -1.349919,
+      "y": 0.519059,
+      "floorZ": 0.0,
+      "footprintRadiusMeters": 0.3,
+      "centerClearanceMeters": 2.0,
+      "footprintEdgeClearanceMeters": 1.7,
+      "limitingGeometry": "floor_boundary",
+      "robotBodyOriginZ": null
+    },
+    {
+      "id": "candidate_2",
+      "x": -1.449919,
+      "y": 1.419059,
+      "floorZ": 0.0,
+      "footprintRadiusMeters": 0.3,
+      "centerClearanceMeters": 1.892141,
+      "footprintEdgeClearanceMeters": 1.592141,
+      "limitingGeometry": "obstacle_81",
+      "robotBodyOriginZ": null
+    },
+    {
+      "id": "candidate_3",
+      "x": -1.849919,
+      "y": -0.280941,
+      "floorZ": 0.0,
+      "footprintRadiusMeters": 0.3,
+      "centerClearanceMeters": 1.5,
+      "footprintEdgeClearanceMeters": 1.2,
+      "limitingGeometry": "floor_boundary",
+      "robotBodyOriginZ": null
+    },
+    {
+      "id": "candidate_4",
+      "x": -0.849919,
+      "y": 2.119058,
+      "floorZ": 0.0,
+      "footprintRadiusMeters": 0.3,
+      "centerClearanceMeters": 1.261883,
+      "footprintEdgeClearanceMeters": 0.961883,
+      "limitingGeometry": "floor_boundary",
+      "robotBodyOriginZ": null
+    },
+    {
+      "id": "candidate_5",
+      "x": -2.049919,
+      "y": 2.119058,
+      "floorZ": 0.0,
+      "footprintRadiusMeters": 0.3,
+      "centerClearanceMeters": 1.261883,
+      "footprintEdgeClearanceMeters": 0.961883,
+      "limitingGeometry": "floor_boundary",
+      "robotBodyOriginZ": null
+    },
+    {
+      "id": "candidate_6",
+      "x": -0.649919,
+      "y": -0.080941,
+      "floorZ": 0.0,
+      "footprintRadiusMeters": 0.3,
+      "centerClearanceMeters": 1.234909,
+      "footprintEdgeClearanceMeters": 0.934909,
+      "limitingGeometry": "obstacle_60",
+      "robotBodyOriginZ": null
+    }
+  ]
+}

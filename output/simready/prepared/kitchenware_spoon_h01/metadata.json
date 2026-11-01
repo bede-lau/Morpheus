@@ -1,0 +1,29 @@
+{
+  "id": "kitchenware_spoon_h01",
+  "category": "spoon",
+  "name": "kitchenware spoon h01",
+  "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_spoon_h01",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA SimReady Assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "dimensions": [
+    0.02342427335679531,
+    0.11795774847269058,
+    0.008831431390717626
+  ],
+  "meshCount": 1,
+  "triangles": 12056,
+  "units": "m",
+  "upAxis": "Z",
+  "sourceMetersPerUnit": 1.0,
+  "sourceUpAxis": "Z",
+  "sourceCenterMeters": [
+    0.00011468958109617233,
+    0.0005340538918972015,
+    0.004464906989596784
+  ],
+  "sourceRoot": "simready_usd/sm_kitchenware_spoon_h01_01.usd",
+  "geometrySha256": "7d711ac29f5730ed7097ce0ca2ffd6aaec6336917c98986b1b118d354ebd4966",
+  "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+  "physicsStatus": "not_validated"
+}

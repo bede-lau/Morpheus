@@ -2,7 +2,11 @@ import type { Vec3 } from './types';
 
 export type RobotId = 'stretch' | 'go2' | 'soarm';
 export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number };
-export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[] };
+export type ReplayEvent = { time: number; label: string };
+export type StepStatus = 'done' | 'failed' | 'skipped';
+export type Verdict = { status: 'completed' | 'partial' | 'failed'; summary: string; steps: { name: string; status: StepStatus; note?: string }[]; planner?: string };
+export type Landmark = { id: string; label: string; position: Vec3; size: Vec3; kind: string };
+export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[] };
 export const ROBOTS = [
   { id: 'go2' as const, name: 'Go2', type: 'Quadruped', description: 'A mobile quadruped for exploring a room. This demo model has no manipulation arm.', reach: 'No arm', clearance: 'Review', drawer: 'Not tested' },
   { id: 'soarm' as const, name: 'SO-ARM100', type: 'Stationary arm', description: 'A compact arm for a fixed work area. The demo keeps its base stationary while the arm moves.', reach: 'Review', clearance: 'Stationary', drawer: 'Not tested' },
@@ -31,5 +35,19 @@ export function parseReplay(data: unknown): Replay {
     previous=frame.time;
   }
   if(r.frames[0].time!==0||r.frames.at(-1)!.time!==r.duration)throw new Error('Replay frames must cover time 0 through duration.');
+  validateTaskFields(r);
   return r;
+}
+const vec3=(v:unknown)=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
+function validateTaskFields(r:Replay){
+  if(r.task!==undefined&&typeof r.task!=='string')throw new Error('Replay task must be text.');
+  if(r.events!==undefined){if(!Array.isArray(r.events)||r.events.some(e=>!e||!Number.isFinite(e.time)||typeof e.label!=='string'))throw new Error('Replay events need finite times and text labels.');}
+  if(r.verdict!==undefined){const v=r.verdict;if(!v||!['completed','partial','failed'].includes(v.status)||typeof v.summary!=='string'||!Array.isArray(v.steps)||v.steps.some(s=>!s||typeof s.name!=='string'||!['done','failed','skipped'].includes(s.status)||(s.note!==undefined&&typeof s.note!=='string'))||(v.planner!==undefined&&typeof v.planner!=='string'))throw new Error('Replay verdict is malformed.');}
+  if(r.landmarks!==undefined){if(!Array.isArray(r.landmarks)||r.landmarks.some(l=>!l||typeof l.id!=='string'||typeof l.label!=='string'||typeof l.kind!=='string'||!vec3(l.position)||!vec3(l.size)))throw new Error('Replay landmarks are malformed.');}
+}
+/** Latest event whose time is at or before `time`. */
+export function currentEvent(replay:Pick<Replay,'events'>|null|undefined,time:number):ReplayEvent|null{
+  let best:ReplayEvent|null=null;
+  for(const e of replay?.events??[])if(e.time<=time+1e-6&&(!best||e.time>=best.time))best=e;
+  return best;
 }

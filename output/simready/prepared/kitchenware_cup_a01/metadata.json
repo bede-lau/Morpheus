@@ -1,0 +1,29 @@
+{
+  "id": "kitchenware_cup_a01",
+  "category": "cup",
+  "name": "kitchenware cup a01",
+  "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/kitchenware_cup_a01",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA SimReady Assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "dimensions": [
+    0.08067332208156586,
+    0.08067332208156586,
+    0.1256339097402721
+  ],
+  "meshCount": 1,
+  "triangles": 3200,
+  "units": "m",
+  "upAxis": "Z",
+  "sourceMetersPerUnit": 1.0,
+  "sourceUpAxis": "Z",
+  "sourceCenterMeters": [
+    0.0,
+    -7.450580596923828e-09,
+    0.06281695542821142
+  ],
+  "sourceRoot": "simready_usd/sm_kitchenware_cup_a01_01.usd",
+  "geometrySha256": "d0fab7cdb6b9289b4e266c2e77e17512cec790404678ab8cfc1c96528a5fe3c9",
+  "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+  "physicsStatus": "not_validated"
+}

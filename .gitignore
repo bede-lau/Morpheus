@@ -11,7 +11,19 @@ public/samples/*.spz
 public/samples/*.ply
 public/samples/*.glb
 public/samples/*.splat
-output/
+# Derived outputs are ignored except the demo fixtures needed on a fresh clone:
+# the kitchen collision scene, planned rollouts, and the prepared SimReady meshes (CC-BY-4.0).
+output/*
+!output/kitchen/
+output/kitchen/*
+!output/kitchen/scene.json
+!output/kitchen/spawn-candidates.json
+!output/kitchen/replays/
+!output/simready/
+output/simready/*
+!output/simready/catalogue.json
+!output/simready/scene.json
+!output/simready/prepared/
 .DS_Store
 .openai/
 COORDINATION.md
