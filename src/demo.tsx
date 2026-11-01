@@ -42,7 +42,7 @@ class Show {
   viewer:RoomViewer; data:Data|null=null; t=0; paused=false; morphing=false; disposed=false;
   private events:{at:number;fn:()=>void;done:boolean}[]=[]; private raf=0; private last=0; private publish=0; private logId=0;
   private home={pos:new THREE.Vector3(),target:new THREE.Vector3()}; private tween:{from:[THREE.Vector3,THREE.Vector3];to:[THREE.Vector3,THREE.Vector3];start:number;dur:number}|null=null;
-  private reveal:ReturnType<typeof createSphereReveal>|null=null; private revealStart=0; private revealRadius=1; private center=new THREE.Vector3();
+  private reveal:ReturnType<typeof createSphereReveal>|null=null; private revealStart=0; private revealRadius=1; private center=new THREE.Vector3(); private footprint:{min:THREE.Vector3;max:THREE.Vector3}|null=null;
   private scan:ReturnType<typeof createScanPlane>|null=null; private rings:ReturnType<typeof createRing>[]=[];
   private assets=new Map<string,Promise<THREE.Group>>(); private swaps:{flash:ReturnType<typeof createFlash>;item:Replacement}[]=[];
   private saved:SavedObjects|null=null; layer:SavedObjectLayer|null=null; private layerReady=false;
@@ -80,6 +80,7 @@ class Show {
     this.reveal=createSphereReveal(v.splat!,this.center);this.revealStart=performance.now();v.sourceRoot.visible=true;
     // Frame the cropped room footprint (not exterior samples) and keep it clear of the right-hand console.
     const fb=roomFootprintBounds(v.points,.008),shift=new THREE.Vector3((fb.min[0]+fb.max[0])/2,(fb.min[1]+fb.max[1])/2,v.orbit.target.z).sub(v.orbit.target);
+    this.footprint={min:new THREE.Vector3(...fb.min),max:new THREE.Vector3(...fb.max)};
     this.home.target.copy(v.orbit.target).add(shift);
     this.home.pos.copy(this.home.target).add(v.camera.position.clone().sub(v.orbit.target).multiplyScalar(.82));
     const offset=this.home.pos.clone().sub(this.home.target).applyAxisAngle(new THREE.Vector3(0,0,1),-.55).multiplyScalar(1.75);offset.z*=1.25;
@@ -96,6 +97,7 @@ class Show {
     v.setCrop(true);v.setCutaway(true);v.setLayers(true,false,false);
     // Frame the cropped room footprint, not the outer bounds: web splats carry floaters that blow up the full extent.
     const fb=roomFootprintBounds(v.points,.02),fc=new THREE.Vector3(...fb.center),fs=new THREE.Vector3(...fb.size),radius=Math.max(fs.x,fs.y,.5);
+    this.footprint={min:new THREE.Vector3(...fb.min),max:new THREE.Vector3(...fb.max)};
     this.center.set(fc.x,fc.y,fb.min[2]);this.revealRadius=Math.hypot(fs.x,fs.y,fs.z)*.62;
     this.reveal=createSphereReveal(v.splat!,this.center);this.revealStart=performance.now();v.sourceRoot.visible=true;
     const dir=v.camera.position.clone().sub(v.orbit.target).normalize();
@@ -120,7 +122,19 @@ class Show {
   }
   cameraTo(pos:THREE.Vector3,target:THREE.Vector3,dur:number,from?:[THREE.Vector3,THREE.Vector3]){const c=this.viewer.camera,o=this.viewer.orbit;if(from){c.position.copy(from[0]);o.target.copy(from[1])}
     this.tween={from:[c.position.clone(),o.target.clone()],to:[pos.clone(),target.clone()],start:performance.now(),dur:dur*1000}}
-  private lookAt(p:number[],dist:number,dur=1.1){const h=this.home.pos.clone().sub(this.home.target).normalize(),dir=new THREE.Vector3(h.x*.55,h.y*.55,1).normalize(),target=new THREE.Vector3(...p);this.cameraTo(target.clone().add(dir.multiplyScalar(dist)),target,dur)}
+  /** Frame an object from inside the room: approach from the object toward the room centre (blended with the home heading), raised about 50°
+   *  (near top-down against a wall), with the eye clamped inside the cropped footprint so wall splats never sit between the camera and the object. */
+  private lookAt(p:number[],dist:number,dur=1.1){
+    const target=new THREE.Vector3(...p),h=this.home.pos.clone().sub(this.home.target).setZ(0).normalize(),fp=this.footprint;
+    const inward=fp?new THREE.Vector3((fp.min.x+fp.max.x)/2-target.x,(fp.min.y+fp.max.y)/2-target.y,0):new THREE.Vector3();
+    const flat=inward.lengthSq()>.04?inward.normalize().multiplyScalar(.7).add(h.multiplyScalar(.3)).normalize():h;
+    // Objects against a wall get a steeper, more top-down pitch so the frame holds the surface rather than the blurred wall behind it.
+    const edge=fp?Math.min(target.x-fp.min.x,fp.max.x-target.x,target.y-fp.min.y,fp.max.y-target.y):Infinity,k=edge<.9?.38:.8;
+    const dir=new THREE.Vector3(flat.x*k,flat.y*k,1).normalize(),pos=target.clone().add(dir.multiplyScalar(dist));
+    // Keep the eye inside the cropped footprint (walls are cut away above ~65% height, so from inside-and-above nothing occludes the object).
+    const margin=.35;if(fp){pos.x=Math.min(fp.max.x-margin,Math.max(fp.min.x+margin,pos.x));pos.y=Math.min(fp.max.y-margin,Math.max(fp.min.y+margin,pos.y));}
+    this.cameraTo(pos,target,dur);
+  }
   startMorph(){if(!this.data||this.morphing)return;this.morphing=true;this.t=0;this.build();this.set(u=>({...u,stage:'morph',phase:0,logs:[]}))}
   togglePause(){this.paused=!this.paused;this.set(u=>({...u,paused:this.paused}))}
   next(){if(!this.morphing)return;const n=START.find(s=>s>this.t+.01);if(n!==undefined)this.t=n}
