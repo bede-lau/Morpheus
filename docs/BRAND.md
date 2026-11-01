@@ -1,6 +1,6 @@
 # Morpheus brand asset
 
-The approved logo is `src/assets/morpheus-gradient-logo.png`. The user approved this gradient concept on 1 November 2026. It was generated with the built-in image tool; no API key or external paid job was used. The original raster is preserved unchanged. `src/brand.tsx` controls its compact and landing-page display sizes, and the README references the same file for GitHub.
+The approved original is `src/assets/morpheus-gradient-logo.png`; its transparent cutout is `src/assets/morpheus-gradient-logo-transparent.png`. The user approved the gradient concept on 1 November 2026. Both images were generated using the built-in image tool; no API key or external paid job was used. The original raster is preserved unchanged. `src/brand.tsx` displays the original colours through the cutout's alpha mask; dark headers render the wordmark in white for contrast. The README and browser icon use the transparent cutout directly.
 
 The symbol uses folded ribbons and an open portal to suggest movement between physical and simulated space. The palette moves from turquoise through blue and violet with a coral highlight. The exact wordmark is `morpheus`.
 
