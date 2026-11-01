@@ -1,10 +1,6 @@
 <p align="center"><img src="src/assets/morpheus-gradient-logo-transparent.png" width="480" alt="Morpheus — gradient ribbon logo" /></p>
 
 <p align="center">
-  <img src="docs/media/banner.jpg" alt="Morpheus" width="100%"/>
-</p>
-
-<p align="center">
   <b>Scan your room. Morph it into a simulation. Watch real robots do your chores in it.</b><br/>
   <sub>Gaussian splat → collision world → SimReady objects → planned robot rollouts → an honest verdict on which robot fits your home.</sub>
 </p>
