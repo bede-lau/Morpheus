@@ -7,7 +7,9 @@ import type { Vec3 } from './types';
 
 /** Eye height above the robot body origin (docs/TASKS.md robot profiles). */
 export const EYE_HEIGHT:Record<RobotId,number>={stretch:1.30,go2:.33,g1:1.22};
-export const EYE_FORWARD=.12, EYE_PITCH=12*Math.PI/180, POV_FOV=70;
+/** Camera offset forward of the body origin: in front of each model's head (Go2's head reaches 0.33 m ahead of its origin). */
+export const EYE_FORWARD:Record<RobotId,number>={stretch:.12,go2:.36,g1:.12};
+export const EYE_PITCH=12*Math.PI/180, POV_FOV=70;
 export type InsetLayout={widthFraction:number;aspect:number;right:number;bottom:number};
 /** Default inset layout in CSS pixels / fractions; the user can drag and resize it (workspace.tsx). */
 export const POV_INSET:InsetLayout={widthFraction:.34,aspect:16/10,right:14,bottom:104};
@@ -15,8 +17,8 @@ export const INSET_MIN_FRACTION=.18, INSET_MAX_FRACTION=.7;
 /** Yaw 0 faces +Y (Z-up). */
 export function forward(yaw:number):Vec3{return [-Math.sin(yaw),Math.cos(yaw),0]}
 export function eyePose(robot:RobotId,position:Vec3,yaw:number){
-  const f=forward(yaw),h=EYE_HEIGHT[robot];
-  const eye:Vec3=[position[0]+f[0]*EYE_FORWARD,position[1]+f[1]*EYE_FORWARD,position[2]+h];
+  const f=forward(yaw),h=EYE_HEIGHT[robot],d=EYE_FORWARD[robot];
+  const eye:Vec3=[position[0]+f[0]*d,position[1]+f[1]*d,position[2]+h];
   const c=Math.cos(EYE_PITCH),s=Math.sin(EYE_PITCH);
   const direction:Vec3=[f[0]*c,f[1]*c,-s];
   return {eye,direction,target:[eye[0]+direction[0],eye[1]+direction[1],eye[2]+direction[2]] as Vec3};

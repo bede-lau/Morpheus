@@ -46,10 +46,10 @@ ROBOT_IDS = ("stretch", "go2", "g1")
 HEADLINE = "wipe-the-table-and-move-the-bowl-to-the-sink"   # copied to rollouts/kitchen/default
 ACTIONS = ("navigate", "wipe", "fill", "pick", "place")
 MANIPULATION = {"wipe", "fill", "pick", "place"}
-# Visual arm model shared with src/robot-scene.ts (Stretch): the arm group sits at robot-local
-# (-0.13, 0.05) and its gripper tip is 0.58 * (0.65 + armExtension) m further along local +Y.
-ARM_MOUNT = (-0.13, 0.05)
-ARM_LINK, ARM_BASE = 0.58, 0.65
+# Stretch 3 arm shared with src/replay.ts STRETCH_ARM: mounted on the mast at robot-local (-0.135, -0.02) and
+# telescoping along local +X (the robot's right side; yaw 0 faces +Y). Grasp centre x = -0.135 + 0.52 * (1.058 + armExtension).
+ARM_MOUNT = (-0.135, -0.02)
+ARM_LINK, ARM_BASE = 0.52, 1.058
 GRIPPER = 0.20        # fingers close on a rim up to this far past the telescoping arm (object picks only)
 PLACE_INSET = 0.12    # objects are set down this far inside the destination edge nearest the robot
 CARRY_OFFSET = [0.0, 0.0, 0.05]
@@ -548,12 +548,13 @@ def arm_pose_for(pos, target):
     """(yaw, armExtension) putting the visual Stretch gripper tip over target xy (see ARM_MOUNT)."""
     v = np.array(target[:2], float) - np.array(pos[:2], float)
     dist = float(np.hypot(*v))
-    lat = -ARM_MOUNT[0]
-    fwd = math.sqrt(max(dist * dist - lat * lat, 1e-6))
-    # yaw rotates local (ARM_MOUNT[0], fwd) onto v; yaw 0 maps local +Y to world +Y.
-    yaw = math.atan2(v[1], v[0]) - math.atan2(fwd, ARM_MOUNT[0])
-    ext = (fwd - ARM_MOUNT[1]) / ARM_LINK - ARM_BASE
-    return wrap(yaw), min(1.0, max(0.0, ext))
+    # local tip = (ARM_MOUNT[0] + L, ARM_MOUNT[1]) with L = ARM_LINK * (ARM_BASE + ext); choose L so |tip| = dist.
+    along = math.sqrt(max(dist * dist - ARM_MOUNT[1] ** 2, 1e-6)) - ARM_MOUNT[0]
+    ext = min(1.0, max(0.0, along / ARM_LINK - ARM_BASE))
+    tip_x = ARM_MOUNT[0] + ARM_LINK * (ARM_BASE + ext)
+    # yaw rotates the local tip onto v; yaw 0 maps local +Y to world +Y (standard rotation of local xy).
+    yaw = math.atan2(v[1], v[0]) - math.atan2(ARM_MOUNT[1], tip_x)
+    return wrap(yaw), ext
 
 
 def place_point(world, lm, pos, half_height):
@@ -687,7 +688,8 @@ def simulate(world, robot, task, steps):
                 held = None
                 results.append({"name": title, "status": "done", "note": f"Set down {PLACE_INSET:.2f} m inside the edge at ({target[0]:.2f}, {target[1]:.2f}, {target[2]:.2f})."})
             continue
-        tl.turn_to(yaw_towards(*(np.array(lm["position"][:2]) - tl.pos)))
+        # Stretch works side-on: its arm reaches to the right, so yaw comes from the arm model, not from facing the target.
+        tl.turn_to(arm_pose_for(tl.pos, lm["position"])[0] if robot == "stretch" else yaw_towards(*(np.array(lm["position"][:2]) - tl.pos)))
         ext = arm_target(robot, arrival["distance"])
         if step["action"] == "wipe":
             tl.event(f"Wiping the {name}")

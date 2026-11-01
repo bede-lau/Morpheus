@@ -56,12 +56,14 @@ export function currentEvent(replay:Pick<Replay,'events'>|null|undefined,time:nu
 }
 
 /** Robot-local Stretch arm model (Z-up, +Y forward): arm group origin and gripper tip distance per unit arm scale. */
-export const STRETCH_ARM={mount:[-.13,.05] as [number,number],height:.98,link:.58,baseScale:.65,liftWindow:.8};
+/** Stretch 3 arm (src/robots/stretch.json): mounted on the mast at local (-0.135, -0.02), telescoping along local +X (the robot's right side,
+ * yaw 0 faces +Y); grasp centre at mount.x + link*(baseScale+ext) and tipDrop below the arm height. */
+export const STRETCH_ARM={mount:[-.135,-.02] as [number,number],height:.98,link:.52,baseScale:1.058,tipDrop:.086,liftWindow:.8};
 const smooth=(x:number)=>{const t=Math.max(0,Math.min(1,x));return t*t*(3-2*t)};
 /** World position of the Stretch gripper tip for a robot pose, arm extension and lift height above the base. */
 export function stretchTip(position:Vec3,yaw:number,armExtension:number,lift=STRETCH_ARM.height):Vec3{
-  const x=STRETCH_ARM.mount[0],y=STRETCH_ARM.mount[1]+STRETCH_ARM.link*(STRETCH_ARM.baseScale+armExtension),c=Math.cos(yaw),s=Math.sin(yaw);
-  return [position[0]+x*c-y*s,position[1]+x*s+y*c,position[2]+lift];
+  const x=STRETCH_ARM.mount[0]+STRETCH_ARM.link*(STRETCH_ARM.baseScale+armExtension),y=STRETCH_ARM.mount[1],c=Math.cos(yaw),s=Math.sin(yaw);
+  return [position[0]+x*c-y*s,position[1]+x*s+y*c,position[2]+lift-STRETCH_ARM.tipDrop];
 }
 /** Arm lift height (above the base) so the gripper dips to each pick/place height around pickTime/placeTime. */
 export function stretchLift(carried:CarriedObject[]|undefined,time:number,baseZ=0,origins?:Record<string,Vec3>):number{
@@ -71,7 +73,7 @@ export function stretchLift(carried:CarriedObject[]|undefined,time:number,baseZ=
     for(const [t,z] of [[c.pickTime,pickZ],[c.placeTime,c.placeAt[2]]] as [number,number|undefined][]){
       if(z===undefined)continue;
       const weight=time<=t?smooth((time-(t-w))/w):1-smooth((time-t)/w);
-      if(weight>0)lift=lift+(z-c.carryOffset[2]-baseZ-lift)*weight;
+      if(weight>0)lift=lift+(z-c.carryOffset[2]-baseZ+STRETCH_ARM.tipDrop-lift)*weight;
     }
   }
   return lift;

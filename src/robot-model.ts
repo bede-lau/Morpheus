@@ -19,7 +19,9 @@ export function loadRobotModel(id:RobotId){
   if(!pending){
     pending=(async()=>{
       const [gltf,meta]=await Promise.all([new GLTFLoader().loadAsync(MODEL_URLS[id].glb),fetch(MODEL_URLS[id].meta).then(r=>{if(!r.ok)throw new Error(`Robot metadata ${r.status}`);return r.json() as Promise<RobotMeta>})]);
-      gltf.scene.traverse(o=>{if(o instanceof THREE.Mesh){o.userData.shared=true;const materials=Array.isArray(o.material)?o.material:[o.material];for(const m of materials)if(m instanceof THREE.MeshStandardMaterial){m.metalness=Math.min(m.metalness,.45);m.roughness=Math.max(m.roughness,.45)}}});
+      // Materials are shared between meshes: tone each one once for the viewer's strong lights.
+      const toned=new Set<THREE.Material>();
+      gltf.scene.traverse(o=>{if(o instanceof THREE.Mesh){o.userData.shared=true;const materials=Array.isArray(o.material)?o.material:[o.material];for(const m of materials)if(m instanceof THREE.MeshStandardMaterial&&!toned.has(m)){toned.add(m);m.color.multiplyScalar(.72);m.metalness=Math.min(m.metalness,.3);m.roughness=Math.max(m.roughness,.6)}}});
       return {scene:gltf.scene,meta};
     })();
     cache.set(id,pending);pending.catch(()=>cache.delete(id));

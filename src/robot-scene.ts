@@ -79,8 +79,8 @@ export class RobotScene {
     if(id==='stretch'){this.arm.position.set(STRETCH_ARM.mount[0],STRETCH_ARM.mount[1],STRETCH_ARM.height);this.robot.add(this.arm);}
     const placeholder=new THREE.Mesh(new THREE.CylinderGeometry(PLACEHOLDER_RADIUS[id],PLACEHOLDER_RADIUS[id],.02,32),new THREE.MeshBasicMaterial({color:0x8fa39c,transparent:true,opacity:.35}));placeholder.rotation.x=Math.PI/2;placeholder.position.z=.02;this.robot.add(placeholder);
     const halo=new THREE.Mesh(new THREE.RingGeometry(.32,.35,48),new THREE.MeshBasicMaterial({color:0x12936d,transparent:true,opacity:.65,side:THREE.DoubleSide}));halo.position.z=.015;halo.userData.decoration=true;this.robot.add(halo);
-    // Eye marker at the POV camera origin (0.12 m forward along local +Y, eye height above origin).
-    this.eye.position.set(0,EYE_FORWARD,EYE_HEIGHT[id]);const lens=new THREE.Mesh(new THREE.SphereGeometry(.028,16,12),new THREE.MeshBasicMaterial({color:0x14d39a}));this.eye.add(lens);
+    // Eye marker at the POV camera origin (EYE_FORWARD along local +Y, eye height above origin).
+    this.eye.position.set(0,EYE_FORWARD[id],EYE_HEIGHT[id]);const lens=new THREE.Mesh(new THREE.SphereGeometry(.028,16,12),new THREE.MeshBasicMaterial({color:0x14d39a}));this.eye.add(lens);
     const ring=new THREE.Mesh(new THREE.TorusGeometry(.04,.008,8,24),new THREE.MeshBasicMaterial({color:0x253236}));ring.rotation.x=Math.PI/2;this.eye.add(ring);this.robot.add(this.eye);
     // Real meshes (metres, Z-up, +Y forward, lowest point at z=0) replace the placeholder once loaded. Node tests have no DOM/fetch.
     if(typeof document==='undefined')return;

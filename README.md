@@ -1,162 +1,386 @@
 <p align="center"><img src="public/brand/morpheus-glasses.png" width="300" alt="Morpheus — green sunglasses logo" /></p>
 
-# Morpheus
+<p align="center">
+  <img src="docs/media/banner.jpg" alt="Morpheus" width="100%"/>
+</p>
 
-**Which robot is best for my home?** Morpheus captures a room as a Gaussian splat, turns it into a simulation-ready environment, swaps scanned objects for real NVIDIA SimReady assets, and then lets three different robots attempt the same household task inside *your* room so you can pick the one that fits.
+<h1 align="center">M O R P H E U S</h1>
 
-Built during the DevDay Community Hackathon in London on 1 November 2026 with Codex. See the [90-second demo outline](docs/DEMO.md), the [task-stage contract](docs/TASKS.md), the [environment handoff contract](docs/CONTRACT.md), the [read API](docs/READ_API.md), and [sample asset provenance](docs/ASSETS.md).
+<p align="center">
+  <b>Scan your room. Morph it into a simulation. Watch real robots do your chores in it.</b><br/>
+  <sub>Gaussian splat → collision world → SimReady objects → planned robot rollouts → an honest verdict on which robot fits your home.</sub>
+</p>
 
-## The pipeline
+<p align="center">
+  <img alt="Three.js" src="https://img.shields.io/badge/three.js-0.180-000?style=flat-square&logo=threedotjs"/>
+  <img alt="Spark" src="https://img.shields.io/badge/gaussian%20splats-Spark%202.4-19c37d?style=flat-square"/>
+  <img alt="MuJoCo" src="https://img.shields.io/badge/MuJoCo-3.17-0b3d31?style=flat-square"/>
+  <img alt="OpenAI Decisions" src="https://img.shields.io/badge/OpenAI-Decisions%20%C2%B7%20gpt--6--luna-111?style=flat-square&logo=openai"/>
+  <img alt="Terra" src="https://img.shields.io/badge/vision-gpt--6.1--terra-111?style=flat-square&logo=openai"/>
+  <img alt="Codex" src="https://img.shields.io/badge/built%20with-Codex-111?style=flat-square&logo=openai"/>
+  <img alt="SimReady" src="https://img.shields.io/badge/assets-NVIDIA%20SimReady-76b900?style=flat-square&logo=nvidia&logoColor=white"/>
+  <img alt="Tests" src="https://img.shields.io/badge/tests-43%20TS%20%C2%B7%2034%20Py-19c37d?style=flat-square"/>
+</p>
 
-| Stage | What happens | Where |
+<p align="center">
+  <img src="docs/media/03-luna.jpg" alt="Luna Decisions classifying a scanned bowl against the NVIDIA SimReady catalogue" width="100%"/>
+</p>
+
+---
+
+## ▍The problem
+
+Robots are about to move into homes. The question stops being *"can a robot do chores?"* and becomes **"which robot can do *my* chores, in *my* kitchen?"** Spec sheets can't answer that. Your counter height, your aisle width and where your sink actually is can.
+
+Morpheus takes a phone-grade capture of a room and turns it into something a robot can be dropped into. Then it lets several robots attempt the same household task inside it, from the robot's own camera, and records which steps each one could and couldn't do.
+
+## ▍The pipeline at a glance
+
+```mermaid
+flowchart LR
+    classDef input fill:#0b0f0e,stroke:#19c37d,color:#e8f3ec,stroke-width:1.5px
+    classDef stage fill:#ffffff,stroke:#111,color:#111,stroke-width:1px
+    classDef model fill:#111,stroke:#111,color:#fff,stroke-width:1px
+    classDef output fill:#19c37d,stroke:#0b3d31,color:#04120d,stroke-width:1.5px
+
+    SPZ[("Gaussian splat<br/>500k gaussians<br/>.spz / .ply")]:::input
+    GLB[("Companion mesh<br/>collider .glb")]:::input
+
+    subgraph S1["01 · SCAN → ENVIRONMENT"]
+      direction TB
+      A1["Floor-plane fit<br/>+ surface sampling"]:::stage
+      A2["Box collider proposal<br/>111 static geoms"]:::stage
+      A3["MuJoCo compile<br/>+ drop probe"]:::stage
+      A1 --> A2 --> A3
+    end
+
+    subgraph S2["02 · OBJECTS → SIMREADY"]
+      direction TB
+      B1["Render 16 orbit views"]:::stage
+      B2["Detect tableware<br/>per view"]:::model
+      B3["Raycast into splat<br/>dedupe in 3D"]:::stage
+      B4["Classify + rank<br/>catalogue candidates"]:::model
+      B5["Mask splats<br/>drop in USD→GLB mesh"]:::stage
+      B1 --> B2 --> B3 --> B4 --> B5
+    end
+
+    subgraph S3["03 · TASK → ROBOTS"]
+      direction TB
+      C1["Room interior<br/>from mesh grid"]:::stage
+      C2["Landmarks<br/>table · sink · entrance · objects"]:::stage
+      C3["A* on inflated<br/>occupancy grid"]:::stage
+      C4["Scripted manipulation<br/>wipe · pick · carry · place"]:::stage
+      C5["Per-step feasibility"]:::model
+      C1 --> C2 --> C3 --> C4 --> C5
+    end
+
+    SPZ --> S1
+    GLB --> S1
+    S1 --> S2 --> S3
+    S3 --> V{{"Verdict per robot<br/>Stretch · Go2 · Unitree G1"}}:::output
+```
+
+| Stage | Model | What it decides |
 | --- | --- | --- |
-| 1. Scan → environment | Load a Gaussian splat (`.spz`/`.ply`/`.splat`) with an optional companion mesh, calibrate scale, propose editable box colliders, validate in native MuJoCo, export MJCF + manifest. | `/?view=builder`, `pipeline/export.py`, `pipeline/server.py` |
-| 2. Objects → SimReady | Select movable objects in the scan, identify them with the OpenAI Decisions API (`gpt-6-luna`), rank candidates from [nvidia/simready-assets](https://huggingface.co/datasets/nvidia/simready-assets), hide the original splats and drop in the real mesh. | `/?view=objects`, `pipeline/object_server.py`, `pipeline/simready.py` |
-| 3. Task → robot comparison | Spawn a robot at the kitchen door, tell it "wipe the table" or "fill a glass of water", plan a collision-free rollout over the reconstructed geometry, watch it from the room and from the robot's own camera, and compare Stretch, Go2 and Unitree G1 verdicts side by side. | `/` (demo) and `/?view=workspace`, `pipeline/task_planner.py`, `pipeline/landmarks.py`, `rollouts/kitchen/` |
+| **Terra vision** | `gpt-6.1-terra` via the Responses API, or `gpt-6-astra` subagents via `codex exec` | Which pixels in each rendered view are a plate, bowl, mug, cup, glass or spoon |
+| **Luna decisions** | `gpt-6-luna` via `POST /v1/decisions` | The object's category (with probabilities), handle/shallow predicates, and a 0–3 match score for every catalogue candidate |
+| **Feasibility** | `gpt-6-luna` predicates | Whether each manipulation step is plausible for the chosen robot body |
 
-Pre-rendered rollouts for both demo tasks and all three robots are committed under `rollouts/kitchen/` so the task stage plays on a fresh clone without any API key. The `OPENAI_API_KEY` in `environment-pipeline/.env` is used only for the Decisions API (`gpt-6-luna`): object matching in stage 2 and per-step feasibility notes in stage 3. Language-model reasoning (step plans, object spotting in rendered views) comes from the Codex CLI agents and is handed to the scripts as JSON (`--steps`, `detections.json`); without any of that, deterministic rules run and the verdict says `planner: "rules"`.
+---
 
-## What works
+## ▍The demo
 
-- Open the synthetic reference kitchen, or import a Gaussian `.spz`, `.ply`, or `.splat`, optionally alongside an aligned `.glb` companion mesh.
-- Inspect the visual scan, reference mesh, and collision layer; select the source up-axis and calibrate scale from a known distance.
-- Generate editable obstacle columns from sampled geometry. A companion mesh is preferred; splat-center proposals are a rougher fallback.
-- Select, move, resize, rotate, rename, add, or remove box colliders. Save and reopen the collision manifest.
-- Export `environment.xml`, `scene.xml`, `scene.json`, `validation.json`, and integration notes in a ZIP.
-- With the local Python service running, compile the exported scene in native MuJoCo and run a sphere-drop floor-contact probe.
-- Replace selected scan regions with converted NVIDIA SimReady meshes, ranked by the Decisions API when a key is configured, and export a MuJoCo object scene.
-- Give a robot a natural-language task; the planner labels landmarks (table, counter, sink, door) from the collision geometry, plans an A* route on an inflated occupancy grid, scripts the manipulation, and records an honest per-robot verdict.
-- Watch the rollout from an orbit camera and from the robot's point of view, with event captions, and compare all three robots on the same task.
+The app opens straight into the show. Every number on screen is read from data recorded in this repository: the scan, the terra detections, the luna traces, the SimReady meshes, the MuJoCo report and the planned rollouts.
 
-## Local setup
+<table>
+<tr>
+<td width="50%"><img src="docs/media/00-bloom.jpg" alt="Splat bloom-in"/><br/><sub><b>00 · BLOOM.</b> Click the kitchen. Half a million gaussians reveal through an expanding sphere mask while the camera dollies in.</sub></td>
+<td width="50%"><img src="docs/media/01-scan.jpg" alt="Scan sweep"/><br/><sub><b>01 · SCAN.</b> Floor plane fitted on a tilted capture, 90k surface samples, room crop and cutaway.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/02-terra.jpg" alt="Terra contact sheet"/><br/><sub><b>02 · TERRA VISION.</b> Sixteen orbit renders, one vision request each. Brackets are the model's own pixel detections.</sub></td>
+<td><img src="docs/media/03-luna.jpg" alt="Luna decisions card"/><br/><sub><b>03 · LUNA DECISIONS.</b> Category probabilities, then every NVIDIA candidate scored. Only matches ≥ 0.5 / 3 are accepted.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/media/05-carry.jpg" alt="Stretch carrying the SimReady bowl"/><br/><sub><b>06 · ROBOTS.</b> Stretch carries the swapped-in SimReady bowl to the sink. The inset is the robot's own camera.</sub></td>
+<td><img src="docs/media/06-robots.jpg" alt="Verdict"/><br/><sub><b>VERDICT.</b> Six of six steps completed. Run Go2 and G1 on the same chore and the verdicts stack up side by side.</sub></td>
+</tr>
+</table>
 
-Tested development tools: Node.js 24, Python 3.12, and MuJoCo 3.17.0. Use a desktop browser with WebGL2; Chrome is the primary demo target. No OpenAI API key is required to run this version.
+```mermaid
+sequenceDiagram
+    autonumber
+    actor U as Presenter
+    participant D as Demo page (/)
+    participant V as RoomViewer<br/>Three.js + Spark
+    participant E as Env API :8000
+    participant O as Object API :8001
+    participant R as RobotScene + POV
 
-From the repository root:
+    U->>D: click "Rustic kitchen"
+    D->>E: GET /api/environments/kitchen
+    E-->>D: scene · validation · splat/mesh URLs · world transform
+    D->>V: load splat + mesh, applyWorldTransform, crop, cutaway
+    V-->>U: sphere-mask bloom-in
+    U->>D: MORPH TO SIM
+    D->>V: 01 scan sweep (floor → cutaway)
+    D->>D: 02 replay terra detections (/discovery/*.json)
+    D->>O: GET /api/objects/scene
+    O-->>D: replacements + luna Decisions traces
+    D->>D: 03 animate category bars + candidate scores
+    D->>V: 04 SavedObjectLayer: mask splats, scale-in SimReady GLBs
+    D->>V: 05 colliders + MuJoCo stamp
+    Note over D,U: waits — nothing moves until a robot is chosen
+    U->>D: pick robot + task → RUN TASK
+    D->>E: GET /api/tasks/{slug}/{robot}
+    E-->>D: replay · events · verdict · carried[]
+    D->>R: play 10 Hz frames, carry bowl on gripper, render POV inset
+    R-->>U: captions, build log, verdict card
+```
+
+**Controls:** `Space` pause / start · `→` next phase · `R` restart. In the workspace, `F` toggles a creative-mode fly camera (WASD, Space/Shift, mouse look, wheel for speed).
+
+---
+
+## ▍Architecture
+
+```mermaid
+flowchart TB
+    classDef fe fill:#ffffff,stroke:#111,color:#111
+    classDef be fill:#0b0f0e,stroke:#19c37d,color:#e8f3ec
+    classDef data fill:#f4f6f5,stroke:#9aa5a2,color:#253236,stroke-dasharray:3 3
+    classDef ext fill:#111,stroke:#111,color:#fff
+
+    subgraph Browser["Browser · Vite 7 · React 19 · Three.js 0.180 · Spark 2.4"]
+      direction LR
+      DEMO["/ · demo.tsx<br/>morph-to-sim show"]:::fe
+      WS["?view=workspace<br/>tasks · POV · compare · fly cam"]:::fe
+      OBJ["?view=objects<br/>select · identify · replace"]:::fe
+      BLD["?view=builder<br/>colliders · scale · export"]:::fe
+      CORE["viewer.ts · cutaway.ts · pov.ts · fly.ts<br/>robot-scene.ts · robot-model.ts · saved-objects.ts"]:::fe
+      DEMO & WS & OBJ & BLD --> CORE
+    end
+
+    subgraph Py["Python services"]
+      direction LR
+      SRV["pipeline.server :8000<br/>environments · replays · tasks · validate · export"]:::be
+      OS["pipeline.object_server :8001<br/>catalogue · match · scene · assets"]:::be
+      PLAN["task_planner · landmarks · room_mesh"]:::be
+      SIM["simready · USD → GLB/OBJ"]:::be
+      SRV --> PLAN
+      OS --> SIM
+    end
+
+    subgraph Data["Committed data"]
+      direction LR
+      SCN[("output/kitchen/scene.json<br/>111 colliders")]:::data
+      ROLL[("rollouts/kitchen/*<br/>3 tasks × 3 robots")]:::data
+      SR[("output/simready/<br/>prepared meshes + scene")]:::data
+      DISC[("public/discovery/<br/>views + detections")]:::data
+      RB[("src/robots/*.glb<br/>MuJoCo Menagerie")]:::data
+    end
+
+    HF[["HuggingFace<br/>nvidia/simready-assets"]]:::ext
+    OAI[["OpenAI<br/>Decisions · Responses"]]:::ext
+    CDX[["Codex CLI<br/>codex exec subagents"]]:::ext
+    MJ[["MuJoCo 3.17"]]:::ext
+
+    Browser -- "/api (Vite proxy)" --> SRV
+    Browser -- "/api/objects" --> OS
+    SRV --- SCN & ROLL
+    OS --- SR
+    CORE --- RB
+    DEMO --- DISC
+    SIM --> HF
+    OS --> OAI
+    PLAN --> OAI
+    SRV --> MJ
+    DISC -. "scripts/discover-objects.py" .- CDX
+    DISC -. "terra backend" .- OAI
+```
+
+### Object discovery → SimReady swap
+
+```mermaid
+flowchart LR
+    classDef step fill:#fff,stroke:#111,color:#111
+    classDef ai fill:#111,stroke:#111,color:#fff
+    classDef ok fill:#19c37d,stroke:#0b3d31,color:#04120d
+    classDef no fill:#f0a429,stroke:#7a4d06,color:#1d1200
+
+    R["render<br/>16 orbit views<br/>850×874"]:::step --> D{"detect"}
+    D -->|"OPENAI_TERRA_API_KEY set<br/>≤ 4 requests in flight"| T["gpt-6.1-terra<br/>Responses API<br/>json_schema output"]:::ai
+    D -->|"no key"| A["codex exec ×16<br/>gpt-6-astra<br/>ChatGPT login"]:::ai
+    T --> J[("detections.json<br/>view · label · x · y · conf")]
+    A --> J
+    J --> RC["raycast pixel → splat<br/>reject z ∉ 0.35–1.6 m<br/>dedupe < 0.18 m"]:::step
+    RC --> L["luna Decisions<br/>1 · category choice<br/>2 · score every candidate 0–3"]:::ai
+    L -->|"score ≥ 0.5"| S["mask splats (SplatEdit BOX)<br/>place SimReady GLB<br/>merge into saved scene"]:::ok
+    L -->|"weak / unknown"| K["leave as scan<br/>log reason"]:::no
+```
+
+The API-key policy is deliberate: the main key only calls **Decisions**. Detection uses either a separate terra-only key (the code refuses any non-terra model on that path) or the Codex CLI login. Nothing above terra is ever called with an API key.
+
+### Task planning
+
+```mermaid
+flowchart TB
+    classDef s fill:#fff,stroke:#111,color:#111
+    classDef ai fill:#111,stroke:#111,color:#fff
+    classDef v fill:#19c37d,stroke:#0b3d31,color:#04120d
+
+    M["collider .glb → world frame<br/>400k surface samples"]:::s --> G["5 cm grids<br/>floor · obstacle · interior<br/>(tilted floor plane fitted)"]:::s
+    G --> LM["landmarks<br/>table · sink (reviewed) · counters<br/>entrance · SimReady objects"]:::s
+    TXT["'wipe the table and<br/>move the bowl to the sink'"] --> P{"plan"}
+    P -->|"default"| RU["rule planner"]:::s
+    P -->|"--steps plan.json"| CX["plan written by a<br/>Codex CLI agent"]:::ai
+    RU & CX --> STEPS["navigate → wipe → navigate →<br/>pick → navigate → place"]:::s
+    LM --> STEPS
+    STEPS --> AS["A* (8-connected) on grid inflated<br/>by robot radius + 5 cm, string-pulled"]:::s
+    AS --> SIM["10 Hz frames · yaw · arm extension<br/>events · carried[] pick/place times"]:::s
+    SIM --> FE["luna feasibility predicates<br/>per manipulation step"]:::ai
+    FE --> V["verdict<br/>completed · partial · failed<br/>+ the step that broke"]:::v
+```
+
+| Robot | Body | Reach | Bowl chore |
+| --- | --- | --- | --- |
+| **Stretch 3** | wheeled mobile manipulator, telescoping arm | 0.52 m, 0.15–1.10 m height | ✅ completed · 6 / 6 steps |
+| **Unitree G1** | humanoid | 0.50 m, 0.30–1.45 m height | ✅ completed |
+| **Unitree Go2** | quadruped, no arm | — | ⚠️ partial · reaches the table, cannot wipe |
+
+Every frame of every committed rollout is tested to stay inside the room interior with full footprint clearance from the mesh.
+
+---
+
+## ▍Run it
+
+Requirements: Node 24, Python 3.12, a WebGL2 browser (Chrome).
 
 ```sh
+git clone https://github.com/bede-lau/Morpheus && cd Morpheus
 npm ci
-npm run fetch-sample
+npm run fetch-sample                                    # World Labs kitchen splat + collider (checksummed)
 uv venv pipeline/.venv
 uv pip install --python pipeline/.venv/bin/python -r requirements.txt
 ```
 
-The explicit sample-fetch command downloads the publisher's test assets into `public/samples/`, checks their sizes and SHA-256 hashes, and can resume interrupted transfers. Read [the asset notes](docs/ASSETS.md) before redistributing any sample files. They are excluded from Git.
-
-Optional (stage 2 and 3 model calls): put `OPENAI_API_KEY=sk-...` in `environment-pipeline/.env`. Everything runs without it.
-
-Start the frontend in one terminal:
-
 ```sh
-npm run dev
+npm run dev                                             # http://127.0.0.1:5174
+pipeline/.venv/bin/python -m pipeline.server            # :8000  environments · tasks · MuJoCo
+pipeline/.venv/bin/python -m pipeline.object_server     # :8001  SimReady objects · Decisions
 ```
 
-Open [http://127.0.0.1:5174](http://127.0.0.1:5174). In a second terminal, start native validation:
+| URL | What |
+| --- | --- |
+| `/` | The demo: blank canvas → bloom → morph to sim → robots |
+| `/?view=workspace` | Task runner, robot POV, verdicts, compare, fly camera |
+| `/?view=objects` | Manual select → identify with Decisions → replace |
+| `/?view=builder` | Collider editing, scale calibration, MuJoCo validate/export |
+
+**No key needed to run the demo.** Rollouts, detections, Decisions traces, prepared meshes and the saved object scene are all committed. Keys only matter for producing new data:
 
 ```sh
-pipeline/.venv/bin/python -m pipeline.server
+# .env
+OPENAI_API_KEY=sk-...           # Decisions only (gpt-6-luna): matching + feasibility notes
+OPENAI_TERRA_API_KEY=sk-...     # optional, terra-class vision only
 ```
 
-Optionally, in a third terminal, start the SimReady object service (`pipeline/.venv/bin/python -m pipeline.object_server`, port 8001; prepare assets once with `python -m pipeline.simready --prepare`, which needs `requirements-assets.txt`).
-
-The service listens on `127.0.0.1:8000`; Vite proxies `/api` to it. It accepts collision manifests, not scan binaries. Check [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health) for engine availability. The server preloads MuJoCo before announcing readiness because its first native import can take several seconds.
-
-## Run the task demo
-
-The app opens on the demo at **`/`**: a blank canvas, click the kitchen, the splat blooms in, then **MORPH TO SIM** replays the real recorded pipeline (scan, terra detections, luna Decisions traces, SimReady swap, MuJoCo validation) and ends with the robots attempting the chore. See [docs/DEMO.md](docs/DEMO.md).
+### Regenerate the data
 
 ```sh
-pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all
-pipeline/.venv/bin/python -m pipeline.task_planner "fill a glass of water" --all
+# object discovery: render → detect (terra API or Codex subagents) → apply
+python3 scripts/discover-objects.py render --views 16
+python3 scripts/discover-objects.py detect             # --backend api|codex
+python3 scripts/discover-objects.py apply              # Decisions match, replace, merge-save
+
+# task rollouts for all robots
+pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table and move the bowl to the sink" --all
+pipeline/.venv/bin/python -m pipeline.task_planner "fill a glass of water" --all --steps plan.json
+
+# inspect what the planner sees
+pipeline/.venv/bin/python -m pipeline.landmarks
 ```
 
-Add `--steps plan.json` to use a step plan written by a Codex CLI agent. To let CLI agents find objects for stage 2, run `python3 scripts/discover-objects.py render --views 16`, then `python3 scripts/discover-objects.py detect` (one `codex exec` Astra subagent per view, logged in through the Codex CLI, writes `output/discovery/detections.json`), then `python3 scripts/discover-objects.py apply` (raycast, dedupe, Decisions match with a score threshold, replace, save). The committed `output/discovery/*.json` is the record of the last run: 16 views, 30 detections, 10 distinct objects, 3 confident SimReady matches.
+### Tests
 
-Add `--steps plan.json` to use a step plan written by a Codex CLI agent. To let CLI agents find objects for stage 2, run `python3 scripts/discover-objects.py render --views 16`, then `python3 scripts/discover-objects.py detect` (one `codex exec` Astra subagent per view, logged in through the Codex CLI, writes `output/discovery/detections.json`), then `python3 scripts/discover-objects.py apply` (raycast, dedupe, Decisions match with a score threshold, replace, save). The committed `output/discovery/*.json` is the record of the last run: 16 views, 30 detections, 10 distinct objects, 3 confident SimReady matches.
+```sh
+npm test                                                                   # 43 TypeScript
+pipeline/.venv/bin/python -m unittest discover -s tests -p 'test_*.py'     # 34 Python
+npm run build
+```
 
-Each run writes `rollouts/kitchen/<task-slug>/<robot>.json` and the latest plan to `output/kitchen/replays/<robot>.json`. Open the workspace at `/?view=workspace`, pick a task, pick a robot, press play. Press **F** (or the gamepad button) for a creative-mode fly camera: WASD moves, Space and Shift go up and down, drag or click-to-capture the mouse to look, scroll changes speed, Esc exits. The inset shows the robot's camera; the right panel shows the verdict and each step's outcome. **Compare robots** shows all three verdicts for the task. Rollouts are planned against the exported collision boxes and checked against the reference mesh in `src/robot-clearance.test.ts`; they are not physics simulations or trained policies.
+Coverage includes collider proposal and export, native MuJoCo floor contact, browser-vs-native MJCF parity, revision-bound replays, landmark and spawn placement, rollout-inside-room clearance, pick/carry/place timing, POV eye pose, fly-camera math and SimReady scene persistence.
 
-## Use the environment builder
+---
 
-1. Click **Open sample kitchen**, or **Import your scan**. Select an aligned GLB in the same file selection if one is available.
-2. Inspect **Scale & alignment**. The sample's metre scale is assumed, not independently measured. For a real capture, select two known surface points and enter their measured separation. Do not invent a measurement for the synthetic sample.
-3. Click **Generate collision shapes**. Compare the **Scan**, **Reference mesh**, and **Collisions** views. Correct false obstacles and inspect passageways; review is part of the workflow.
-4. Click **Validate in MuJoCo** when the local service is running. Read compilation and floor-probe results separately.
-5. Click **Export environment** and hand the ZIP to the robot-training developer. A browser-only export is schema checked and explicitly marked `unverified` for native physics.
+## ▍Repository map
 
-Local imports are processed in the browser. Native validation sends only the collision manifest to the local Python service. Loading the sample in a production build fetches its files directly from the publisher's host.
+```
+Morpheus/
+├── src/
+│   ├── demo.tsx · demo-fx.ts          morph-to-sim show (route /)
+│   ├── red-pill.tsx                   opening screen
+│   ├── workspace.tsx                  task runner UI
+│   ├── viewer.ts · cutaway.ts         Three.js + Spark room viewer, display-only crop/cutaway
+│   ├── robot-scene.ts · robot-model.ts  articulated Menagerie robots, gait, carry
+│   ├── pov.ts · fly.ts                robot camera inset, creative-mode fly cam
+│   ├── saved-objects.ts · object-scene.ts  SimReady meshes + splat masks
+│   └── robots/                        Stretch 3 · Go2 · G1 GLBs + joint sidecars
+├── pipeline/
+│   ├── server.py · read_api.py · task_api.py   :8000
+│   ├── object_server.py · simready.py          :8001, Decisions, USD → GLB
+│   ├── room_mesh.py · landmarks.py · task_planner.py
+│   └── export.py                      MJCF + validation
+├── scripts/discover-objects.py        render / detect / apply
+├── rollouts/kitchen/                  committed rollouts (3 tasks × 3 robots)
+├── output/                            scene.json, SimReady prepared meshes, discovery record
+└── docs/                              contracts, API, demo script
+```
 
-## Training handoff
+| Doc | |
+| --- | --- |
+| [docs/DEMO.md](docs/DEMO.md) | 90-second script with talking points |
+| [docs/TASKS.md](docs/TASKS.md) | Task-stage contract: robots, envelope, landmarks, carry, API policy |
+| [docs/CONTRACT.md](docs/CONTRACT.md) | Environment handoff: MJCF, manifest schema, frames, validation meaning |
+| [docs/READ_API.md](docs/READ_API.md) | HTTP routes for environments, replays and tasks |
+| [docs/ASSETS.md](docs/ASSETS.md) | Provenance and licensing for every asset |
+| [docs/UI_HANDOFF.md](docs/UI_HANDOFF.md) | Workspace UI internals |
 
-The scene uses metres, a right-handed Z-up frame, full box dimensions in JSON, and WXYZ quaternions. MuJoCo receives half-extents as required by MJCF. Static geometry names are prefixed `env_`.
-
-Unzip a bundle and load its standalone scene:
+### Drop the room into your own MuJoCo scene
 
 ```python
 import mujoco
-
-model = mujoco.MjModel.from_xml_path("scene.xml")
-data = mujoco.MjData(model)
+model = mujoco.MjModel.from_xml_path("scene.xml")   # from the exported bundle
 ```
-
-To combine it with a robot scene, place this inside the robot's `<mujoco>` root:
 
 ```xml
-<include file="environment.xml"/>
+<mujoco> <include file="environment.xml"/> <!-- your robot here --> </mujoco>
 ```
 
-Reconcile the robot scene's existing floor to avoid duplicate overlapping geometry. Preserve the exported world frame; do not reapply `source.transform` to the colliders. See [CONTRACT.md](docs/CONTRACT.md) for the exact schema and validation meanings.
+Metres, right-handed, Z-up, WXYZ quaternions, static geoms prefixed `env_`. Details in [CONTRACT.md](docs/CONTRACT.md).
 
-## Reproduce the reference export
+---
 
-After fetching the sample:
+## ▍What this is, and isn't
 
-```sh
-npm run prepare-sample
-pipeline/.venv/bin/python -m pipeline validate output/kitchen/scene.json
-pipeline/.venv/bin/python -m pipeline package output/kitchen/scene.json -o output/kitchen/morpheus-kitchen.zip
-```
+We'd rather be precise than impressive.
 
-The preparation script samples the companion mesh, applies a shared frame conversion, and writes an **assumed-scale, unreviewed** fixture. It does not infer semantic household objects. The output directory is ignored by Git.
+- The kitchen is a **synthetic World Labs capture** with a companion mesh, not a measured scan of a real home. Scale is assumed.
+- Rollouts are **planned motions checked against the room geometry**, not physics simulations or trained policies. A verdict says which steps are geometrically and kinematically plausible for a body, not that a robot will succeed.
+- Landmarks are inferred from geometry. The sink was pinned by a person after looking at the scan, and the UI says so.
+- SimReady swaps are **visual + static collision** replacements. Mass, articulation and grasp quality are not validated.
+- The table bowl sits slightly past Stretch's nominal reach; the pick uses a declared 0.20 m gripper allowance, shown in the step note.
 
-Recorded native check on 1 November 2026: the reference export contained 111 static colliders, compiled in MuJoCo 3.17.0, and passed the two-second floor-contact probe. A sphere of radius 0.04 m dropped from `[0, 0, 0.5]` rested at Z ≈ 0.03963 m against the floor. That evidence establishes basic physical support in the generated scene; it does not establish metric accuracy, reconstruction quality, or successful robot tasks.
+## ▍Credits
 
-## Checks and builds
-
-```sh
-npm test
-pipeline/.venv/bin/python -m unittest discover -s tests -p 'test_pipeline.py' -v
-npm run build
-npm run preview
-```
-
-The recorded implementation checks comprise 11 TypeScript tests and 8 Python tests. They cover geometry proposal behavior, scale and transform math, manifest validation, MJCF export, disabled colliders, actual native floor contact, ZIP contents, and local API validation/export. Browser interaction checks and production deployment must be assessed separately; these test counts do not certify every UI interaction.
-
-`npm run build` produces a static `dist/`. It deliberately does **not** copy downloaded sample binaries. Production sample loading uses official remote URLs and requires network access. A static host alone does not run the Python service, so its browser export records native validation as not run. The local Vite proxy is a development feature, not a deployed backend.
-
-## Scope and limitations
-
-- This is a reviewed collision-geometry preparation tool. It is not arbitrary splat-to-mesh reconstruction, semantic segmentation, exact furniture retrieval, or a robot policy trainer.
-- The sample kitchen is AI-generated by World Labs and uses its companion mesh. It is not a measured scan of a real home.
-- Proposals use occupied XY columns extending from the proposed floor to observed obstacle heights. This fills space beneath elevated surfaces and can block table openings, overhangs, and other real free space. Sparse or missing observations can also omit real obstacles. Unknown space is not certified free.
-- Floor estimation, cropping, scale, orientation, and collision proposals require review. Source provenance records whether scale is assumed or confirmed; validation does not change those claims.
-- Boxes are static and have assumed contact parameters. Doors, drawers, deformable objects, material identification, and articulated scene reconstruction are outside this version.
-- A passing floor probe proves only model compilation and contact support at the sampled point. It does not prove reachability, graspability, navigation safety, or task success.
-
-## Credits and Codex contribution
-
-The hackathon implementation includes the room-preparation interface, geometry proposal and editing flow, scene contract, dual browser/Python exporters, local validation service, and tests. It builds on existing libraries and a publisher-provided sample:
-
-| Component | Source |
+| | |
 | --- | --- |
-| Gaussian splat rendering | [Spark 2.4.0](https://github.com/sparkjsdev/spark) |
-| 3D scene and interaction | [Three.js 0.180.0](https://github.com/mrdoob/three.js) |
-| UI | [React 19.2.0](https://github.com/facebook/react), [Lucide icons](https://github.com/lucide-icons/lucide) |
-| Development/build tools | [Vite](https://github.com/vitejs/vite), [TypeScript](https://github.com/microsoft/TypeScript) |
-| Physics validation | [MuJoCo 3.17.0](https://github.com/google-deepmind/mujoco) |
-| Browser ZIP export | [fflate](https://github.com/101arrowz/fflate) |
-| Synthetic sample and companion collider | [World Labs — Rustic kitchen with natural light](https://docs.worldlabs.ai/marble/export/specs) |
+| Gaussian splat rendering | [Spark](https://github.com/sparkjsdev/spark) |
+| 3D | [Three.js](https://github.com/mrdoob/three.js) |
+| Physics | [MuJoCo](https://github.com/google-deepmind/mujoco) |
+| Robot models | [MuJoCo Menagerie](https://github.com/google-deepmind/mujoco_menagerie): Hello Robot Stretch 3 (Clear BSD), Unitree Go2 and G1 (BSD-3-Clause) |
+| Objects | [NVIDIA SimReady Assets](https://huggingface.co/datasets/nvidia/simready-assets) (CC-BY-4.0) |
+| Sample room | [World Labs — Rustic kitchen with natural light](https://docs.worldlabs.ai/marble/export/specs) (not redistributed; fetched by script) |
+| Models | OpenAI Decisions API (`gpt-6-luna`), Responses API (`gpt-6.1-terra`), Codex CLI (`gpt-6-astra`) |
 
-Upstream code and assets retain their respective terms. No open redistribution license was established for the World Labs sample; downloaded binaries are not committed or bundled in the production build. Full file hashes and provenance are in [ASSETS.md](docs/ASSETS.md).
-
-Codex coordinated bounded research and implementation tasks, checked sample integrity and relative splat/mesh alignment, authored the collision preparation and export code, and ran the native tests. A concrete contribution was identifying the full-room convex-hull collision problem, exporting separate box colliders instead, and validating the actual generated 111-collider scene with a physical contact probe. The code, tests, and `validation.json` are inspectable evidence of that work.
+<p align="center"><sub>Built in one day at the OpenAI DevDay Community Hackathon, London, 1 November 2026, with Codex.</sub></p>

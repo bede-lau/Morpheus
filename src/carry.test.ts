@@ -13,17 +13,18 @@ test('carried object rests, follows the gripper tip, then stays at placeAt',()=>
   assert.deepEqual(carriedPose(entry,20,tip,[3,-2,.6]),{phase:'placed',position:[1,2,.7]});
 });
 
-test('stretch tip is forward along yaw with the arm mount offset',()=>{
-  // yaw 0 faces +Y: tip x = mount x, y = mount y + link*(base+ext)
-  close(stretchTip([0,0,0],0,1),[-.13,.05+.58*1.65,STRETCH_ARM.height]);
-  // yaw pi/2 faces -X
-  close(stretchTip([1,1,0],Math.PI/2,0,.5),[1-(.05+.58*.65),1-.13,.5]);
+test('stretch tip extends to the right of yaw from the mast mount',()=>{
+  const A=STRETCH_ARM;
+  // yaw 0 faces +Y: the arm telescopes along +X, tip x = mount x + link*(base+ext), y = mount y
+  close(stretchTip([0,0,0],0,1),[A.mount[0]+A.link*(A.baseScale+1),A.mount[1],A.height-A.tipDrop]);
+  // yaw pi/2 faces -X, so the arm points along +Y
+  close(stretchTip([1,1,0],Math.PI/2,0,.5),[1-A.mount[1],1+A.mount[0]+A.link*A.baseScale,.5-A.tipDrop]);
 });
 
 test('lift dips to the pick and place heights only around those times',()=>{
   assert.equal(stretchLift([entry],0),STRETCH_ARM.height);
-  assert.ok(Math.abs(stretchLift([entry],10)-(.6-.05))<1e-9);
-  assert.ok(Math.abs(stretchLift([entry],20)-(.7-.05))<1e-9);
+  assert.ok(Math.abs(stretchLift([entry],10)-(.6-.05+STRETCH_ARM.tipDrop))<1e-9);
+  assert.ok(Math.abs(stretchLift([entry],20)-(.7-.05+STRETCH_ARM.tipDrop))<1e-9);
   assert.equal(stretchLift([entry],15),STRETCH_ARM.height);
   assert.equal(stretchLift(undefined,10),STRETCH_ARM.height);
 });
