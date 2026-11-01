@@ -127,7 +127,7 @@ CLI: `pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all`
 
 ## Frontend behaviour
 
-- Default workspace gains a **Task** section: text input with preset chips
+- The workspace (`/?view=workspace`; the demo page is the default route) gains a **Task** section: text input with preset chips
   ("Wipe the table", "Fill a glass of water"), **Run on this robot** and
   **Run on all robots** (POST `/api/tasks/plan`), and a list of prerendered
   tasks (GET `/api/tasks`). Selecting a task + robot loads its envelope via

@@ -10,7 +10,7 @@ Built during the DevDay Community Hackathon in London on 1 November 2026 with Co
 | --- | --- | --- |
 | 1. Scan → environment | Load a Gaussian splat (`.spz`/`.ply`/`.splat`) with an optional companion mesh, calibrate scale, propose editable box colliders, validate in native MuJoCo, export MJCF + manifest. | `/?view=builder`, `pipeline/export.py`, `pipeline/server.py` |
 | 2. Objects → SimReady | Select movable objects in the scan, identify them with the OpenAI Decisions API (`gpt-6-luna`), rank candidates from [nvidia/simready-assets](https://huggingface.co/datasets/nvidia/simready-assets), hide the original splats and drop in the real mesh. | `/?view=objects`, `pipeline/object_server.py`, `pipeline/simready.py` |
-| 3. Task → robot comparison | Spawn a robot at the kitchen door, tell it "wipe the table" or "fill a glass of water", plan a collision-free rollout over the reconstructed geometry, watch it from the room and from the robot's own camera, and compare Stretch, Go2 and SO-ARM100 verdicts side by side. | `/` (default workspace), `pipeline/task_planner.py`, `pipeline/landmarks.py`, `rollouts/kitchen/` |
+| 3. Task → robot comparison | Spawn a robot at the kitchen door, tell it "wipe the table" or "fill a glass of water", plan a collision-free rollout over the reconstructed geometry, watch it from the room and from the robot's own camera, and compare Stretch, Go2 and SO-ARM100 verdicts side by side. | `/` (demo) and `/?view=workspace`, `pipeline/task_planner.py`, `pipeline/landmarks.py`, `rollouts/kitchen/` |
 
 Pre-rendered rollouts for both demo tasks and all three robots are committed under `rollouts/kitchen/` so the task stage plays on a fresh clone without any API key. The `OPENAI_API_KEY` in `environment-pipeline/.env` is used only for the Decisions API (`gpt-6-luna`): object matching in stage 2 and per-step feasibility notes in stage 3. Language-model reasoning (step plans, object spotting in rendered views) comes from the Codex CLI agents and is handed to the scripts as JSON (`--steps`, `detections.json`); without any of that, deterministic rules run and the verdict says `planner: "rules"`.
 
@@ -61,7 +61,7 @@ The service listens on `127.0.0.1:8000`; Vite proxies `/api` to it. It accepts c
 
 ## Run the task demo
 
-The cinematic version is **`/?view=demo`**: a blank canvas, click the kitchen, the splat blooms in, then **MORPH TO SIM** replays the real recorded pipeline (scan, terra detections, luna Decisions traces, SimReady swap, MuJoCo validation) and ends with the robots attempting the chore. See [docs/DEMO.md](docs/DEMO.md).
+The app opens on the demo at **`/`**: a blank canvas, click the kitchen, the splat blooms in, then **MORPH TO SIM** replays the real recorded pipeline (scan, terra detections, luna Decisions traces, SimReady swap, MuJoCo validation) and ends with the robots attempting the chore. See [docs/DEMO.md](docs/DEMO.md).
 
 ```sh
 pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all
@@ -72,7 +72,7 @@ Add `--steps plan.json` to use a step plan written by a Codex CLI agent. To let 
 
 Add `--steps plan.json` to use a step plan written by a Codex CLI agent. To let CLI agents find objects for stage 2, run `python3 scripts/discover-objects.py render --views 16`, then `python3 scripts/discover-objects.py detect` (one `codex exec` Astra subagent per view, logged in through the Codex CLI, writes `output/discovery/detections.json`), then `python3 scripts/discover-objects.py apply` (raycast, dedupe, Decisions match with a score threshold, replace, save). The committed `output/discovery/*.json` is the record of the last run: 16 views, 30 detections, 10 distinct objects, 3 confident SimReady matches.
 
-Each run writes `rollouts/kitchen/<task-slug>/<robot>.json` and the latest plan to `output/kitchen/replays/<robot>.json`. Open the default workspace, pick a task, pick a robot, press play. Press **F** (or the gamepad button) for a creative-mode fly camera: WASD moves, Space and Shift go up and down, drag or click-to-capture the mouse to look, scroll changes speed, Esc exits. The inset shows the robot's camera; the right panel shows the verdict and each step's outcome. **Compare robots** shows all three verdicts for the task. Rollouts are planned against the exported collision boxes and checked against the reference mesh in `src/robot-clearance.test.ts`; they are not physics simulations or trained policies.
+Each run writes `rollouts/kitchen/<task-slug>/<robot>.json` and the latest plan to `output/kitchen/replays/<robot>.json`. Open the workspace at `/?view=workspace`, pick a task, pick a robot, press play. Press **F** (or the gamepad button) for a creative-mode fly camera: WASD moves, Space and Shift go up and down, drag or click-to-capture the mouse to look, scroll changes speed, Esc exits. The inset shows the robot's camera; the right panel shows the verdict and each step's outcome. **Compare robots** shows all three verdicts for the task. Rollouts are planned against the exported collision boxes and checked against the reference mesh in `src/robot-clearance.test.ts`; they are not physics simulations or trained policies.
 
 ## Use the environment builder
 

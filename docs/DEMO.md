@@ -1,6 +1,6 @@
 # 90-second demonstration
 
-Before presenting: `npm run fetch-sample`, `npm run dev`, `python -m pipeline.server` (8000) and `python -m pipeline.object_server` (8001). Open **http://127.0.0.1:5174/?view=demo**. Everything the page shows is real recorded data from this repository: the scan, the terra detections, the luna Decisions traces, the SimReady meshes, the MuJoCo validation and the planned rollouts.
+Before presenting: `npm run fetch-sample`, `npm run dev`, `python -m pipeline.server` (8000) and `python -m pipeline.object_server` (8001). Open **http://127.0.0.1:5174/** (the demo is the default route; the detailed workspace is `/?view=workspace`). Everything the page shows is real recorded data from this repository: the scan, the terra detections, the luna Decisions traces, the SimReady meshes, the MuJoCo validation and the planned rollouts.
 
 **Problem statement.** Robots are coming into homes. The question becomes *which* robot is right for *my* home. Morpheus captures your room, reconstructs it for simulation, swaps the things a robot can touch for real simulation assets, and lets several robots attempt your chores inside it so you can choose.
 
