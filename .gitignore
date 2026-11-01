@@ -1,0 +1,11 @@
+.venv/
+.morpheus/
+outputs/
+__pycache__/
+.pytest_cache/
+*.pyc
+*.egg-info/
+.DS_Store
+MUJOCO_LOG.TXT
+.env*
+!.env.example
