@@ -9,3 +9,16 @@ __pycache__/
 MUJOCO_LOG.TXT
 .env*
 !.env.example
+node_modules/
+dist/
+**/.venv/
+.env
+.env.*
+public/samples/*.spz
+public/samples/*.ply
+public/samples/*.glb
+public/samples/*.splat
+output/
+.openai/
+COORDINATION.md
+*.tsbuildinfo

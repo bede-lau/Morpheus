@@ -1,117 +1,136 @@
-# Morpheus: home-policy integration
+# Morpheus
 
-Consume a teammate's MJCF + Scene JSON, calculate a robot-compatible route, execute a real learned G1 walking controller in MuJoCo, and export the resulting state and evidence to an existing Three.js + Spark viewer.
+Explore a captured room, prepare its collision scene, and evaluate robot navigation policies in the same workspace. The integrated policy layer consumes the existing MJCF + Scene JSON without generating the environment.
 
-**This repository does not capture or generate environments.** The supplied geometry is read-only. The only composition step attaches a registered robot to that geometry. `PREVIEW_ONLY` is a successful calculation with unresolved input/qualification gates; it is not physical readiness.
+- **Viewer and capture setup:** follow this page.
+- **Policy installation, real G1 simulation, evidence and limitations:** [Policy guide](POLICY_README.md).
+- **Architecture and compact build contract:** [architecture](architecture.md), [build brief](BUILD_BRIEF.md).
 
-## Policy and supported scope
+Turn a captured room into an editable collision environment for robot simulation.
 
-| Component | Implementation | Why / tradeoff |
-|---|---|---|
-| Home navigation | Conservative footprint A*, bounded waypoint velocity control | Immediate use of supplied geometry; static, flat-floor envelope model |
-| Humanoid locomotion | Official Unitree G1 12DoF PPO/LSTM checkpoint, 47 observations / 12 actions | Actual learned walking with exact model pairing; legs only, no kitchen manipulation |
-| Low-level actuation | 50 Hz recurrent actor, 500 Hz PD and MuJoCo physics | Preserves original deployment contract; CPU inference |
-| Optimization | Bounded controller-config search, disjoint train/held-out seeds | Actor stays frozen; results are controller tuning, not new policy training |
-| Fixed arm | Generic damped least-squares IK on supplied joint/site mapping | Kinematic reach calculation only; no commercial arm, grasp, collision-rollout or manipulation certification |
-| Go2 / other dogs | Capability registry, explicitly unavailable | Requires a separate matched policy/model contract; G1 weights cannot transfer by changing MJCF |
+Morpheus keeps a Gaussian splat as the visual reference, proposes simple collision geometry, lets a person correct it, and exports a MuJoCo scene with its provenance and validation status. The core journey is **load a room → establish scale → generate and review collision shapes → validate → export**. Robot models, controllers, policy training, and task evaluation are integrated through the policy package; see the policy guide above.
 
-The actor is pinned to [Unitree RL Gym](https://github.com/unitreerobotics/unitree_rl_gym) commit `276801e46c5d433564f24658bac64f254b7d2d4b`; checkpoint SHA-256 is `cf668f75b90d1abf73d2b87612a6e76bccc61ff7e083b63582d3f6aaa3c1759d`. Use its `g1_12dof.xml`, not a generic G1/29DoF model. The BSD-3-Clause license is fetched and carried in exported model bundles.
+Built during the DevDay Community Hackathon in London on 1 November 2026. See the [90-second demo outline](docs/DEMO.md), [environment handoff contract](docs/CONTRACT.md), and [sample asset provenance](docs/ASSETS.md).
 
-## Run the core journey
+## What works
 
-Requires Python 3.12 and [uv](https://docs.astral.sh/uv/). No API key, GPU, Modal account, browser server, or hardware connection is required.
+- Open the synthetic reference kitchen, or import a Gaussian `.spz`, `.ply`, or `.splat`, optionally alongside an aligned `.glb` companion mesh.
+- Inspect the visual scan, reference mesh, and collision layer; select the source up-axis and calibrate scale from a known distance.
+- Generate editable obstacle columns from sampled geometry. A companion mesh is preferred; splat-center proposals are a rougher fallback.
+- Select, move, resize, rotate, rename, add, or remove box colliders. Save and reopen the collision manifest.
+- Export `environment.xml`, `scene.xml`, `scene.json`, `validation.json`, and integration notes in a ZIP.
+- With the local Python service running, compile the exported scene in native MuJoCo and run a sphere-drop floor-contact probe.
 
-```sh
-uv sync --python 3.12 --extra dev
-uv run python scripts/fetch_g1.py
-uv run morpheus-policy inspect /path/to/morpheus-kitchen.zip
-uv run morpheus-policy robots
-uv run morpheus-policy run /path/to/morpheus-kitchen.zip \
-  --demo-task --output outputs/demo
-```
+## Local setup
 
-The fetcher installs only the pinned robot XML, referenced meshes, checkpoint, license, and hash inventory into `.morpheus/assets/g1`. It refuses an existing output. Reuse an intact installation; use a new `--output` path when fetching another copy.
+Tested development tools: Node.js 24, Python 3.12, and MuJoCo 3.17.0. Use a desktop browser with WebGL2; Chrome is the primary demo target. No OpenAI API key is required to run this version.
 
-The provided bundle has no semantic task target. `--demo-task` explicitly chooses a numerical free-space route; it does not label a target as a sink, appliance, or real household task. For a specified numerical route:
+From the repository root:
 
 ```sh
-uv run morpheus-policy plan /path/to/morpheus-kitchen.zip \
-  --start=-2.5,-1.5 --goal=0,2.5
-uv run morpheus-policy run /path/to/morpheus-kitchen.zip \
-  --start=-2.5,-1.5 --goal=0,2.5 --duration 45 --output outputs/crossing
+npm ci
+npm run fetch-sample
+uv venv pipeline/.venv
+uv pip install --python pipeline/.venv/bin/python -r requirements.txt
 ```
 
-Positions are metres in the existing scene's Z-up frame. `--yaw` is radians; when omitted it points toward the goal. Initial posture/base pose are assigned only at episode reset. Every subsequent state comes from `policy → PD controls → mj_step`; the floating base is never moved along a planned path.
+The explicit sample-fetch command downloads the publisher's test assets into `public/samples/`, checks their sizes and SHA-256 hashes, and can resume interrupted transfers. Read [the asset notes](docs/ASSETS.md) before redistributing any sample files. They are excluded from Git.
 
-Outputs:
-
-- `report.json`: task, thresholds, source caveats, execution/readiness, provenance and per-step aggregate metrics.
-- `replay.json`: 50 Hz full qpos/qvel, controls, velocity commands, named body poses, route, failure events.
-- `model.mjz`: portable composed robot + supplied geometry, external meshes and Unitree license.
-- `manifest.json`: report/replay/model digests; the model digest is also in report/replay.
-- `THIRD_PARTY_LICENSE.txt`: redistributed robot-asset license.
-
-Output directories must be new. A blocked/failed run exits with code 2. Native XML export can round geometric decimals by a few micrometres; the report declares the checked 5 µm presentation tolerance. Physics uses original input values; body-pose replay is checked. Browser physics parity is not claimed.
-
-## Verification and optimization
+Start the frontend in one terminal:
 
 ```sh
-uv run morpheus-policy qualify /path/to/morpheus-kitchen.zip \
-  --demo-task --episodes 20 --output outputs/qualification
-uv run morpheus-policy optimize /path/to/morpheus-kitchen.zip \
-  --demo-task --output outputs/controller-search
-uv run pytest -q
-MORPHEUS_SCENE_BUNDLE=/path/to/morpheus-kitchen.zip uv run pytest -q
-node --experimental-strip-types --test web/policy-bridge.test.ts
+npm run dev
 ```
 
-The actual-input integration test requires that environment variable and fetched assets. Generic robot fixtures verify contracts only. Qualification changes starting XY by ±2 cm and heading by ±0.03 rad for the same task/map; it does not establish robustness to a different home, friction, perception, or dynamic obstacles.
-
-Every physics step checks finite state, forbidden contacts, support bodies, body tilt/height, envelope clearance, joint position/speed, applied joint-force limits, and simulator warnings. Failed episodes stop. Qualification also rejects mismatched source/model/policy/configuration and fabricated completion with contacts or failures.
-
-The supplied fixture declares synthetic geometry, assumed metric scale and no review. These flags are preserved, so its result remains `PREVIEW_ONLY` even with successful trials. Physical hardware is always `UNVERIFIED`.
-
-## Observed results on the supplied fixture
-
-Measured locally on 1 November 2026 with MuJoCo 3.17.0 / Torch 2.15.0:
-
-- Learned G1 walking: 5.266 simulated seconds, approximately 1.2 CPU wall seconds, final target error 0.2205 m within the declared 0.25 m tolerance, zero forbidden contacts/falls/force-limit overruns.
-- 20/20 perturbed starts completed; minimum envelope clearance approximately 0.869 m and maximum tilt approximately 0.0882 rad.
-- A separate 4.72 m straight crossing completed in 18.11 simulated seconds with zero forbidden contacts and 0.339 m minimum envelope clearance.
-- A genuine 17-point obstacle detour (1.60 m planned route vs 1.265 m straight separation) completed in 7.146 simulated seconds, with 0.2036 m final error, zero forbidden contacts and 0.1779 m minimum envelope clearance.
-- The detour also passed 20/20 held-out starts: worst final error 0.2162 m, minimum clearance 0.1758 m, zero forbidden contacts and applied force-limit overruns.
-- Exploratory search on two train and two held-out starts selected 0.4 m/s over the 0.3 m/s baseline: mean held-out duration 5.135 s vs 5.271 s, zero contacts in both. Two held-out cases are limited evidence; the baseline remains the default and has the 20-trial qualification.
-
-These are simulation calculations on proposed collision proxies. No actor was retrained, no hardware was tested, and no Modal credits were spent.
-
-Final validation: 44 Python tests passed with the actual-input integration enabled; 4 TypeScript tests passed; both generated replay bundles passed the actual bridge identity/state-application check. Torch emits a deprecation warning for the official TorchScript artifact; no test fails from it.
-
-## Existing viewer integration
-
-Use [web/README.md](web/README.md) and [visualization-contract.md](visualization-contract.md). Import `web/policy-bridge.ts` into the teammate's viewer. Verify the model artifact digest, set complete qpos on the exact compiled model, then call `mj_forward` to obtain transforms. Keep readiness from `report.json`; Three.js collision tests cannot upgrade it.
-
-Spark/environment rendering remains upstream-owned. Apply the declared source-to-viewer root transform once; keep the original scan transform separate. Actual integration into the teammate's running browser/WASM wrapper is still an external handoff, not an executed browser end-to-end test.
-
-Render a native replay clip without building a new viewer:
+Open [http://127.0.0.1:5174](http://127.0.0.1:5174). In a second terminal, start native validation:
 
 ```sh
-uv run --with pillow --with imageio --with imageio-ffmpeg \
-  python scripts/render_replay.py outputs/demo \
-  --png outputs/demo/preview.png --mp4 outputs/demo/demo.mp4 --seconds 12 --fps 20
+pipeline/.venv/bin/python -m pipeline.server
 ```
 
-This renders recorded states only, including route overlays and preview labels. The 12-second clip stretches the short simulation for inspection; its on-screen timestamp is simulation time. It is a local demo artifact, not an uploaded submission video.
+The service listens on `127.0.0.1:8000`; Vite proxies `/api` to it. It accepts collision manifests, not scan binaries. Check [http://127.0.0.1:8000/api/health](http://127.0.0.1:8000/api/health) for engine availability. The server preloads MuJoCo before announcing readiness because its first native import can take several seconds.
 
-## Training and GPU decision
+## Use the app
 
-Pretrained inference, planning, IK and evaluation fit CPU execution. Modal would be useful for a defined specialist-training experiment, not this inference loop. [POLICY_TRAINING.md](POLICY_TRAINING.md) defines the conditional next step, data/reward/compatibility requirements, and $180 budget boundary. No GPU trainer is implemented or launched here.
+1. Click **Open sample kitchen**, or **Import your scan**. Select an aligned GLB in the same file selection if one is available.
+2. Inspect **Scale & alignment**. The sample's metre scale is assumed, not independently measured. For a real capture, select two known surface points and enter their measured separation. Do not invent a measurement for the synthetic sample.
+3. Click **Generate collision shapes**. Compare the **Scan**, **Reference mesh**, and **Collisions** views. Correct false obstacles and inspect passageways; review is part of the workflow.
+4. Click **Validate in MuJoCo** when the local service is running. Read compilation and floor-probe results separately.
+5. Click **Export environment** and hand the ZIP to the robot-training developer. A browser-only export is schema checked and explicitly marked `unverified` for native physics.
 
-## Handoff, attribution and release
+Local imports are processed in the browser. Native validation sends only the collision manifest to the local Python service. Loading the sample in a production build fetches its files directly from the publisher's host.
 
-[PRD.md](PRD.md) was written first; [BUILD_BRIEF.md](BUILD_BRIEF.md) is its ultra-compact pre-build handoff. Engineering contracts are in [architecture.md](architecture.md), [design.md](design.md), [decisions.md](decisions.md), and [agents.md](agents.md).
+## Training handoff
 
-Codex coordinated parallel policy research, scene/planning implementation, visualization, verification and independent review. Concrete review fixes include recurrent-memory reset tests, model-name mapping, portable assets, force/contact checks, failure-replay events, and hash-linked evidence. See [DEMO.md](DEMO.md) for a <=90-second presentation script.
+The scene uses metres, a right-handed Z-up frame, full box dimensions in JSON, and WXYZ quaternions. MuJoCo receives half-extents as required by MJCF. Static geometry names are prefixed `env_`.
 
-Original integration code: MIT. Existing code/assets: Unitree RL Gym/G1 and checkpoint (BSD-3-Clause), MuJoCo (Apache-2.0), Torch (BSD-style), upstream fixture attributed to World Labs in its source metadata. The capture pipeline, Spark, Three.js, and the viewer are supplied by the other developer and are not bundled here. Dependencies retain their own licenses. See [THIRD_PARTY.md](THIRD_PARTY.md).
+Unzip a bundle and load its standalone scene:
 
-Inputs, robot downloads, output geometry/replays/media, secrets and local environment files are excluded from Git. Review outputs before sharing home scans. A local Git repository is initialized; there is no configured public remote, uploaded video, or submitted hackathon entry. Reserve time before the [17:00 London deadline](https://luma.com/dde-ldn-hack) to publish and submit.
+```python
+import mujoco
+
+model = mujoco.MjModel.from_xml_path("scene.xml")
+data = mujoco.MjData(model)
+```
+
+To combine it with a robot scene, place this inside the robot's `<mujoco>` root:
+
+```xml
+<include file="environment.xml"/>
+```
+
+Reconcile the robot scene's existing floor to avoid duplicate overlapping geometry. Preserve the exported world frame; do not reapply `source.transform` to the colliders. See [CONTRACT.md](docs/CONTRACT.md) for the exact schema and validation meanings.
+
+## Reproduce the reference export
+
+After fetching the sample:
+
+```sh
+npm run prepare-sample
+pipeline/.venv/bin/python -m pipeline validate output/kitchen/scene.json
+pipeline/.venv/bin/python -m pipeline package output/kitchen/scene.json -o output/kitchen/morpheus-kitchen.zip
+```
+
+The preparation script samples the companion mesh, applies a shared frame conversion, and writes an **assumed-scale, unreviewed** fixture. It does not infer semantic household objects. The output directory is ignored by Git.
+
+Recorded native check on 1 November 2026: the reference export contained 111 static colliders, compiled in MuJoCo 3.17.0, and passed the two-second floor-contact probe. A sphere of radius 0.04 m dropped from `[0, 0, 0.5]` rested at Z ≈ 0.03963 m against the floor. That evidence establishes basic physical support in the generated scene; it does not establish metric accuracy, reconstruction quality, or successful robot tasks.
+
+## Checks and builds
+
+```sh
+npm test
+pipeline/.venv/bin/python -m unittest discover -s tests -p 'test_pipeline.py' -v
+npm run build
+npm run preview
+```
+
+The recorded implementation checks comprise 11 TypeScript tests and 8 Python tests. They cover geometry proposal behavior, scale and transform math, manifest validation, MJCF export, disabled colliders, actual native floor contact, ZIP contents, and local API validation/export. Browser interaction checks and production deployment must be assessed separately; these test counts do not certify every UI interaction.
+
+`npm run build` produces a static `dist/`. It deliberately does **not** copy downloaded sample binaries. Production sample loading uses official remote URLs and requires network access. A static host alone does not run the Python service, so its browser export records native validation as not run. The local Vite proxy is a development feature, not a deployed backend.
+
+## Scope and limitations
+
+- This is a reviewed collision-geometry preparation tool. It is not arbitrary splat-to-mesh reconstruction, semantic segmentation, exact furniture retrieval, or a robot policy trainer.
+- The sample kitchen is AI-generated by World Labs and uses its companion mesh. It is not a measured scan of a real home.
+- Proposals use occupied XY columns extending from the proposed floor to observed obstacle heights. This fills space beneath elevated surfaces and can block table openings, overhangs, and other real free space. Sparse or missing observations can also omit real obstacles. Unknown space is not certified free.
+- Floor estimation, cropping, scale, orientation, and collision proposals require review. Source provenance records whether scale is assumed or confirmed; validation does not change those claims.
+- Boxes are static and have assumed contact parameters. Doors, drawers, deformable objects, material identification, and articulated scene reconstruction are outside this version.
+- A passing floor probe proves only model compilation and contact support at the sampled point. It does not prove reachability, graspability, navigation safety, or task success.
+
+## Credits and Codex contribution
+
+The hackathon implementation includes the room-preparation interface, geometry proposal and editing flow, scene contract, dual browser/Python exporters, local validation service, and tests. It builds on existing libraries and a publisher-provided sample:
+
+| Component | Source |
+| --- | --- |
+| Gaussian splat rendering | [Spark 2.4.0](https://github.com/sparkjsdev/spark) |
+| 3D scene and interaction | [Three.js 0.180.0](https://github.com/mrdoob/three.js) |
+| UI | [React 19.2.0](https://github.com/facebook/react), [Lucide icons](https://github.com/lucide-icons/lucide) |
+| Development/build tools | [Vite](https://github.com/vitejs/vite), [TypeScript](https://github.com/microsoft/TypeScript) |
+| Physics validation | [MuJoCo 3.17.0](https://github.com/google-deepmind/mujoco) |
+| Browser ZIP export | [fflate](https://github.com/101arrowz/fflate) |
+| Synthetic sample and companion collider | [World Labs — Rustic kitchen with natural light](https://docs.worldlabs.ai/marble/export/specs) |
+
+Upstream code and assets retain their respective terms. No open redistribution license was established for the World Labs sample; downloaded binaries are not committed or bundled in the production build. Full file hashes and provenance are in [ASSETS.md](docs/ASSETS.md).
+
+Codex coordinated bounded research and implementation tasks, checked sample integrity and relative splat/mesh alignment, authored the collision preparation and export code, and ran the native tests. A concrete contribution was identifying the full-room convex-hull collision problem, exporting separate box colliders instead, and validating the actual generated 111-collider scene with a physical contact probe. The code, tests, and `validation.json` are inspectable evidence of that work.
