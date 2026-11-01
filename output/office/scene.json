@@ -1,0 +1,2446 @@
+{
+  "version": 1,
+  "name": "spark-fireplace",
+  "units": "m",
+  "upAxis": "Z",
+  "source": {
+    "fileName": "spark-fireplace.spz",
+    "kind": "upload",
+    "synthetic": false,
+    "scaleConfirmed": false,
+    "scaleStatus": "assumed",
+    "reviewed": false,
+    "transform": {
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2.220446049250313e-16,
+        -1,
+        0,
+        0,
+        1,
+        2.220446049250313e-16,
+        0,
+        0.45553906250000153,
+        0.35228125000000077,
+        0.735352,
+        1
+      ],
+      "matrixOrder": "column-major",
+      "unitsPerSourceUnit": 1
+    },
+    "geometrySource": "splat-centers",
+    "approximation": "surface samples to occupied obstacle columns; open space below elevated surfaces is filled",
+    "generation": {
+      "method": "splat-centers",
+      "cellSize": 0.22,
+      "floor": 0,
+      "ceiling": 6.008789539337158
+    }
+  },
+  "objects": [
+    {
+      "id": "floor",
+      "name": "Proposed floor",
+      "type": "box",
+      "position": [
+        0,
+        0,
+        -0.05
+      ],
+      "size": [
+        7.446734,
+        5.696219,
+        0.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "floor",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_1",
+      "name": "Proposed obstacle 1",
+      "type": "box",
+      "position": [
+        -2.270042,
+        -2.397159,
+        0.4
+      ],
+      "size": [
+        1.20285,
+        0.8019,
+        0.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_2",
+      "name": "Proposed obstacle 2",
+      "type": "box",
+      "position": [
+        -1.267667,
+        -2.397159,
+        0.15
+      ],
+      "size": [
+        0.8019,
+        0.8019,
+        0.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_3",
+      "name": "Proposed obstacle 3",
+      "type": "box",
+      "position": [
+        1.138033,
+        -2.196684,
+        0.3
+      ],
+      "size": [
+        0.8019,
+        1.20285,
+        0.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_4",
+      "name": "Proposed obstacle 4",
+      "type": "box",
+      "position": [
+        1.739458,
+        -2.597634,
+        0.1
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_5",
+      "name": "Proposed obstacle 5",
+      "type": "box",
+      "position": [
+        1.739458,
+        -1.795734,
+        0.4
+      ],
+      "size": [
+        0.40095,
+        1.20285,
+        0.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_6",
+      "name": "Proposed obstacle 6",
+      "type": "box",
+      "position": [
+        2.140408,
+        -2.196684,
+        0.45
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_7",
+      "name": "Proposed obstacle 7",
+      "type": "box",
+      "position": [
+        2.541358,
+        -2.196684,
+        0.7
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.4
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_8",
+      "name": "Proposed obstacle 8",
+      "type": "box",
+      "position": [
+        2.942308,
+        -1.996209,
+        0.75
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        1.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_9",
+      "name": "Proposed obstacle 9",
+      "type": "box",
+      "position": [
+        -1.668617,
+        -1.595259,
+        0.1
+      ],
+      "size": [
+        0.8019,
+        0.8019,
+        0.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_10",
+      "name": "Proposed obstacle 10",
+      "type": "box",
+      "position": [
+        2.140408,
+        -1.394784,
+        0.5
+      ],
+      "size": [
+        0.40095,
+        1.20285,
+        1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_11",
+      "name": "Proposed obstacle 11",
+      "type": "box",
+      "position": [
+        2.541358,
+        -1.595259,
+        0.75
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        1.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_12",
+      "name": "Proposed obstacle 12",
+      "type": "box",
+      "position": [
+        0.937558,
+        -1.394784,
+        0.1
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_13",
+      "name": "Proposed obstacle 13",
+      "type": "box",
+      "position": [
+        1.338508,
+        -1.394784,
+        0.3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_14",
+      "name": "Proposed obstacle 14",
+      "type": "box",
+      "position": [
+        2.942308,
+        -1.394784,
+        0.8
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_15",
+      "name": "Proposed obstacle 15",
+      "type": "box",
+      "position": [
+        3.343258,
+        -1.394784,
+        0.45
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_16",
+      "name": "Proposed obstacle 16",
+      "type": "box",
+      "position": [
+        1.739458,
+        -0.993834,
+        0.45
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_17",
+      "name": "Proposed obstacle 17",
+      "type": "box",
+      "position": [
+        2.541358,
+        -0.993834,
+        0.8
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_18",
+      "name": "Proposed obstacle 18",
+      "type": "box",
+      "position": [
+        2.942308,
+        -0.793359,
+        0.75
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        1.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_19",
+      "name": "Proposed obstacle 19",
+      "type": "box",
+      "position": [
+        3.343258,
+        -0.993834,
+        2.25
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_20",
+      "name": "Proposed obstacle 20",
+      "type": "box",
+      "position": [
+        3.60855,
+        -0.993834,
+        2.3
+      ],
+      "size": [
+        0.129634,
+        0.40095,
+        4.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_21",
+      "name": "Proposed obstacle 21",
+      "type": "box",
+      "position": [
+        -1.468142,
+        -0.592884,
+        0.1
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_22",
+      "name": "Proposed obstacle 22",
+      "type": "box",
+      "position": [
+        1.538983,
+        -0.592884,
+        1.25
+      ],
+      "size": [
+        0.8019,
+        0.40095,
+        2.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_23",
+      "name": "Proposed obstacle 23",
+      "type": "box",
+      "position": [
+        2.140408,
+        -0.592884,
+        2.5
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_24",
+      "name": "Proposed obstacle 24",
+      "type": "box",
+      "position": [
+        3.343258,
+        -0.592884,
+        2.5
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_25",
+      "name": "Proposed obstacle 25",
+      "type": "box",
+      "position": [
+        3.60855,
+        -0.592884,
+        2.45
+      ],
+      "size": [
+        0.129634,
+        0.40095,
+        4.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_26",
+      "name": "Proposed obstacle 26",
+      "type": "box",
+      "position": [
+        -3.472892,
+        -0.191934,
+        0.45
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_27",
+      "name": "Proposed obstacle 27",
+      "type": "box",
+      "position": [
+        -2.670992,
+        -0.191934,
+        0.5
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_28",
+      "name": "Proposed obstacle 28",
+      "type": "box",
+      "position": [
+        -2.270042,
+        -0.191934,
+        0.45
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_29",
+      "name": "Proposed obstacle 29",
+      "type": "box",
+      "position": [
+        -1.869092,
+        -0.191934,
+        0.4
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_30",
+      "name": "Proposed obstacle 30",
+      "type": "box",
+      "position": [
+        -1.468142,
+        -0.191934,
+        0.3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_31",
+      "name": "Proposed obstacle 31",
+      "type": "box",
+      "position": [
+        -1.067192,
+        -0.191934,
+        0.15
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_32",
+      "name": "Proposed obstacle 32",
+      "type": "box",
+      "position": [
+        0.937558,
+        -0.191934,
+        1.2
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        2.4
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_33",
+      "name": "Proposed obstacle 33",
+      "type": "box",
+      "position": [
+        1.538983,
+        -0.191934,
+        2.65
+      ],
+      "size": [
+        0.8019,
+        0.40095,
+        5.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_34",
+      "name": "Proposed obstacle 34",
+      "type": "box",
+      "position": [
+        2.140408,
+        -0.191934,
+        2.6
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_35",
+      "name": "Proposed obstacle 35",
+      "type": "box",
+      "position": [
+        2.541358,
+        -0.191934,
+        2.65
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_36",
+      "name": "Proposed obstacle 36",
+      "type": "box",
+      "position": [
+        2.942308,
+        -0.191934,
+        2.6
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_37",
+      "name": "Proposed obstacle 37",
+      "type": "box",
+      "position": [
+        3.343258,
+        -0.191934,
+        2.55
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_38",
+      "name": "Proposed obstacle 38",
+      "type": "box",
+      "position": [
+        3.60855,
+        -0.191934,
+        2.3
+      ],
+      "size": [
+        0.129634,
+        0.40095,
+        4.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_39",
+      "name": "Proposed obstacle 39",
+      "type": "box",
+      "position": [
+        -2.871467,
+        0.209016,
+        0.55
+      ],
+      "size": [
+        0.8019,
+        0.40095,
+        1.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_40",
+      "name": "Proposed obstacle 40",
+      "type": "box",
+      "position": [
+        -2.270042,
+        0.209016,
+        0.5
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_41",
+      "name": "Proposed obstacle 41",
+      "type": "box",
+      "position": [
+        -1.668617,
+        0.209016,
+        0.45
+      ],
+      "size": [
+        0.8019,
+        0.40095,
+        0.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_42",
+      "name": "Proposed obstacle 42",
+      "type": "box",
+      "position": [
+        0.937558,
+        0.209016,
+        1.3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        2.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_43",
+      "name": "Proposed obstacle 43",
+      "type": "box",
+      "position": [
+        1.338508,
+        0.209016,
+        2.8
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_44",
+      "name": "Proposed obstacle 44",
+      "type": "box",
+      "position": [
+        1.739458,
+        0.209016,
+        2.65
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_45",
+      "name": "Proposed obstacle 45",
+      "type": "box",
+      "position": [
+        2.340883,
+        0.209016,
+        2.7
+      ],
+      "size": [
+        0.8019,
+        0.40095,
+        5.4
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_46",
+      "name": "Proposed obstacle 46",
+      "type": "box",
+      "position": [
+        2.942308,
+        0.209016,
+        2.55
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_47",
+      "name": "Proposed obstacle 47",
+      "type": "box",
+      "position": [
+        3.343258,
+        0.209016,
+        2.3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_48",
+      "name": "Proposed obstacle 48",
+      "type": "box",
+      "position": [
+        -3.071942,
+        0.810441,
+        0.8
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        1.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_49",
+      "name": "Proposed obstacle 49",
+      "type": "box",
+      "position": [
+        -2.670992,
+        0.609966,
+        0.75
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_50",
+      "name": "Proposed obstacle 50",
+      "type": "box",
+      "position": [
+        -2.270042,
+        0.609966,
+        0.55
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_51",
+      "name": "Proposed obstacle 51",
+      "type": "box",
+      "position": [
+        -1.869092,
+        1.211391,
+        0.5
+      ],
+      "size": [
+        0.40095,
+        1.6038,
+        1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_52",
+      "name": "Proposed obstacle 52",
+      "type": "box",
+      "position": [
+        -1.468142,
+        0.609966,
+        0.55
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_53",
+      "name": "Proposed obstacle 53",
+      "type": "box",
+      "position": [
+        0.536608,
+        0.609966,
+        1.25
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        2.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_54",
+      "name": "Proposed obstacle 54",
+      "type": "box",
+      "position": [
+        1.138033,
+        0.609966,
+        2.95
+      ],
+      "size": [
+        0.8019,
+        0.40095,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_55",
+      "name": "Proposed obstacle 55",
+      "type": "box",
+      "position": [
+        1.739458,
+        0.609966,
+        2.4
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_56",
+      "name": "Proposed obstacle 56",
+      "type": "box",
+      "position": [
+        2.140408,
+        0.609966,
+        2.1
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_57",
+      "name": "Proposed obstacle 57",
+      "type": "box",
+      "position": [
+        2.541358,
+        0.609966,
+        2.75
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_58",
+      "name": "Proposed obstacle 58",
+      "type": "box",
+      "position": [
+        -3.472892,
+        1.010916,
+        2.05
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_59",
+      "name": "Proposed obstacle 59",
+      "type": "box",
+      "position": [
+        -2.670992,
+        1.010916,
+        0.8
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_60",
+      "name": "Proposed obstacle 60",
+      "type": "box",
+      "position": [
+        -2.270042,
+        1.010916,
+        0.75
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_61",
+      "name": "Proposed obstacle 61",
+      "type": "box",
+      "position": [
+        -1.468142,
+        1.010916,
+        0.5
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_62",
+      "name": "Proposed obstacle 62",
+      "type": "box",
+      "position": [
+        -1.067192,
+        1.010916,
+        0.35
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_63",
+      "name": "Proposed obstacle 63",
+      "type": "box",
+      "position": [
+        -0.265292,
+        1.211391,
+        2.95
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_64",
+      "name": "Proposed obstacle 64",
+      "type": "box",
+      "position": [
+        0.536608,
+        1.010916,
+        3
+      ],
+      "size": [
+        1.20285,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_65",
+      "name": "Proposed obstacle 65",
+      "type": "box",
+      "position": [
+        1.338508,
+        1.010916,
+        2.7
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.4
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_66",
+      "name": "Proposed obstacle 66",
+      "type": "box",
+      "position": [
+        1.739458,
+        1.010916,
+        2.3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_67",
+      "name": "Proposed obstacle 67",
+      "type": "box",
+      "position": [
+        2.541358,
+        1.010916,
+        2.2
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.4
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_68",
+      "name": "Proposed obstacle 68",
+      "type": "box",
+      "position": [
+        -3.472892,
+        1.411866,
+        2.4
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_69",
+      "name": "Proposed obstacle 69",
+      "type": "box",
+      "position": [
+        -2.270042,
+        1.411866,
+        2.95
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_70",
+      "name": "Proposed obstacle 70",
+      "type": "box",
+      "position": [
+        -1.468142,
+        1.411866,
+        0.35
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        0.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_71",
+      "name": "Proposed obstacle 71",
+      "type": "box",
+      "position": [
+        -1.067192,
+        1.411866,
+        3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_72",
+      "name": "Proposed obstacle 72",
+      "type": "box",
+      "position": [
+        -0.666242,
+        1.411866,
+        2.95
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_73",
+      "name": "Proposed obstacle 73",
+      "type": "box",
+      "position": [
+        0.135658,
+        1.411866,
+        3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_74",
+      "name": "Proposed obstacle 74",
+      "type": "box",
+      "position": [
+        0.536608,
+        1.411866,
+        2.8
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_75",
+      "name": "Proposed obstacle 75",
+      "type": "box",
+      "position": [
+        0.937558,
+        1.411866,
+        2.75
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.5
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_76",
+      "name": "Proposed obstacle 76",
+      "type": "box",
+      "position": [
+        1.338508,
+        1.411866,
+        2.6
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_77",
+      "name": "Proposed obstacle 77",
+      "type": "box",
+      "position": [
+        -3.472892,
+        2.013291,
+        2.6
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        5.2
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_78",
+      "name": "Proposed obstacle 78",
+      "type": "box",
+      "position": [
+        -3.071942,
+        1.812816,
+        2.7
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.4
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_79",
+      "name": "Proposed obstacle 79",
+      "type": "box",
+      "position": [
+        -2.270042,
+        1.812816,
+        3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_80",
+      "name": "Proposed obstacle 80",
+      "type": "box",
+      "position": [
+        -1.468142,
+        1.812816,
+        3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_81",
+      "name": "Proposed obstacle 81",
+      "type": "box",
+      "position": [
+        -1.067192,
+        2.013291,
+        2.95
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_82",
+      "name": "Proposed obstacle 82",
+      "type": "box",
+      "position": [
+        -0.666242,
+        1.812816,
+        3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_83",
+      "name": "Proposed obstacle 83",
+      "type": "box",
+      "position": [
+        -0.265292,
+        1.812816,
+        2.9
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_84",
+      "name": "Proposed obstacle 84",
+      "type": "box",
+      "position": [
+        0.135658,
+        2.013291,
+        2.85
+      ],
+      "size": [
+        0.40095,
+        0.8019,
+        5.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_85",
+      "name": "Proposed obstacle 85",
+      "type": "box",
+      "position": [
+        0.536608,
+        1.812816,
+        2.65
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_86",
+      "name": "Proposed obstacle 86",
+      "type": "box",
+      "position": [
+        1.739458,
+        1.812816,
+        2.05
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        4.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_87",
+      "name": "Proposed obstacle 87",
+      "type": "box",
+      "position": [
+        -3.071942,
+        2.213766,
+        2.95
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_88",
+      "name": "Proposed obstacle 88",
+      "type": "box",
+      "position": [
+        -2.670992,
+        2.213766,
+        3
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_89",
+      "name": "Proposed obstacle 89",
+      "type": "box",
+      "position": [
+        -1.869092,
+        2.213766,
+        2.95
+      ],
+      "size": [
+        1.20285,
+        0.40095,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_90",
+      "name": "Proposed obstacle 90",
+      "type": "box",
+      "position": [
+        -0.666242,
+        2.213766,
+        2.95
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.9
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_91",
+      "name": "Proposed obstacle 91",
+      "type": "box",
+      "position": [
+        -0.265292,
+        2.213766,
+        2.85
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_92",
+      "name": "Proposed obstacle 92",
+      "type": "box",
+      "position": [
+        0.536608,
+        2.213766,
+        2.85
+      ],
+      "size": [
+        0.40095,
+        0.40095,
+        5.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_93",
+      "name": "Proposed obstacle 93",
+      "type": "box",
+      "position": [
+        -3.071942,
+        2.606175,
+        2.8
+      ],
+      "size": [
+        0.40095,
+        0.383869,
+        5.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_94",
+      "name": "Proposed obstacle 94",
+      "type": "box",
+      "position": [
+        -2.670992,
+        2.606175,
+        2.85
+      ],
+      "size": [
+        0.40095,
+        0.383869,
+        5.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_95",
+      "name": "Proposed obstacle 95",
+      "type": "box",
+      "position": [
+        -2.069567,
+        2.606175,
+        2.9
+      ],
+      "size": [
+        0.8019,
+        0.383869,
+        5.8
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_96",
+      "name": "Proposed obstacle 96",
+      "type": "box",
+      "position": [
+        -1.468142,
+        2.606175,
+        2.85
+      ],
+      "size": [
+        0.40095,
+        0.383869,
+        5.7
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_97",
+      "name": "Proposed obstacle 97",
+      "type": "box",
+      "position": [
+        -0.866717,
+        2.606175,
+        2.8
+      ],
+      "size": [
+        0.8019,
+        0.383869,
+        5.6
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_98",
+      "name": "Proposed obstacle 98",
+      "type": "box",
+      "position": [
+        -0.265292,
+        2.606175,
+        2.55
+      ],
+      "size": [
+        0.40095,
+        0.383869,
+        5.1
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    },
+    {
+      "id": "obstacle_99",
+      "name": "Proposed obstacle 99",
+      "type": "box",
+      "position": [
+        0.135658,
+        2.606175,
+        2.15
+      ],
+      "size": [
+        0.40095,
+        0.383869,
+        4.3
+      ],
+      "quaternion": [
+        1,
+        0,
+        0,
+        0
+      ],
+      "source": "geometry-proposal",
+      "role": "obstacle",
+      "enabled": true
+    }
+  ]
+}

@@ -1,0 +1,365 @@
+{
+  "version": 1,
+  "kind": "simready-replacements",
+  "units": "m",
+  "upAxis": "Z",
+  "interactionValidated": false,
+  "revision": 1,
+  "source": {
+    "name": "Office (sparkjs.dev fireplace sample)",
+    "fileName": "spark-fireplace.spz",
+    "sha256": "f11fe4c9bbf0c5aaff9ce4886e59cc8e325f4bacca535a934eb0ab813b7437a0",
+    "transform": {
+      "matrix": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        2.220446049250313e-16,
+        -1,
+        0,
+        0,
+        1,
+        2.220446049250313e-16,
+        0,
+        0.45553906250000153,
+        0.35228125000000077,
+        0.735352,
+        1
+      ],
+      "matrixOrder": "column-major",
+      "unitsPerSourceUnit": 1
+    },
+    "scaleConfirmed": false
+  },
+  "replacements": [
+    {
+      "id": "office-book-1",
+      "assetId": "magazines_stack_a01",
+      "position": [
+        1.22,
+        -2.17,
+        0.6273
+      ],
+      "quaternion": [
+        1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "scale": 1.0,
+      "selection": {
+        "position": [
+          1.22,
+          -2.17,
+          0.6273
+        ],
+        "size": [
+          0.26,
+          0.3,
+          0.1
+        ]
+      },
+      "chosenBy": "decisions",
+      "asset": {
+        "id": "magazines_stack_a01",
+        "category": "book",
+        "name": "magazines stack a01",
+        "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/magazines_stack_a01",
+        "license": "CC-BY-4.0",
+        "attribution": "NVIDIA SimReady Assets",
+        "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+        "dimensions": [
+          0.2113686129450798,
+          0.2563050091266632,
+          0.054508420813363045
+        ],
+        "meshCount": 1,
+        "triangles": 105794,
+        "units": "m",
+        "upAxis": "Z",
+        "sourceMetersPerUnit": 1.0,
+        "sourceUpAxis": "Z",
+        "sourceCenterMeters": [
+          0.00046551600098609924,
+          0.007986068725585938,
+          0.026340520387748256
+        ],
+        "sourceRoot": "simready_usd/sm_magazines_stack_a01_01.usd",
+        "geometrySha256": "20cad825678de127ef2a1ecf5163ba9053b5940e3f517c6868771e3a82a3a3ce",
+        "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+        "physicsStatus": "not_validated"
+      },
+      "decision": {
+        "category": "book",
+        "candidates": [
+          {
+            "asset": {
+              "id": "magazines_stack_a01",
+              "category": "book",
+              "name": "magazines stack a01",
+              "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/magazines_stack_a01",
+              "license": "CC-BY-4.0",
+              "attribution": "NVIDIA SimReady Assets",
+              "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+              "dimensions": [
+                0.2113686129450798,
+                0.2563050091266632,
+                0.054508420813363045
+              ],
+              "meshCount": 1,
+              "triangles": 105794,
+              "units": "m",
+              "upAxis": "Z",
+              "sourceMetersPerUnit": 1.0,
+              "sourceUpAxis": "Z",
+              "sourceCenterMeters": [
+                0.00046551600098609924,
+                0.007986068725585938,
+                0.026340520387748256
+              ],
+              "sourceRoot": "simready_usd/sm_magazines_stack_a01_01.usd",
+              "geometrySha256": "20cad825678de127ef2a1ecf5163ba9053b5940e3f517c6868771e3a82a3a3ce",
+              "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+              "physicsStatus": "not_validated"
+            },
+            "score": 1.66,
+            "confidence": 0.52,
+            "probabilities": [
+              {
+                "value": 0,
+                "label": "Mismatch",
+                "probability": 0.09
+              },
+              {
+                "value": 1,
+                "label": "Weak",
+                "probability": 0.23
+              },
+              {
+                "value": 2,
+                "label": "Plausible",
+                "probability": 0.61
+              },
+              {
+                "value": 3,
+                "label": "Close",
+                "probability": 0.07
+              }
+            ]
+          },
+          {
+            "asset": {
+              "id": "misc_notebook_a02",
+              "category": "book",
+              "name": "misc notebook a02",
+              "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/misc_notebook_a02",
+              "license": "CC-BY-4.0",
+              "attribution": "NVIDIA SimReady Assets",
+              "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+              "dimensions": [
+                0.22890474647283554,
+                0.1699736788868904,
+                0.010015689767897129
+              ],
+              "meshCount": 1,
+              "triangles": 6944,
+              "units": "m",
+              "upAxis": "Z",
+              "sourceMetersPerUnit": 1.0,
+              "sourceUpAxis": "Z",
+              "sourceCenterMeters": [
+                -0.003839585930109024,
+                -3.725290298461914e-09,
+                0.005033520516008139
+              ],
+              "sourceRoot": "simready_usd/sm_misc_notebook_a02_01.usd",
+              "geometrySha256": "b81d4dd31ca7f02fb36578ba067e33d79262ddec53ceb25a26c60217aac1f4dc",
+              "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+              "physicsStatus": "not_validated"
+            },
+            "score": 0.34,
+            "confidence": 0.66,
+            "probabilities": [
+              {
+                "value": 0,
+                "label": "Mismatch",
+                "probability": 0.75
+              },
+              {
+                "value": 1,
+                "label": "Weak",
+                "probability": 0.17
+              },
+              {
+                "value": 2,
+                "label": "Plausible",
+                "probability": 0.07
+              },
+              {
+                "value": 3,
+                "label": "Close",
+                "probability": 0.01
+              }
+            ]
+          }
+        ],
+        "trace": [
+          {
+            "stage": "category",
+            "answers": [
+              {
+                "type": "choice",
+                "name": "category",
+                "choice": "book",
+                "probabilities": [
+                  {
+                    "value": "armchair",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "basket",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "bin",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "book",
+                    "probability": 0.64
+                  },
+                  {
+                    "value": "bowl",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "candle",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "chair",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "clock",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "cup",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "keyboard",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "monitor",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "mug",
+                    "probability": 0.0
+                  },
+                  {
+                    "value": "plate",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "spoon",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "vase",
+                    "probability": 0.01
+                  },
+                  {
+                    "value": "unknown",
+                    "probability": 0.26
+                  }
+                ],
+                "confidence": 0.62
+              },
+              {
+                "type": "predicate",
+                "name": "handle",
+                "probability": 0.05
+              },
+              {
+                "type": "predicate",
+                "name": "shallow",
+                "probability": 0.05
+              }
+            ],
+            "requestId": null
+          },
+          {
+            "stage": "candidate_comparison",
+            "answers": [
+              {
+                "type": "score",
+                "name": "magazines_stack_a01",
+                "score": 1.66,
+                "probabilities": [
+                  {
+                    "value": 0,
+                    "label": "Mismatch",
+                    "probability": 0.09
+                  },
+                  {
+                    "value": 1,
+                    "label": "Weak",
+                    "probability": 0.23
+                  },
+                  {
+                    "value": 2,
+                    "label": "Plausible",
+                    "probability": 0.61
+                  },
+                  {
+                    "value": 3,
+                    "label": "Close",
+                    "probability": 0.07
+                  }
+                ],
+                "confidence": 0.52
+              },
+              {
+                "type": "score",
+                "name": "misc_notebook_a02",
+                "score": 0.34,
+                "probabilities": [
+                  {
+                    "value": 0,
+                    "label": "Mismatch",
+                    "probability": 0.75
+                  },
+                  {
+                    "value": 1,
+                    "label": "Weak",
+                    "probability": 0.17
+                  },
+                  {
+                    "value": 2,
+                    "label": "Plausible",
+                    "probability": 0.07
+                  },
+                  {
+                    "value": 3,
+                    "label": "Close",
+                    "probability": 0.01
+                  }
+                ],
+                "confidence": 0.66
+              }
+            ],
+            "requestId": null
+          }
+        ],
+        "reviewRequired": true,
+        "message": "Scores rank this prepared catalogue only. Review the crop and fit before replacement."
+      }
+    }
+  ]
+}
