@@ -4,162 +4,99 @@
       "label": "bowl",
       "view": 0,
       "pixel": [
-        566,
-        654
+        563,
+        652
       ],
       "position": [
-        1.248,
-        0.462,
+        1.238,
+        0.472,
         0.645
       ],
-      "confidence": 0.93,
+      "confidence": 0.76,
       "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
-      "result": "replaced",
-      "asset": "kitchenware bowl b01 | 5,360 triangles \u00b7 1.54/3"
+      "result": "weak",
+      "asset": "dishware plastic small Plate a01 | 18,160 triangles \u00b7 0.27/3"
     },
     {
       "label": "plate",
       "view": 0,
       "pixel": [
-        759,
+        756,
         534
       ],
       "position": [
-        1.126,
-        1.866,
-        0.683
-      ],
-      "confidence": 0.88,
-      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
-      "result": "unknown"
-    },
-    {
-      "label": "plate",
-      "view": 3,
-      "pixel": [
-        491,
-        660
-      ],
-      "position": [
-        1.106,
-        0.822,
-        0.64
-      ],
-      "confidence": 0.9,
-      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
-      "result": "unknown"
-    },
-    {
-      "label": "bowl",
-      "view": 9,
-      "pixel": [
-        309,
-        154
-      ],
-      "position": [
-        3.123,
-        -2.209,
-        0.611
-      ],
-      "confidence": 0.9,
-      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
-      "result": "replaced",
-      "asset": "kitchenware bowl c01 | 8,800 triangles \u00b7 1.35/3"
-    },
-    {
-      "label": "cup",
-      "view": 11,
-      "pixel": [
-        290,
-        35
-      ],
-      "position": [
-        3.137,
-        0.535,
-        1.361
-      ],
-      "confidence": 0.75,
-      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
-      "result": "unknown"
-    },
-    {
-      "label": "mug",
-      "view": 11,
-      "pixel": [
-        397,
-        42
-      ],
-      "position": [
-        3.214,
-        0.104,
-        1.311
-      ],
-      "confidence": 0.7,
-      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
-      "result": "unknown"
-    },
-    {
-      "label": "mug",
-      "view": 11,
-      "pixel": [
-        447,
-        42
-      ],
-      "position": [
-        3.139,
-        -0.075,
-        1.313
-      ],
-      "confidence": 0.77,
-      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
-      "result": "replaced",
-      "asset": "kitchenware cup a01 | 3,200 triangles \u00b7 1.05/3"
-    },
-    {
-      "label": "plate",
-      "view": 13,
-      "pixel": [
-        239,
-        146
-      ],
-      "position": [
-        3.104,
-        2.8,
-        0.822
+        1.114,
+        1.885,
+        0.681
       ],
       "confidence": 0.87,
       "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
       "result": "unknown"
     },
     {
-      "label": "cup",
-      "view": 13,
+      "label": "plate",
+      "view": 2,
       "pixel": [
-        708,
-        45
+        500,
+        637
       ],
       "position": [
-        3.117,
-        0.779,
-        1.351
+        1.158,
+        0.808,
+        0.633
       ],
-      "confidence": 0.72,
-      "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
-      "result": "unknown"
+      "confidence": 0.7,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "weak",
+      "asset": "dishware plastic small Plate a01 | 18,160 triangles \u00b7 0.06/3"
     },
     {
-      "label": "cup",
-      "view": 15,
+      "label": "plate",
+      "view": 6,
       "pixel": [
-        665,
-        146
+        287,
+        627
       ],
       "position": [
-        2.957,
-        3.265,
-        0.784
+        1.023,
+        0.404,
+        0.528
       ],
-      "confidence": 0.73,
+      "confidence": 0.83,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "weak",
+      "asset": "dishware plastic big Plate a01 | 19,488 triangles \u00b7 0.11/3"
+    },
+    {
+      "label": "bowl",
+      "view": 9,
+      "pixel": [
+        311,
+        151
+      ],
+      "position": [
+        3.146,
+        -2.262,
+        0.616
+      ],
+      "confidence": 0.85,
+      "decisions": "Scores rank this prepared catalogue only. Review the crop and fit before replacement.",
+      "result": "replaced",
+      "asset": "kitchenware bowl b01 | 5,360 triangles \u00b7 1.31/3"
+    },
+    {
+      "label": "bowl",
+      "view": 15,
+      "pixel": [
+        753,
+        171
+      ],
+      "position": [
+        3.097,
+        2.789,
+        0.769
+      ],
+      "confidence": 0.9,
       "decisions": "No supported match. Select a clearer object or prepare more catalogue assets.",
       "result": "unknown"
     }

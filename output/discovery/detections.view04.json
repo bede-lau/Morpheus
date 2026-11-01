@@ -1,1 +1,1 @@
-{"detections":[{"label":"bowl","x":183,"y":625,"confidence":0.93},{"label":"plate","x":369,"y":641,"confidence":0.84}]}
+{"detections":[{"label":"bowl","x":182,"y":626,"confidence":0.78},{"label":"plate","x":372,"y":637,"confidence":0.87}]}

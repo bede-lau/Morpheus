@@ -38,6 +38,28 @@ cups, spoons); raycasts on blurry splats can land on walls, so hits outside
 """
 from __future__ import annotations
 import argparse, base64, json, re, subprocess, sys, time, urllib.request
+OBJECTS_API = 'http://127.0.0.1:8001/api/objects/scene'
+
+
+def saved_scene():
+    try:
+        with urllib.request.urlopen(OBJECTS_API, timeout=10) as r: return json.load(r)
+    except Exception: return None
+
+
+def merge_saved(prior, current):
+    """Keep prior replacements that the new save did not re-place (within 0.18 m), then POST the union."""
+    if not prior or not prior.get('replacements'): return current
+    kept = []
+    for item in prior['replacements']:
+        if not any(sum((a-b)**2 for a, b in zip(item['position'], c['position'])) ** .5 < 0.18 for c in current['replacements']): kept.append(item)
+    if not kept: return current
+    body = {k: v for k, v in current.items() if k not in ('revision',)}
+    body['replacements'] = current['replacements'] + kept
+    body['baseRevision'] = current['revision']
+    for item in body['replacements']: item.pop('asset', None)
+    req = urllib.request.Request(OBJECTS_API, data=json.dumps(body).encode(), headers={'Content-Type': 'application/json'})
+    with urllib.request.urlopen(req, timeout=30) as r: return json.load(r)
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -194,7 +216,10 @@ def apply(args):
     for d in detections: by_view.setdefault(int(d['view']), []).append(d)
     views = json.loads((OUT / 'views.json').read_text())['views']
     yaw_steps = max(1, len(views) // 2)
-    found, report = [], {'objects': [], 'source': 'codex-cli detections'}
+    prior = saved_scene()
+    found = [{'label': 'saved', 'position': r['position'], 'result': 'already-saved', 'asset': r['assetId']} for r in (prior or {}).get('replacements', [])]
+    print(f'{len(found)} objects already saved; new hits within 0.18 m of them are skipped')
+    report = {'objects': [], 'source': 'detections.json', 'priorRevision': (prior or {}).get('revision')}
     with sync_playwright() as p:
         browser, page, box = open_workspace(p)
         for v in range(len(views)):
@@ -252,12 +277,16 @@ def apply(args):
             print('save ->', status(page))
             try: print('error:', page.inner_text('.object-error'))
             except Exception: pass
+            try:
+                merged = merge_saved(prior, saved_scene())
+                print(f'saved scene revision {merged.get("revision")} holds {len(merged.get("replacements", []))} objects (earlier ones kept)')
+            except Exception as e: print('merge with earlier saved objects failed:', str(e)[:160])
         page.get_by_text('Room view', exact=True).click(); time.sleep(2)
         page.screenshot(path=str(OUT / 'final.png'))
         browser.close()
     report['objects'] = found
     (OUT / 'report.json').write_text(json.dumps(report, indent=2))
-    print(f'{len(replaced) if not args.dry_run else 0} replaced / {len(found)} located; report at {OUT / "report.json"}')
+    print(f'{len(replaced) if not args.dry_run else 0} replaced / {len([f for f in found if f.get("result") != "already-saved"])} located; report at {OUT / "report.json"}')
 
 
 def main():
