@@ -3,12 +3,13 @@ import * as THREE from 'three';
 import { RoomViewer } from './viewer';
 import { RobotScene } from './robot-scene';
 import { RobotPov } from './pov';
+import { SavedObjectLayer, parseSavedObjects, type SavedObjects } from './saved-objects';
 import { getJson, parseEnvironment, type BackendEnvironment } from './backend';
 import { fetchTasks, parseTaskEnvelope, taskUrl } from './tasks';
 import { currentEvent, ROBOTS, type Replay, type RobotId, type Verdict } from './replay';
 import { computeBounds, roomFootprintBounds } from './geometry';
 import { suggestedCutawayHeight } from './cutaway';
-import { AMBER, GREEN, backOut, captureAround, createBoxMask, createFlash, createRing, createScanPlane, createSphereReveal, easeInOutCubic, easeOutCubic, fadeColliders, freeObject, loadAsset, progress, project } from './demo-fx';
+import { AMBER, GREEN, backOut, captureAround, createFlash, createRing, createScanPlane, createSphereReveal, easeInOutCubic, easeOutCubic, fadeColliders, loadAsset, progress, project } from './demo-fx';
 import './demo.css';
 
 type View={view:number;file:string;width:number;height:number};
@@ -41,7 +42,8 @@ class Show {
   private home={pos:new THREE.Vector3(),target:new THREE.Vector3()}; private tween:{from:[THREE.Vector3,THREE.Vector3];to:[THREE.Vector3,THREE.Vector3];start:number;dur:number}|null=null;
   private reveal:ReturnType<typeof createSphereReveal>|null=null; private revealStart=0; private revealRadius=1; private center=new THREE.Vector3();
   private scan:ReturnType<typeof createScanPlane>|null=null; private rings:ReturnType<typeof createRing>[]=[];
-  private assets=new Map<string,Promise<THREE.Group>>(); private swaps:{mesh:THREE.Group|null;flash:ReturnType<typeof createFlash>;unmask:(()=>void)|null;item:Replacement}[]=[];
+  private assets=new Map<string,Promise<THREE.Group>>(); private swaps:{flash:ReturnType<typeof createFlash>;item:Replacement}[]=[];
+  private saved:SavedObjects|null=null; layer:SavedObjectLayer|null=null; private layerReady=false;
   private collidersOn=false; robotScene:RobotScene|null=null; pov:RobotPov|null=null; run:RobotRun|null=null; private onRunEnd:(()=>void)|null=null;
   constructor(private host:HTMLElement,private set:(fn:(u:UI)=>UI)=>void,private labels:()=>HTMLElement|null){
     this.viewer=new RoomViewer(host,{onSelect:()=>{},onChange:()=>{},onMeasure:()=>{},onStatus:status=>set(u=>({...u,status}))},{crop:true});
@@ -67,6 +69,8 @@ class Show {
     this.data={tasks:tasks.map(t=>({slug:t.slug,task:t.task})),env,views:views.views,detections:detections.detections,source:detections.source,report:report.objects,replacements:reps,task:{slug:chosen.slug,task:chosen.task},replay,numSplats:v.splat?.numSplats??0,samples:v.points.length/3,floor:min.z,top:max.z,cut:suggestedCutawayHeight(min.z,max.z),size:max.clone().sub(min)};
     this.center.set((min.x+max.x)/2,(min.y+max.y)/2,min.z);this.revealRadius=Math.hypot(max.x-min.x,max.y-min.y,max.z-min.z)*.62;
     this.scan=createScanPlane(v.scene,min,max);
+    try{this.saved=parseSavedObjects(objects,env)}catch(e){console.warn('Saved SimReady objects unavailable',e)}
+    // Warm the HTTP cache so the SavedObjectLayer load in phase 04 is instant.
     for(const r of reps)if(!this.assets.has(r.assetId)){const p=loadAsset(r.assetId);p.catch(()=>{});this.assets.set(r.assetId,p)}
     // Render-in: hidden until the reveal mask is in place, then a growing sphere and a slow dolly toward the home view.
     this.reveal=createSphereReveal(v.splat!,this.center);this.revealStart=performance.now();v.sourceRoot.visible=true;
@@ -106,7 +110,7 @@ class Show {
     // 03 LUNA DECISIONS
     this.phase(2);
     d.replacements.forEach((r,i)=>{const t0=START[2]+i*LUNA_SLOT,dec=r.decision,cat=dec?.trace[0]?.answers.find(a=>a.type==='choice');
-      this.at(t0,()=>{this.lookAt(r.position,2.1);const top=[...(cat?.probabilities??[])].sort((a,b)=>b.probability-a.probability)[0];this.log(`POST /v1/decisions gpt-6-luna · category=${dec?.category??'?'}${top?` p=${pct(top.probability)}`:''}`,'ok')});
+      this.at(t0,()=>{this.lookAt(r.position,2.6);const top=[...(cat?.probabilities??[])].sort((a,b)=>b.probability-a.probability)[0];this.log(`POST /v1/decisions gpt-6-luna · category=${dec?.category??'?'}${top?` p=${pct(top.probability)}`:''}`,'ok')});
       if(!r.match)this.at(t0+1.2,()=>{let url:string|null=null;try{url=captureAround(v,new THREE.Vector3(...r.position),190)}catch(e){console.warn('live crop failed',e)}if(url)this.set(u=>({...u,crops:{...u.crops,[r.id]:url!}}));else console.warn('live crop unavailable')});
       this.at(t0+RANK_AT,()=>this.log(`candidate_comparison · ${dec?.candidates.map(c=>`${c.asset.id} ${c.score.toFixed(2)}`).join(' · ')}`));
       this.at(t0+DECIDE_AT,()=>{const win=dec?.candidates.find(c=>c.asset.id===r.assetId);this.log(`→ ${r.assetId} ${win?`score ${win.score.toFixed(2)}/3 (${bandOf(win)})`:''} · ${win?.asset.license??''} · ${r.chosenBy}`,'ok')});
@@ -114,8 +118,10 @@ class Show {
     // 04 SIMREADY SWAP
     this.phase(3);
     d.replacements.forEach((r,i)=>this.at(SWAP_T-.55+i*SWAP_DT,()=>this.lookAt(r.position,2,.6)));
-    d.replacements.forEach((r,i)=>this.at(SWAP_T+i*SWAP_DT,()=>{const swap={mesh:null as THREE.Group|null,flash:createFlash(v.scene,r.position),unmask:v.splat?createBoxMask(v.splat,r.selection):null,item:r};this.swaps.push(swap);
-      this.assets.get(r.assetId)?.then(mesh=>{if(this.disposed)return freeObject(mesh);const m=mesh.clone();m.position.fromArray(r.position);m.quaternion.set(r.quaternion[1],r.quaternion[2],r.quaternion[3],r.quaternion[0]);m.scale.setScalar(.0001);v.scene.add(m);swap.mesh=m}).catch(()=>this.log(`${r.assetId} model.glb failed to load`,'warn'));
+    // SavedObjectLayer owns the SimReady meshes and their splat masks (robot-scene carries them); the demo only stages the reveal.
+    this.at(START[3]+.05,()=>{if(!this.saved||!v.splat){this.log('no saved SimReady scene for this scan','warn');return}const layer=new SavedObjectLayer(v);this.layer=layer;layer.root.visible=false;
+      void layer.load(this.saved).then(()=>{if(this.disposed)return;this.saved!.replacements.forEach(item=>layer.getMesh(item.id)?.scale.setScalar(.0001));layer.root.visible=true;this.layerReady=true}).catch(e=>this.log(`SimReady layer failed: ${e instanceof Error?e.message:String(e)}`,'warn'))});
+    d.replacements.forEach((r,i)=>this.at(SWAP_T+i*SWAP_DT,()=>{this.swaps.push({flash:createFlash(v.scene,r.position),item:r});
       this.log(`${r.assetId} · scale ${r.scale.toFixed(3)} · masked ${r.selection.size.map(n=>n.toFixed(2)).join('×')} m`,'ok')}));
     this.at(SWAP_T+d.replacements.length*SWAP_DT+.2,()=>this.log(`${d.replacements.length} objects replaced · splats masked · pose/scale from reviewed fit`,'ok'));
     // 05 PHYSICS
@@ -130,7 +136,7 @@ class Show {
     this.phase(5);
     this.at(START[5]+.05,()=>{this.robotScene=new RobotScene(v);this.whiten();this.robotScene.hasEnvironmentColliders=true;
       try{this.pov=new RobotPov(v,this.robotScene);this.pov.setLayout({widthFraction:.22,aspect:16/10,right:384,bottom:96})}catch(e){console.warn('Robot POV unavailable',e)}
-      this.robotScene.clearReplay();this.cameraTo(this.home.pos,this.home.target,1);
+      this.robotScene.clearReplay();this.robotScene.setCarriedObjects(this.layer);this.cameraTo(this.home.pos,this.home.target,1);
       this.log(`environment ready · ${d.tasks.length} tasks published · choose a robot and run`,'ok');this.set(u=>({...u,panel:true}))});
   }
   play(robot:RobotId,replay:Replay,onEnd:()=>void,speed=1){if(!this.robotScene)return;this.robotScene.setReplay(replay);this.run={robot,replay,start:this.t+.4,speed};this.onRunEnd=onEnd;this.firedRobotEvents=new Set();this.log(`spawn ${ROBOT_NAME[robot]} · ${replay.duration.toFixed(1)} s rollout${speed!==1?` · ${speed}× playback`:''}`,'hi')}
@@ -155,7 +161,7 @@ class Show {
       const d=this.data!;
       if(this.scan){const k=progress(t,.3,6),a=Math.min(progress(t,.1,.3),1-progress(t,6.4,.5));this.scan.set(d.floor+(d.cut-d.floor)*easeInOutCubic(k),t<START[1]?a:0)}
       const ringVis=Math.min(progress(t,RINGS_T,.5),1-progress(t,START[3],.5));this.rings.forEach(r=>r.update(now/1000,ringVis));
-      for(const [i,s] of this.swaps.entries()){const p=progress(t,SWAP_T+i*SWAP_DT,.9);s.flash.update(progress(t,SWAP_T+i*SWAP_DT,1.1));if(s.mesh)s.mesh.scale.setScalar(Math.max(.0001,backOut(p)*s.item.scale))}
+      for(const [i,s] of this.swaps.entries()){const p=progress(t,SWAP_T+i*SWAP_DT,.9);s.flash.update(progress(t,SWAP_T+i*SWAP_DT,1.1));const mesh=this.layerReady?this.layer?.getMesh(s.item.id):null;if(mesh)mesh.scale.setScalar(p>=1?s.item.scale:Math.max(.0001,backOut(p)*s.item.scale))}
       if(this.collidersOn)fadeColliders(v,t<START[5]?easeOutCubic(progress(t,START[4]+.1,1.4)):1-.8*progress(t,START[5],1));
       if(this.run&&this.robotScene){const rt=Math.max(0,(t-this.run.start)*this.run.speed);this.robotScene.update(Math.min(rt,this.run.replay.duration));
         (this.run.replay.events??[]).forEach((e,i)=>{if(rt>=e.time&&!this.firedRobotEvents.has(i)){this.firedRobotEvents.add(i);this.log(`[${this.run!.robot}] t=${e.time.toFixed(1)}s ${e.label}`,/cannot|fail|unable|no manipulator|partial/i.test(e.label)?'warn':'ok')}});
@@ -166,7 +172,7 @@ class Show {
     if(this.morphing&&now-this.publish>50){this.publish=now;const run=this.run;this.set(u=>({...u,now:t,robot:run?{id:run.robot,time:Math.max(0,Math.min(run.replay.duration,(t-run.start)*run.speed)),replay:run.replay}:null}))}
   };
   dispose(){if(this.disposed)return;this.disposed=true;cancelAnimationFrame(this.raf);this.reveal?.dispose();this.scan?.dispose();this.rings.forEach(r=>r.dispose());
-    for(const s of this.swaps){s.flash.dispose();s.unmask?.();if(s.mesh){this.viewer.scene.remove(s.mesh);freeObject(s.mesh)}}
+    for(const s of this.swaps)s.flash.dispose();this.robotScene?.setCarriedObjects(null);this.layer?.dispose();
     this.pov?.dispose();this.robotScene?.dispose();this.viewer.dispose()}
 }
 
