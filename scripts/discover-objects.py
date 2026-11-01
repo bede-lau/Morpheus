@@ -15,10 +15,10 @@ already performs.
 
     python3 scripts/discover-objects.py detect [--parallel 4] [--backend auto|api|codex]
         Detects objects per view. With OPENAI_TERRA_API_KEY in .env (backend
-        "api") it calls the Responses API with gpt-6-terra directly, a few
+        "api") it calls the Responses API with gpt-6.1-terra directly, a few
         requests at a time, no subagents needed. Otherwise (backend "codex") it
         fans out one `codex exec` Astra subagent per view through the Codex
-        CLI's ChatGPT login. The API path is pinned to gpt-6-terra: it refuses
+        CLI's ChatGPT login. The API path is pinned to terra-class models: it refuses
         any other model, so the key is never used for astra/sol/luna-class
         models. with the image attached, and merges their
         answers into output/discovery/detections.json. Equivalent to the manual
@@ -118,8 +118,9 @@ def detect_view(view, model):
         return view['view'], [], f'failed: {str(e).splitlines()[0] if str(e) else type(e).__name__}'
 
 
-API_MODEL = 'gpt-6-terra'
-API_ALLOWED = {'gpt-6-terra'}
+# Terra-class only: the key must never be used for sol/astra/luna-class models here.
+API_MODEL = 'gpt-6.1-terra'
+API_ALLOWED = {'gpt-6.1-terra', 'gpt-6-terra', 'gpt-5.6-terra'}
 API_SCHEMA = {'type': 'object', 'additionalProperties': False, 'required': ['detections'], 'properties': {'detections': {
     'type': 'array', 'items': {'type': 'object', 'additionalProperties': False, 'required': ['label', 'x', 'y', 'confidence'],
     'properties': {'label': {'type': 'string', 'enum': list(SIZES)}, 'x': {'type': 'integer'}, 'y': {'type': 'integer'},

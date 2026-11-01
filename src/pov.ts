@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { FlyControls } from './fly';
 import type { RoomViewer } from './viewer';
 import type { RobotId } from './replay';
 import type { Vec3 } from './types';
@@ -33,7 +34,9 @@ export class RobotPov {
   enabled=true; swapped=false;
   private target=new THREE.WebGLRenderTarget(4,4,{depthBuffer:true});
   private quadScene=new THREE.Scene(); private quadCamera=new THREE.OrthographicCamera(-1,1,1,-1,0,1);
-  private quad:THREE.Mesh; private size=new THREE.Vector2(); private disposed=false; private frame=0;
+  private quad:THREE.Mesh; private size=new THREE.Vector2(); private disposed=false; private frame=0; private lastTime=0;
+  /** Free-fly camera; while enabled it replaces orbit.update() in the loop. */
+  fly:FlyControls;
   constructor(private viewer:RoomViewer,private source:PoseSource){
     this.camera.up.set(0,0,1);
     this.quad=new THREE.Mesh(new THREE.PlaneGeometry(2,2),new THREE.ShaderMaterial({uniforms:{map:{value:this.target.texture}},depthTest:false,depthWrite:false,
@@ -41,6 +44,7 @@ export class RobotPov {
       vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=vec4(position.xy,0.,1.);}',
       fragmentShader:'uniform sampler2D map;varying vec2 vUv;void main(){gl_FragColor=vec4(texture2D(map,vUv).rgb,1.);}'}));
     this.quadScene.add(this.quad);
+    this.fly=new FlyControls(viewer.camera,viewer.renderer.domElement);
     viewer.renderer.setAnimationLoop(null);
     viewer.renderer.setAnimationLoop(this.render);
   }
@@ -50,9 +54,10 @@ export class RobotPov {
   updateCamera(){const pose=this.source.getPose();if(!pose)return false;
     const p=eyePose(pose.robot,pose.position.toArray() as Vec3,pose.yaw);
     this.camera.position.set(...p.eye);this.camera.lookAt(...p.target);this.camera.updateMatrixWorld();return true;}
-  private render=()=>{
+  private render=(now:number=performance.now())=>{
     if(this.disposed)return;const {renderer,scene,camera,orbit}=this.viewer;
-    orbit.update();renderer.getSize(this.size);const W=this.size.x,H=this.size.y;
+    const dt=this.lastTime?Math.min((now-this.lastTime)/1000,.1):0;this.lastTime=now;
+    if(this.fly.enabled){orbit.enabled=false;this.fly.update(dt)}else{orbit.enabled=true;orbit.update()}renderer.getSize(this.size);const W=this.size.x,H=this.size.y;
     const active=this.enabled&&W>0&&H>0&&this.updateCamera();
     if(!active){renderer.setScissorTest(false);renderer.setViewport(0,0,W,H);renderer.render(scene,camera);return;}
     const rect=insetRect(W,H),pr=renderer.getPixelRatio();
@@ -78,7 +83,7 @@ export class RobotPov {
     if(camera.aspect!==mainAspect)this.setAspect(camera,mainAspect);
   };
   private setAspect(cam:THREE.PerspectiveCamera,aspect:number){if(Math.abs(cam.aspect-aspect)>1e-6){cam.aspect=aspect;cam.updateProjectionMatrix()}}
-  dispose(){if(this.disposed)return;this.disposed=true;const v=this.viewer;
+  dispose(){if(this.disposed)return;this.disposed=true;const v=this.viewer;this.fly.dispose();v.orbit.enabled=true;
     try{v.renderer.setAnimationLoop(()=>{v.orbit.update();v.renderer.render(v.scene,v.camera)})}catch{/* viewer already disposed */}
     this.target.dispose();this.quad.geometry.dispose();(this.quad.material as THREE.Material).dispose();}
 }
