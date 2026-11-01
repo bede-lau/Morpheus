@@ -564,7 +564,8 @@ def simulate(world, robot, task, steps):
             tl.event("Filling glass")
             tl.hold(4.0)
             tl.arm_to(0.0)
-            results.append({"name": title, "status": "done", "note": "Held 4 s at the assumed sink (sink location is a geometric guess)."})
+            where = "the reviewed sink counter" if "reviewed" in lm.get("label", "").lower() else "the assumed sink (sink location is a geometric guess)"
+            results.append({"name": title, "status": "done", "note": f"Held 4 s at {where}."})
         else:
             tl.arm_to(ext)
             tl.hold(0.5)

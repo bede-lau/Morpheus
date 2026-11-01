@@ -2047,7 +2047,7 @@
     {
      "name": "Fill glass at sink counter",
      "status": "done",
-     "note": "Held 4 s at the assumed sink (sink location is a geometric guess). Decisions (gpt-6-luna) feasibility estimate p=0.99."
+     "note": "Held 4 s at the reviewed sink counter. Decisions (gpt-6-luna) feasibility estimate p=0.99."
     },
     {
      "name": "Navigate to table",
