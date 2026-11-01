@@ -1,4 +1,4 @@
-<p align="center"><img src="public/brand/morpheus-glasses.png" width="300" alt="Morpheus — green sunglasses logo" /></p>
+<p align="center"><img src="src/assets/morpheus-gradient-logo.png" width="480" alt="Morpheus — gradient ribbon logo" /></p>
 
 <p align="center">
   <img src="docs/media/banner.jpg" alt="Morpheus" width="100%"/>

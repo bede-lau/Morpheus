@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { Brand } from './brand';
 import * as THREE from 'three';
 import { RoomViewer } from './viewer';
 import { RobotScene } from './robot-scene';
@@ -276,12 +277,12 @@ export default function Demo(){
       {d&&phase>=1&&phase<=3&&now>=RINGS_T&&d.report.map((o,i)=><div key={`r${i}`} className={`d-pin ${o.result}`} data-x={o.position[0]} data-y={o.position[1]} data-z={o.position[2]}><span>{o.label} · v{pad(o.view)} · {pct(o.confidence)}<b>{o.result}</b></span></div>)}
       {d&&phase===4&&now>START[4]+1.8&&landmarkList.map(l=><div key={l.id} className="d-pin land" data-x={l.position[0]} data-y={l.position[1]} data-z={l.position[2]+l.size[2]/2}><span>{l.label}<b>{l.size.slice(0,2).map(n=>Math.abs(n).toFixed(2)).join('×')} m</b></span></div>)}
     </div>
-    {ui.stage!=='empty'&&<header className="d-brand"><img src="/brand/morpheus-glasses.png" alt="" width="48" height="16"/>MORPHEUS{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>}
+    {ui.stage!=='empty'&&<header className="d-brand"><Brand/>{ui.stage==='ready'&&d&&<em>{d.env.scene.name} · rev {d.env.revision.slice(0,8)}</em>}</header>}
     {ui.stage==='empty'&&<main className="home">
-      <header className="home-header"><a className="home-brand" href="/" aria-label="Morpheus home">MORPHEUS<span>Home robotics, in perspective.</span></a><a className="home-workspace" href="/?view=workspace">Open workspace <span aria-hidden="true">↗</span></a></header>
+      <header className="home-header"><a className="home-brand" href="/" aria-label="Morpheus home"><Brand/><span>Home robotics, in perspective.</span></a><a className="home-workspace" href="/?view=workspace">Open workspace <span aria-hidden="true">↗</span></a></header>
       <section className="home-hero" aria-labelledby="home-title">
         <div className="home-intro"><span className="home-eyebrow">A NEW PERSPECTIVE</span><h1 id="home-title">See your home<br/>through new eyes.</h1><p>Choose a room. Turn the scan into a simulation,<br className="home-wide-break"/> then see how each robot moves through it.</p></div>
-        <div className="home-glasses"><img src="/brand/morpheus-glasses.png" alt="Morpheus green sunglasses" width="2172" height="724"/><span>Same room. Different possibilities.</span></div>
+        <div className="home-glasses"><Brand large/><span>Same room. Different possibilities.</span></div>
       </section>
       <section className="home-spaces" aria-labelledby="spaces-title">
         <div className="home-section-heading"><h2 id="spaces-title">Choose your space</h2><span>{ROOMS.length} rooms to explore</span></div>
