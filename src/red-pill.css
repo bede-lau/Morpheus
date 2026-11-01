@@ -1,0 +1,21 @@
+/* Opening screen: black, neon green, Morpheus' shades, 3D hands offering the pills */
+.rp{position:absolute;inset:0;z-index:20;background:radial-gradient(ellipse at 50% 62%,#07120c 0%,#020403 58%,#000 100%);color:#d7efe2;opacity:0;pointer-events:none;transition:opacity 1.1s cubic-bezier(.4,0,.2,1);font-family:var(--mono)}
+.rp.on{opacity:1;pointer-events:auto;transition-duration:.35s}
+.rp-rain{position:absolute;inset:0;width:100%;height:100%;opacity:.22}
+.rp-stage{position:absolute;inset:0;opacity:0;transition:opacity 1.4s .2s}.rp.ready .rp-stage{opacity:1}
+.rp-stage canvas{display:block;outline:none}
+.rp-top{position:absolute;left:50%;top:5vh;transform:translateX(-50%);width:min(680px,calc(100vw - 32px));display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none;animation:rise .7s .1s both}
+.rp-shades{width:min(380px,72vw);aspect-ratio:1536/300;background:url(/brand/morpheus-matrix-logo.png) center 37%/100% auto no-repeat;-webkit-mask-image:radial-gradient(ellipse 52% 60% at 50% 50%,#000 70%,transparent 100%);mask-image:radial-gradient(ellipse 52% 60% at 50% 50%,#000 70%,transparent 100%);filter:drop-shadow(0 0 18px rgba(25,195,125,.35))}
+.rp-quote{margin:22px 0 0;font-size:14px;line-height:1.75;font-weight:500;min-height:5.25em;color:#d7efe2;text-shadow:0 0 12px rgba(0,0,0,.9)}
+.rp-quote .blue{color:#6f9bff}.rp-quote .red{color:#ff5a63}
+.rp-caret{display:inline-block;width:.55em;height:1.05em;margin-left:2px;vertical-align:-.15em;background:var(--green);box-shadow:0 0 10px var(--green);animation:blink 1s steps(1) infinite}
+.rp-cite{margin-top:12px;font-style:normal;font-size:10px;font-weight:700;letter-spacing:.32em;color:#4f7a63}
+.rp-line{position:absolute;left:50%;bottom:7vh;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#5f8a73;white-space:nowrap;transition:color .2s;pointer-events:none;text-align:center}
+.rp-line.red{color:#ff5a63;text-shadow:0 0 14px rgba(255,45,58,.6)}.rp-line.blue{color:#6f9bff;text-shadow:0 0 14px rgba(47,107,255,.6)}
+.phase-blue .rp-line{color:#6f9bff;letter-spacing:.12em;text-transform:none}.phase-exit .rp-line{color:#19c37d;letter-spacing:.12em;text-transform:none}
+.rp-top,.rp-shades{transition:opacity .6s}.phase-exit .rp-top{opacity:0}
+.rp-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.rp-sr button:focus{outline:2px solid var(--green)}
+@keyframes blink{50%{opacity:0}}
+@media(max-width:700px){.rp-line{white-space:normal;width:calc(100vw - 32px);letter-spacing:.14em}.rp-quote{font-size:12.5px}}
+@media(prefers-reduced-motion:reduce){.rp-rain{display:none}.rp-caret{animation:none}}

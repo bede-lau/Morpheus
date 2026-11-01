@@ -9,6 +9,7 @@ import { fetchTasks, parseTaskEnvelope, taskUrl } from './tasks';
 import { currentEvent, ROBOTS, type Replay, type RobotId, type Verdict } from './replay';
 import { computeBounds, roomFootprintBounds } from './geometry';
 import { suggestedCutawayHeight } from './cutaway';
+import RedPill from './red-pill';
 import { AMBER, GREEN, backOut, captureAround, createFlash, createRing, createScanPlane, createSphereReveal, easeInOutCubic, easeOutCubic, fadeColliders, loadAsset, progress, project } from './demo-fx';
 import './demo.css';
 
@@ -97,7 +98,7 @@ class Show {
     this.center.set(fc.x,fc.y,fb.min[2]);this.revealRadius=Math.hypot(fs.x,fs.y,fs.z)*.62;
     this.reveal=createSphereReveal(v.splat!,this.center);this.revealStart=performance.now();v.sourceRoot.visible=true;
     const dir=v.camera.position.clone().sub(v.orbit.target).normalize();
-    this.home.target.set(fc.x,fc.y,fb.min[2]+fs.z*.35);this.home.pos.copy(this.home.target).add(dir.multiplyScalar(radius*1.15));
+    this.home.target.set(fc.x,fc.y,fb.min[2]+fs.z*.35);this.home.pos.copy(this.home.target).add(dir.multiplyScalar(radius*1.9));
     const offset=this.home.pos.clone().sub(this.home.target).applyAxisAngle(new THREE.Vector3(0,0,1),-.55).multiplyScalar(1.75);offset.z*=1.25;
     this.cameraTo(this.home.pos,this.home.target,4.6,[this.home.target.clone().add(offset),this.home.target.clone().add(new THREE.Vector3(0,0,-.3))]);
     this.set(u=>({...u,stage:'ready',data:null,status:''}));
@@ -201,7 +202,8 @@ type Room={name:string;meta:string;image:string;kind:'kitchen'|'splat';splat?:st
 const ROOMS:Room[]=[
   {name:'Rustic kitchen',meta:'500k gaussians',image:'/rooms/rustic-kitchen.jpg',kind:'kitchen'},
   {name:'Hackney flat',meta:'scan only',image:'/rooms/hackney-flat.jpg',kind:'splat',splat:'/samples/hackney-room.spz',file:'hackney-room.spz',up:'y-down',credit:'Scaniverse capture · hackney-room'},
-  {name:'Studio',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',splat:'/samples/mipnerf-room.splat',file:'mipnerf-room.splat',up:'y-down',credit:'Mip-NeRF 360 “room” · antimatter15 .splat'}];
+  {name:'Studio',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',splat:'/samples/mipnerf-room.splat',file:'mipnerf-room.splat',up:'y-down',credit:'Mip-NeRF 360 “room” · antimatter15 .splat'},
+  {name:'Fireplace',meta:'scan only',image:'/rooms/studio.jpg',kind:'splat',splat:'/samples/spark-fireplace.spz',file:'spark-fireplace.spz',up:'y-down',credit:'sparkjs.dev sample'}];
 
 function Glyph({id}:{id:RobotId}){const c={fill:'none',stroke:'currentColor',strokeWidth:1.4,strokeLinecap:'square' as const};
   return <svg viewBox="0 0 64 44" width="64" height="44" aria-hidden="true">{id==='go2'?<g {...c}><rect x="14" y="14" width="30" height="9"/><rect x="44" y="11" width="9" height="8"/><path d="M18 23l-3 9 3 7M26 23l2 9-2 7M36 23l-3 9 3 7M42 23l2 9-2 7"/><path d="M4 41h56" strokeDasharray="2 3"/></g>
@@ -242,56 +244,6 @@ function LunaCard({data,item,crop,local}:{data:Data;item:Replacement;crop?:strin
         <div className="d-score"><em><i style={{width:showRank?`${c.score/3*100}%`:0}}/>{[1,2].map(k=><s key={k} style={{left:`${k/3*100}%`}}/>)}</em><b>{c.score.toFixed(2)}/3</b><span className={`band ${bandOf(c).toLowerCase()}`}>{bandOf(c)}</span></div>
         {win&&<div className="d-attrib">nvidia/simready-assets · {c.asset.id} · {c.asset.license}</div>}</div></div>})}
     <div className="d-luna-foot">{data.replacements.indexOf(item)+1} / {data.replacements.length}</div>
-  </div>;
-}
-
-// The opening veil holds this long after the quote finishes typing.
-const VEIL_READ_MS=1600;
-const QUOTE:[string,''|'blue'|'red'][]=[["This is your last chance. Take the ",''],["blue pill",'blue'],[" and you buy the robot the brochure promised. Take the ",''],["red pill",'red'],[" and I show you how it really moves through your kitchen.",'']];
-const QUOTE_LEN=QUOTE.reduce((n,[t])=>n+t.length,0);
-
-function Hand({pill,x,flip}:{pill:'blue'|'red';x:number;flip?:boolean}){
-  return <g transform={flip?`translate(${x+200},0) scale(-1,1)`:`translate(${x},0)`}>
-    <g className="rp-hand">
-      <path d="M0 64H20V112H0"/>
-      <path d="M20 68C36 67 48 64 58 60C66 49 72 38 81 32C88 28 94 33 90 41C86 50 81 58 80 66C96 72 118 72 136 66C150 61 165 55 177 51C186 48 191 56 183 61C174 66 163 70 153 74C165 74 177 73 186 72C194 72 195 81 186 83C176 85 165 86 155 88C164 90 173 91 180 92C187 94 185 102 177 101C150 99 118 106 90 108C62 110 40 109 20 108"/>
-      <path d="M141 77C152 79 166 79 176 77M136 86C146 88 158 89 168 89" className="rp-crease"/>
-      <path d="M84 70C98 78 120 78 134 72" className="rp-crease"/>
-    </g>
-    <g className={`rp-pill ${pill}`}><g transform="translate(108 62) rotate(-14)"><rect x="-15" y="-6.5" width="30" height="13" rx="6.5"/><path d="M0-6.5V6.5"/><rect x="-11" y="-4" width="9" height="2.4" rx="1.2" className="rp-shine"/></g></g>
-  </g>;
-}
-
-function Rain({on}:{on:boolean}){
-  const ref=useRef<HTMLCanvasElement>(null);
-  useEffect(()=>{if(!on)return;const c=ref.current!,g=c.getContext('2d')!,cell=16,glyphs='ｱｲｳｴｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄ0123456789MORPHEUS<>/*';
-    let drops:number[]=[],raf=0,last=0;
-    const size=()=>{c.width=innerWidth;c.height=innerHeight;drops=Array.from({length:Math.ceil(c.width/cell)},()=>Math.random()*c.height/cell-12);g.font=`${cell-3}px 'JetBrains Mono',monospace`};
-    const tick=(t:number)=>{raf=requestAnimationFrame(tick);if(t-last<55)return;last=t;
-      g.fillStyle='rgba(43,46,45,.16)';g.fillRect(0,0,c.width,c.height);
-      drops.forEach((y,i)=>{const ch=glyphs[Math.floor(Math.random()*glyphs.length)];g.fillStyle=Math.random()<.04?'#d8ffe9':'#19c37d';g.fillText(ch,i*cell,y*cell);
-        drops[i]=y*cell>c.height&&Math.random()>.97?Math.random()*-20:y+1})};
-    size();addEventListener('resize',size);raf=requestAnimationFrame(tick);
-    return()=>{cancelAnimationFrame(raf);removeEventListener('resize',size)}},[on]);
-  return <canvas ref={ref} className="rp-rain"/>;
-}
-
-// Opening screen only: the app starts grey on the quote, then fades to the room picker (click to skip).
-function RedPill(){
-  const [typed,setTyped]=useState(0),[on,setOn]=useState(true),[live,setLive]=useState(true);
-  useEffect(()=>{const id=setInterval(()=>setTyped(n=>n>=QUOTE_LEN?(clearInterval(id),n):n+1),17);return()=>clearInterval(id)},[]);
-  useEffect(()=>{if(typed<QUOTE_LEN)return;const t=setTimeout(()=>setOn(false),VEIL_READ_MS);return()=>clearTimeout(t)},[typed>=QUOTE_LEN]);
-  useEffect(()=>{if(on)return;const t=setTimeout(()=>setLive(false),1400);return()=>clearTimeout(t)},[on]);
-  if(!live&&!on)return null;
-  let left=typed;
-  return <div className={`rp ${on?'on':''} skippable`} aria-live="polite" onClick={()=>setOn(false)}>
-    <Rain on={live}/>
-    <div className="rp-body">
-      <svg className="rp-hands" viewBox="0 0 440 120" aria-hidden="true"><Hand pill="blue" x={0}/><Hand pill="red" x={240} flip/></svg>
-      <blockquote className="rp-quote">{QUOTE.map(([text,tone],i)=>{const shown=text.slice(0,Math.max(0,left));left-=text.length;return <span key={i} className={tone}>{shown}</span>})}<span className={`rp-caret ${typed>=QUOTE_LEN?'done':''}`}/></blockquote>
-      <cite className="rp-cite">— MORPHEUS</cite>
-      <div className="rp-status"><span className="d-spin"/>wake up · click to enter</div>
-    </div>
   </div>;
 }
 

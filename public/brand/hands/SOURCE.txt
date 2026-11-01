@@ -1,0 +1,1 @@
+generic-hand left.glb / right.glb from @webxr-input-profiles/assets@1.0.20 (dist/profiles/generic-hand), MIT License, Copyright (c) 2019 Amazon. See LICENSE.md.
