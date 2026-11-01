@@ -31,3 +31,4 @@ output/discovery/*
 .openai/
 COORDINATION.md
 *.tsbuildinfo
+.claude/
