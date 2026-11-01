@@ -4,8 +4,6 @@
   <img src="docs/media/banner.jpg" alt="Morpheus" width="100%"/>
 </p>
 
-<h1 align="center">M O R P H E U S</h1>
-
 <p align="center">
   <b>Scan your room. Morph it into a simulation. Watch real robots do your chores in it.</b><br/>
   <sub>Gaussian splat → collision world → SimReady objects → planned robot rollouts → an honest verdict on which robot fits your home.</sub>
@@ -151,53 +149,47 @@ flowchart TB
     classDef data fill:#f4f6f5,stroke:#9aa5a2,color:#253236,stroke-dasharray:3 3
     classDef ext fill:#111,stroke:#111,color:#fff
 
-    subgraph Browser["Browser · Vite 7 · React 19 · Three.js 0.180 · Spark 2.4"]
+    subgraph L1["CLIENT · React + Three.js + Spark"]
       direction LR
-      DEMO["/ · demo.tsx<br/>morph-to-sim show"]:::fe
-      WS["?view=workspace<br/>tasks · POV · compare · fly cam"]:::fe
-      OBJ["?view=objects<br/>select · identify · replace"]:::fe
-      BLD["?view=builder<br/>colliders · scale · export"]:::fe
-      CORE["viewer.ts · cutaway.ts · pov.ts · fly.ts<br/>robot-scene.ts · robot-model.ts · saved-objects.ts"]:::fe
-      DEMO & WS & OBJ & BLD --> CORE
+      DEMO["/<br/>morph-to-sim demo"]:::fe
+      WS["?view=workspace<br/>tasks · POV · fly cam"]:::fe
+      OBJ["?view=objects<br/>select · identify · swap"]:::fe
+      BLD["?view=builder<br/>colliders · export"]:::fe
     end
 
-    subgraph Py["Python services"]
+    subgraph L2["SERVICES · Python"]
       direction LR
-      SRV["pipeline.server :8000<br/>environments · replays · tasks · validate · export"]:::be
-      OS["pipeline.object_server :8001<br/>catalogue · match · scene · assets"]:::be
-      PLAN["task_planner · landmarks · room_mesh"]:::be
-      SIM["simready · USD → GLB/OBJ"]:::be
-      SRV --> PLAN
-      OS --> SIM
+      SRV["pipeline.server :8000<br/>environments · tasks · replays<br/>MJCF validate · export"]:::be
+      OS["pipeline.object_server :8001<br/>catalogue · Decisions match<br/>saved scene · assets"]:::be
     end
 
-    subgraph Data["Committed data"]
+    subgraph L3["ENGINES"]
       direction LR
-      SCN[("output/kitchen/scene.json<br/>111 colliders")]:::data
-      ROLL[("rollouts/kitchen/*<br/>3 tasks × 3 robots")]:::data
-      SR[("output/simready/<br/>prepared meshes + scene")]:::data
-      DISC[("public/discovery/<br/>views + detections")]:::data
-      RB[("src/robots/*.glb<br/>MuJoCo Menagerie")]:::data
+      PLAN["task_planner<br/>landmarks · room_mesh"]:::be
+      SIM["simready<br/>USD → GLB / OBJ"]:::be
+      DISC["discover-objects.py<br/>render · detect · apply"]:::be
     end
 
-    HF[["HuggingFace<br/>nvidia/simready-assets"]]:::ext
-    OAI[["OpenAI<br/>Decisions · Responses"]]:::ext
-    CDX[["Codex CLI<br/>codex exec subagents"]]:::ext
-    MJ[["MuJoCo 3.17"]]:::ext
+    subgraph L4["EXTERNAL"]
+      direction LR
+      MJ[["MuJoCo 3.17"]]:::ext
+      OAI[["OpenAI<br/>Decisions · Responses"]]:::ext
+      CDX[["Codex CLI<br/>codex exec"]]:::ext
+      HF[["HuggingFace<br/>nvidia/simready-assets"]]:::ext
+    end
 
-    Browser -- "/api (Vite proxy)" --> SRV
-    Browser -- "/api/objects" --> OS
-    SRV --- SCN & ROLL
-    OS --- SR
-    CORE --- RB
-    DEMO --- DISC
-    SIM --> HF
+    L1 == "/api" ==> SRV
+    L1 == "/api/objects" ==> OS
+    SRV --> PLAN
+    SRV --> MJ
+    OS --> SIM --> HF
     OS --> OAI
     PLAN --> OAI
-    SRV --> MJ
-    DISC -. "scripts/discover-objects.py" .- CDX
-    DISC -. "terra backend" .- OAI
+    DISC --> OAI
+    DISC --> CDX
 ```
+
+**Committed state the client reads:** `output/kitchen/scene.json` (111 colliders) · `rollouts/kitchen/*` (3 tasks × 3 robots) · `output/simready/` (prepared meshes + saved scene with Decisions traces) · `public/discovery/` (16 views + detections) · `src/robots/*.glb` (MuJoCo Menagerie meshes).
 
 ### Object discovery → SimReady swap
 
@@ -208,10 +200,11 @@ flowchart LR
     classDef ok fill:#19c37d,stroke:#0b3d31,color:#04120d
     classDef no fill:#f0a429,stroke:#7a4d06,color:#1d1200
 
-    R["render<br/>16 orbit views<br/>850×874"]:::step --> D{"detect"}
+    classDef q fill:#0b0f0e,stroke:#19c37d,color:#e8f3ec
+    R["render<br/>16 orbit views<br/>850×874"]:::step --> D{"detect"}:::q
     D -->|"OPENAI_TERRA_API_KEY set<br/>≤ 4 requests in flight"| T["gpt-6.1-terra<br/>Responses API<br/>json_schema output"]:::ai
     D -->|"no key"| A["codex exec ×16<br/>gpt-6-astra<br/>ChatGPT login"]:::ai
-    T --> J[("detections.json<br/>view · label · x · y · conf")]
+    T --> J[("detections.json<br/>view · label · x · y · conf")]:::q
     A --> J
     J --> RC["raycast pixel → splat<br/>reject z ∉ 0.35–1.6 m<br/>dedupe < 0.18 m"]:::step
     RC --> L["luna Decisions<br/>1 · category choice<br/>2 · score every candidate 0–3"]:::ai
@@ -231,7 +224,8 @@ flowchart TB
 
     M["collider .glb → world frame<br/>400k surface samples"]:::s --> G["5 cm grids<br/>floor · obstacle · interior<br/>(tilted floor plane fitted)"]:::s
     G --> LM["landmarks<br/>table · sink (reviewed) · counters<br/>entrance · SimReady objects"]:::s
-    TXT["'wipe the table and<br/>move the bowl to the sink'"] --> P{"plan"}
+    classDef q fill:#0b0f0e,stroke:#19c37d,color:#e8f3ec
+    TXT["'wipe the table and<br/>move the bowl to the sink'"]:::q --> P{"plan"}:::q
     P -->|"default"| RU["rule planner"]:::s
     P -->|"--steps plan.json"| CX["plan written by a<br/>Codex CLI agent"]:::ai
     RU & CX --> STEPS["navigate → wipe → navigate →<br/>pick → navigate → place"]:::s
