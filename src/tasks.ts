@@ -9,7 +9,9 @@ export const MAX_TASK_LENGTH=200;
 const object=(v:unknown):v is Record<string,any>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const SLUG=/^[a-z0-9-]{1,120}$/;
 export function slugify(task:string){return task.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80)||'task'}
-export function taskUrl(slug:string,robot:RobotId){if(!SLUG.test(slug))throw new Error('Invalid task slug.');return `/api/tasks/${slug}/${robot}`}
+/** `?env=<id>` selects a non-kitchen environment; the kitchen is the server default. */
+export function envQuery(env?:string){return env&&env!=='kitchen'?`?env=${encodeURIComponent(env)}`:''}
+export function taskUrl(slug:string,robot:RobotId,env?:string){if(!SLUG.test(slug))throw new Error('Invalid task slug.');return `/api/tasks/${slug}/${robot}${envQuery(env)}`}
 export function parseTaskList(data:unknown):TaskSummary[]{
  if(!object(data)||data.version!==1||!Array.isArray(data.tasks))throw new Error('Unsupported task list.');
  return data.tasks.filter((t:unknown)=>object(t)&&typeof t.slug==='string'&&SLUG.test(t.slug)&&typeof t.task==='string').map((t:Record<string,any>)=>{const robots:TaskSummary['robots']={};if(object(t.robots))for(const {id}of ROBOTS){const url=t.robots[id];if(typeof url==='string')try{robots[id]=apiPath(url)}catch{/* skip invalid */}}return {slug:t.slug,task:t.task,robots};});
@@ -25,12 +27,12 @@ export function parsePlanResult(data:unknown):PlanResult{
  if(!object(data)||data.version!==1||typeof data.slug!=='string'||!object(data.results))throw new Error('Unsupported plan response.');
  return {slug:data.slug,task:typeof data.task==='string'?data.task:'',results:data.results};
 }
-export async function fetchTasks(signal?:AbortSignal){return parseTaskList(await getJson('/api/tasks',signal))}
-export async function fetchTaskEnvelope(slug:string,robot:RobotId,environment:Pick<BackendEnvironment,'id'|'revision'>,signal?:AbortSignal){return parseTaskEnvelope(await getJson(taskUrl(slug,robot),signal),environment,robot)}
-export async function planTask(task:string,robot?:RobotId,signal?:AbortSignal):Promise<PlanResult>{
+export async function fetchTasks(signal?:AbortSignal,env?:string){return parseTaskList(await getJson(`/api/tasks${envQuery(env)}`,signal))}
+export async function fetchTaskEnvelope(slug:string,robot:RobotId,environment:Pick<BackendEnvironment,'id'|'revision'>,signal?:AbortSignal){return parseTaskEnvelope(await getJson(taskUrl(slug,robot,environment.id),signal),environment,robot)}
+export async function planTask(task:string,robot?:RobotId,signal?:AbortSignal,env?:string):Promise<PlanResult>{
  const text=task.trim();if(!text)throw new Error('Describe a task first.');if(text.length>MAX_TASK_LENGTH)throw new Error(`Tasks are limited to ${MAX_TASK_LENGTH} characters.`);
  const timeout=AbortSignal.timeout(120000);
- const response=await fetch(apiPath('/api/tasks/plan'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(robot?{task:text,robot}:{task:text}),signal:signal?AbortSignal.any([signal,timeout]):timeout,cache:'no-store'});
+ const response=await fetch(apiPath('/api/tasks/plan'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({task:text,...(robot?{robot}:{}),...(env&&env!=='kitchen'?{env}:{})}),signal:signal?AbortSignal.any([signal,timeout]):timeout,cache:'no-store'});
  const data=await response.json().catch(()=>null);
  if(!response.ok)throw new Error(object(data)&&typeof data.error==='string'?data.error:`Planning failed (${response.status}).`);
  return parsePlanResult(data);
