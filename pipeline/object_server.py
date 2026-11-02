@@ -56,20 +56,22 @@ def normalize_object_scene(body):
     return {'version':1,'kind':'simready-replacements','units':'m','upAxis':'Z',
             'source':source,'replacements':replacements,'interactionValidated':False}
 
-def saved_scene():
-    path=CACHE/'scene.json'
+def saved_scene(path=None, fallback=None):
+    path=Path(path) if path else CACHE/'scene.json'
+    if not path.exists() and fallback: path=Path(fallback)
     return json.loads(path.read_text()) if path.exists() else {'version':1,'kind':'simready-replacements','units':'m','upAxis':'Z','revision':0,'source':None,'replacements':[],'interactionValidated':False}
 
-def save_scene(body):
+def save_scene(body, path=None, fallback=None):
     normalized=normalize_object_scene(body)
     with SCENE_LOCK:
-        current=saved_scene()
+        current=saved_scene(path, fallback)
         if body.get('baseRevision')!=current['revision']: raise ValueError('Scene changed in another editor. Reload before saving.')
         normalized['revision']=current['revision']+1
-        CACHE.mkdir(parents=True,exist_ok=True)
-        temporary=CACHE/'scene.json.tmp'
+        destination=Path(path) if path else CACHE/'scene.json'
+        destination.parent.mkdir(parents=True,exist_ok=True)
+        temporary=destination.with_suffix('.json.tmp')
         temporary.write_text(json.dumps(normalized,indent=2,allow_nan=False))
-        temporary.replace(CACHE/'scene.json')
+        temporary.replace(destination)
     return normalized
 
 def load_local_key():
@@ -244,7 +246,7 @@ class Handler(BaseHTTPRequestHandler):
         path=urlparse(self.path).path
         if path=='/api/objects/status':
             return self.send(200,{'decisionsConfigured':bool(load_local_key()),'preparedCount':len(prepared_assets())})
-        if path=='/api/objects/scene': return self.send(200,saved_scene())
+        if path=='/api/objects/scene': return self.send(200,saved_scene(getattr(self,'scene_path',None),getattr(self,'scene_fallback',None)))
         if path=='/api/objects/catalogue':
             try: return self.send(200,{'dataset':'nvidia/simready-assets','catalogueCount':len(catalogue()['assets']),'assets':prepared_assets()})
             except ValueError as exc: return self.send(503,{'error':str(exc)})
@@ -264,7 +266,7 @@ class Handler(BaseHTTPRequestHandler):
             if self.headers.get_content_type()!='application/json': raise ValueError('Expected application/json')
             body=json.loads(self.rfile.read(size))
             if self.path.endswith('/match'): self.send(200,match_objects(body))
-            elif self.path.endswith('/scene'): self.send(200,save_scene(body))
+            elif self.path.endswith('/scene'): self.send(200,save_scene(body,getattr(self,'scene_path',None),getattr(self,'scene_fallback',None)))
             else: self.send(200,replacement_bundle(body),'application/zip')
         except (ValueError,KeyError,TypeError) as exc: self.send(400,{'error':str(exc)})
         except Exception:

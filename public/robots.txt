@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://morpheus-robot-simulation.bedelau59.chatgpt.site/sitemap.xml

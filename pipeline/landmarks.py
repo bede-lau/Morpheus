@@ -356,6 +356,8 @@ def filter_boxes(boxes, grids):
 
 REVIEW = SCENE.parent / "landmark-review.json"
 SIMREADY = REPO / "output" / "simready" / "scene.json"
+from contextvars import ContextVar
+visitor_scene_path = ContextVar("visitor_scene_path", default=None)
 
 
 def object_landmarks(path=SIMREADY):
@@ -364,6 +366,7 @@ def object_landmarks(path=SIMREADY):
     Extra fields: objectId (replacement id), assetId, category, halfHeight (scaled asset half height, m),
     meshPosition (the replacement's mesh origin, world Z-up). Empty when no saved scene exists.
     """
+    path = visitor_scene_path.get() or path
     try:
         data = json.loads(Path(path).read_text())
     except (OSError, ValueError):
