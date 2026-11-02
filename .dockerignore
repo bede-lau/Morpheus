@@ -1,0 +1,13 @@
+.git
+.venv
+node_modules
+.env
+.env.*
+.openai
+.claude
+.morpheus
+dist
+outputs
+public/samples
+*.tsbuildinfo
+__pycache__

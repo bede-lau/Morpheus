@@ -28,13 +28,14 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 from pathlib import Path
 
 import numpy as np
 from scipy import ndimage
 
 REPO = Path(__file__).resolve().parents[1]
-GLB = REPO / "public" / "samples" / "rustic-kitchen-collider.glb"
+GLB = Path(os.environ.get("MORPHEUS_COLLIDER_PATH", REPO / "public" / "samples" / "rustic-kitchen-collider.glb"))
 SCENE = REPO / "output" / "kitchen" / "scene.json"
 CACHE = REPO / "output" / "kitchen" / "mesh-grid.npz"
 STEP = 0.05

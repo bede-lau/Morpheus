@@ -1,0 +1,10 @@
+{
+  "name": "Morpheus",
+  "short_name": "Morpheus",
+  "description": "Explore robots in a simulation of your space.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f1f5f2",
+  "theme_color": "#174d46",
+  "icons": [{"src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml"}]
+}
