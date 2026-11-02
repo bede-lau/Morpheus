@@ -83,6 +83,11 @@ class HostedHandler(server.Handler, object_server.Handler, SimpleHTTPRequestHand
     def allowed(self):
         return self._allowed_origin()
 
+    def end_headers(self):
+        if not urlparse(self.path).path.startswith('/api/'):
+            self.send_header('Cache-Control', 'no-cache')
+        super().end_headers()
+
     def prepare_visitor(self):
         token = self.headers.get("X-Morpheus-Visitor", "")
         if not re.fullmatch(r"[0-9a-f]{64}", token):
