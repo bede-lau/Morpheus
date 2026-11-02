@@ -143,11 +143,14 @@ sequenceDiagram
 
 ## ▍Architecture
 
-![Morpheus architecture: room capture and task inputs flow through the React client to environment and object services, geometry validation, task planning and the object pipeline.](docs/media/architecture.svg)
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/media/architecture-dark.svg">
+  <img src="docs/media/architecture.svg" width="1200" alt="Morpheus architecture: a React, Three.js and Spark browser client calls local environment and object services. Geometry validation, task planning, Decisions matching and SimReady assets use local files; offline Terra or Codex discovery saves detections and matched scenes.">
+</picture>
 
 The environment service serves scenes and planned replays and validates MJCF with MuJoCo. The object service manages catalogue matching and saved replacements. Object discovery can also run offline. Robot routes and manipulation are planned or scripted; they are not learned locomotion. The sample scene's scale is assumed.
 
-<sub>Visual direction inspired by [Supabase's architecture diagrams](https://supabase.com/docs/guides/getting-started/architecture).</sub>
+<sub>Diagram style inspired by [Supabase](https://github.com/supabase/supabase#how-it-works), [SlideMate](https://github.com/Mattlo0546/slidemate#architecture), and [Skill Issue](https://github.com/Mattlo0546/skill-issue). [Regenerate the SVGs](docs/diagrams/render_architecture.py).</sub>
 
 **Committed state the client reads:** `output/kitchen/scene.json` (111 colliders) · `rollouts/kitchen/*` (3 tasks × 3 robots) · `output/simready/` (prepared meshes + saved scene with Decisions traces) · `public/discovery/` (16 views + detections) · `src/robots/*.glb` (MuJoCo Menagerie meshes).
 
@@ -338,4 +341,3 @@ We'd rather be precise than impressive.
 | Models | OpenAI Decisions API (`gpt-6-luna`), Responses API (`gpt-6.1-terra`), Codex CLI (`gpt-6-astra`) |
 
 <p align="center"><sub>Built in one day at the OpenAI DevDay Community Hackathon, London, 1 November 2026, with Codex.</sub></p>
-

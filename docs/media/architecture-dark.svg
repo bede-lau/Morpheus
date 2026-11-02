@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1080" viewBox="0 0 1200 1080" role="img" aria-labelledby="title desc">
+<title id="title">Morpheus system architecture</title>
+<desc id="desc">A React, Three.js and Spark browser client calls two local Python HTTP services. The environment service validates geometry with MuJoCo and plans robot tasks. The object service matches objects through the OpenAI Decisions API and serves prepared NVIDIA SimReady assets. Both services read and write local scene, rollout and replacement files. Offline discovery renders room views, detects objects using Terra vision or Codex, matches assets, and saves its results. Solid arrows show calls; dashed arrows show file access. Robot rollouts are planned or scripted, not learned policies.</desc>
+<defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M1 1 L9 5 L1 9" fill="none" stroke="#8b949e" stroke-width="1.5"/></marker></defs>
+<style>text{font-family:Helvetica Neue,Helvetica,Arial,sans-serif;fill:#e6edf3;font-size:18px}.heading{font-size:23px;font-weight:600}.title{font-size:24px;font-weight:500}.meta{fill:#9da7b3;font-size:17px}.code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:15px;fill:#9da7b3}.label{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:14px;letter-spacing:1px;fill:#9da7b3}.inverse{fill:#f0f6fc}</style>
+<rect width="1200" height="1080" fill="#0d1117"/>
+<text x="40" y="40" class="title" text-anchor="start">Morpheus / system architecture</text>
+<text x="1160" y="40" class="label" text-anchor="end">LOCAL DEMO</text>
+<text x="40" y="84" class="label" text-anchor="start">INPUTS</text>
+<text x="128" y="84" class="meta" text-anchor="start">Room capture (SPZ / PLY + GLB) · household task · robot model</text>
+<rect x="40" y="110" width="1120" height="110" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1.3"/>
+<text x="64" y="147" class="heading" text-anchor="start">Browser client</text>
+<text x="1136" y="147" class="code" text-anchor="end">React · Three.js · World Labs Spark</text>
+<text x="64" y="181" class="" text-anchor="start">Room viewer · object replacement · robot POV · model comparison</text>
+<text x="64" y="205" class="meta" text-anchor="start">Demo / workspace / object inspector / collider builder</text>
+<path d="M310 220 V316" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<path d="M890 220 V316" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+<text x="332" y="264" class="code" text-anchor="start">/api/*</text>
+<text x="332" y="288" class="meta" text-anchor="start">HTTP / JSON</text>
+<text x="912" y="264" class="code" text-anchor="start">/api/objects/*</text>
+<text x="912" y="288" class="meta" text-anchor="start">HTTP / JSON</text>
+<rect x="40" y="316" width="540" height="350" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1.3"/>
+<rect x="620" y="316" width="540" height="350" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1.3"/>
+<rect x="40" y="316" width="540" height="100" rx="6" fill="#252c35" stroke="#30363d" stroke-width="1.3"/>
+<rect x="620" y="316" width="540" height="100" rx="6" fill="#252c35" stroke="#30363d" stroke-width="1.3"/>
+<text x="64" y="352" class="heading inverse" text-anchor="start">Environment service</text>
+<text x="556" y="352" class="code inverse" text-anchor="end">:8000</text>
+<text x="64" y="385" class="code inverse" text-anchor="start">pipeline.server</text>
+<text x="644" y="352" class="heading inverse" text-anchor="start">Object service</text>
+<text x="1136" y="352" class="code inverse" text-anchor="end">:8001</text>
+<text x="644" y="385" class="code inverse" text-anchor="start">pipeline.object_server</text>
+<path d="M178 416 V460" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M442 416 V460" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M758 416 V460" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<path d="M1022 416 V460" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)"/>
+<rect x="60" y="460" width="236" height="150" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1.3"/>
+<rect x="324" y="460" width="236" height="150" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1.3"/>
+<rect x="640" y="460" width="236" height="150" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1.3"/>
+<rect x="904" y="460" width="236" height="150" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1.3"/>
+<text x="78" y="492" class="heading" text-anchor="start">Geometry</text>
+<text x="78" y="522" class="code" text-anchor="start">MJCF + MuJoCo</text>
+<text x="78" y="551" class="meta" text-anchor="start">Compile · contact probe</text>
+<text x="78" y="579" class="meta" text-anchor="start">Validate + export</text>
+<text x="342" y="492" class="heading" text-anchor="start">Task planner</text>
+<text x="342" y="522" class="code" text-anchor="start">Landmarks + A*</text>
+<text x="342" y="551" class="meta" text-anchor="start">Scripted robot actions</text>
+<text x="342" y="579" class="meta" text-anchor="start">Decisions feasibility</text>
+<text x="658" y="492" class="heading" text-anchor="start">Object matching</text>
+<text x="658" y="522" class="code" text-anchor="start">OpenAI Decisions API</text>
+<text x="658" y="551" class="meta" text-anchor="start">Classify + rank assets</text>
+<text x="658" y="579" class="code" text-anchor="start">gpt-6-luna</text>
+<text x="922" y="492" class="heading" text-anchor="start">Asset catalogue</text>
+<text x="922" y="522" class="code" text-anchor="start">NVIDIA SimReady</text>
+<text x="922" y="551" class="meta" text-anchor="start">Prepared GLB meshes</text>
+<text x="922" y="579" class="meta" text-anchor="start">Static collision export</text>
+<text x="64" y="643" class="meta" text-anchor="start">Scenes · tasks · replays · validation bundles</text>
+<text x="644" y="643" class="meta" text-anchor="start">Catalogue · matching · saved replacements</text>
+<path d="M310 666 V750" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="5 5" marker-start="url(#arrow)"/>
+<path d="M890 666 V750" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="5 5" marker-start="url(#arrow)"/>
+<text x="332" y="712" class="code" text-anchor="start">read / write</text>
+<text x="912" y="712" class="code" text-anchor="start">read / write</text>
+<rect x="40" y="750" width="1120" height="124" rx="6" fill="#161b22" stroke="#30363d" stroke-width="1.3"/>
+<text x="64" y="779" class="label" text-anchor="start">LOCAL FILES</text>
+<text x="1136" y="779" class="meta" text-anchor="end">Committed demo data + generated outputs</text>
+<text x="64" y="817" class="" text-anchor="start">Environments</text>
+<text x="64" y="846" class="code" text-anchor="start">output/&lt;room&gt;/</text>
+<text x="340" y="817" class="" text-anchor="start">Robot rollouts</text>
+<text x="340" y="846" class="code" text-anchor="start">rollouts/&lt;room&gt;/</text>
+<text x="616" y="817" class="" text-anchor="start">Replacements + meshes</text>
+<text x="616" y="846" class="code" text-anchor="start">output/simready/</text>
+<text x="892" y="817" class="" text-anchor="start">Vision detections</text>
+<text x="892" y="846" class="code" text-anchor="start">public/discovery/</text>
+<path d="M600 944 V874" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#arrow)" stroke-dasharray="5 5"/>
+<text x="622" y="915" class="code" text-anchor="start">save detections + matched scene</text>
+<rect x="40" y="944" width="1120" height="96" rx="6" fill="#0d1117" stroke="#30363d" stroke-width="1.3" stroke-dasharray="5 5"/>
+<text x="64" y="978" class="heading" text-anchor="start">Offline object discovery</text>
+<text x="1136" y="978" class="code" text-anchor="end">scripts/discover-objects.py</text>
+<text x="64" y="1012" class="meta" text-anchor="start">Orbit renders → Terra 6.1 vision or Codex → 3D deduplication → Decisions matching</text>
+<text x="40" y="1066" class="code" text-anchor="start">Solid arrows: calls     Dashed arrows: file access</text>
+<text x="1160" y="1066" class="code" text-anchor="end">Robot rollouts: planned / scripted</text>
+</svg>
