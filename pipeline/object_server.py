@@ -195,7 +195,14 @@ def replacement_bundle(body):
         # or articulation: real robot interaction requires engine-specific assets.
         ET.SubElement(node,'geom',type='mesh',mesh=ident,rgba='.82 .82 .78 1')
         source = CACHE/'source'/entry['id']
-        for license_file in (source/'.metadata').glob('*LICENSE*'):
+        license_files = list((source/'.metadata').glob('*LICENSE*'))
+        if not license_files:
+            license_files = [ROOT/'licenses'/'NVIDIA-SimReady-LICENSE.txt']
+        for license_file in license_files:
+            if not license_file.is_file(): raise ValueError('Asset license file is missing')
+            if license_file.name == 'NVIDIA-SimReady-LICENSE.txt':
+                files[f'credits/{entry["id"]}/LICENSE.txt'] = license_file.read_bytes()
+                continue
             files[f'credits/{entry["id"]}/{license_file.name}'] = license_file.read_bytes()
         manifest.append({**item,'quaternion':q,'asset':entry,'collision':'MuJoCo convex hull; static',
                          'interactionValidated':False})

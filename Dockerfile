@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends libgl1 libegl1 
 COPY requirements.txt requirements-assets.txt ./
 RUN pip install --no-cache-dir -r requirements-assets.txt
 COPY pipeline ./pipeline
+COPY licenses ./licenses
 COPY rollouts ./rollouts
 COPY output /seed-output
 COPY --from=frontend /app/dist ./dist
