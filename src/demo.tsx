@@ -49,6 +49,7 @@ class Show {
   private collidersOn=false; robotScene:RobotScene|null=null; pov:RobotPov|null=null; run:RobotRun|null=null; private onRunEnd:(()=>void)|null=null;
   constructor(private host:HTMLElement,private set:(fn:(u:UI)=>UI)=>void,private labels:()=>HTMLElement|null){
     this.viewer=new RoomViewer(host,{onSelect:()=>{},onChange:()=>{},onMeasure:()=>{},onStatus:status=>set(u=>({...u,status}))},{crop:true});
+    if(import.meta.env?.DEV&&typeof window!=='undefined')(window as unknown as {__show?:Show}).__show=this; // dev-only hook for browser checks
     this.whiten();this.viewer.sourceRoot.visible=false;
     this.raf=requestAnimationFrame(this.frame);
   }
@@ -132,7 +133,11 @@ class Show {
     const edge=fp?Math.min(target.x-fp.min.x,fp.max.x-target.x,target.y-fp.min.y,fp.max.y-target.y):Infinity,k=edge<.9?.38:.8;
     const dir=new THREE.Vector3(flat.x*k,flat.y*k,1).normalize(),pos=target.clone().add(dir.multiplyScalar(dist));
     // Keep the eye inside the cropped footprint (walls are cut away above ~65% height, so from inside-and-above nothing occludes the object).
-    const margin=.35;if(fp){pos.x=Math.min(fp.max.x-margin,Math.max(fp.min.x+margin,pos.x));pos.y=Math.min(fp.max.y-margin,Math.max(fp.min.y+margin,pos.y));}
+    // Scan-only rooms have thick, fuzzy wall splats and no cutaway below the ceiling, so keep their eye in the central half of the footprint.
+    const margin=fp?Math.max(.35,(this.data?.office?.25:.06)*Math.min(fp.max.x-fp.min.x,fp.max.y-fp.min.y)):.35;
+    if(fp){pos.x=Math.min(fp.max.x-margin,Math.max(fp.min.x+margin,pos.x));pos.y=Math.min(fp.max.y-margin,Math.max(fp.min.y+margin,pos.y));}
+    // Stay under the ceiling: scan-only splats carry floaters that push the cutaway above the real ceiling, and a camera above it looks through ceiling splats.
+    pos.z=Math.min(pos.z,(fp?fp.min.z:target.z)+2.0);
     this.cameraTo(pos,target,dur);
   }
   startMorph(){if(!this.data||this.morphing)return;this.morphing=true;this.t=0;this.build();this.set(u=>({...u,stage:'morph',phase:0,logs:[]}))}
