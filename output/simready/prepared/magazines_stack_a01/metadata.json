@@ -1,0 +1,29 @@
+{
+  "id": "magazines_stack_a01",
+  "category": "book",
+  "name": "magazines stack a01",
+  "sourceUrl": "https://huggingface.co/datasets/nvidia/simready-assets/tree/4763fbfaa4f8e97658e68b57d01b4c86659e08b5/magazines_stack_a01",
+  "license": "CC-BY-4.0",
+  "attribution": "NVIDIA SimReady Assets",
+  "revision": "4763fbfaa4f8e97658e68b57d01b4c86659e08b5",
+  "dimensions": [
+    0.2113686129450798,
+    0.2563050091266632,
+    0.054508420813363045
+  ],
+  "meshCount": 1,
+  "triangles": 105794,
+  "units": "m",
+  "upAxis": "Z",
+  "sourceMetersPerUnit": 1.0,
+  "sourceUpAxis": "Z",
+  "sourceCenterMeters": [
+    0.00046551600098609924,
+    0.007986068725585938,
+    0.026340520387748256
+  ],
+  "sourceRoot": "simready_usd/sm_magazines_stack_a01_01.usd",
+  "geometrySha256": "20cad825678de127ef2a1ecf5163ba9053b5940e3f517c6868771e3a82a3a3ce",
+  "conversion": "Visible USD mesh geometry and base-color textures; centered, metres, Z-up. Physics/material extensions are not transferred to GLB.",
+  "physicsStatus": "not_validated"
+}
