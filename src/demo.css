@@ -168,7 +168,7 @@
 .d-robot.sel svg{color:#0e8f59}
 .d-robot:disabled{cursor:default}
 .d-robot i{position:absolute;right:8px;top:8px;width:7px;height:7px;border-radius:50%;background:#b9bebb}.d-robot i.completed{background:var(--green)}.d-robot i.partial{background:var(--amber)}.d-robot i.failed{background:#d4583a}
-.d-task-list{display:flex;flex-direction:column;border:1px solid var(--rule);background:#fff}
+.d-task-list{display:flex;flex-direction:column;border:1px solid var(--rule);background:#fff;max-height:min(32vh,275px);overflow-y:auto}
 .d-task-list button{display:flex;gap:10px;align-items:center;padding:8px 10px;border:0;border-bottom:1px solid var(--rule);background:transparent;font-size:11px;text-align:left;cursor:pointer;color:var(--ink)}
 .d-task-list button:last-child{border-bottom:0}.d-task-list button span{color:var(--mute)}.d-task-list button.sel{background:#f2fbf6}.d-task-list button.sel span{color:var(--green)}
 .d-run-row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}

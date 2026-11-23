@@ -58,7 +58,7 @@ class Show {
     this.set(u=>({...u,stage:'loading',status:'GET /api/environments/kitchen'}));
     const [envRaw,views,detections,report,objects,tasks]=await Promise.all([getJson('/api/environments/kitchen'),fetch('/discovery/views.json').then(r=>r.json()),fetch('/discovery/detections.json').then(r=>r.json()),fetch('/discovery/report.json').then(r=>r.json()),getJson('/api/objects/scene'),fetchTasks()]);
     const env=parseEnvironment(envRaw);if(!env.visual.splatUrl)throw new Error('The kitchen has no visual scan.');
-    const chosen=tasks.find(t=>t.slug.includes('bowl'))??tasks.find(t=>t.slug==='wipe-the-table')??tasks[0];if(!chosen)throw new Error('No robot tasks have been published.');
+    const chosen=tasks.find(t=>t.slug==='wipe-the-table-and-clean-the-sink')??tasks.find(t=>t.slug.includes('bowl'))??tasks.find(t=>t.slug==='wipe-the-table')??tasks[0];if(!chosen)throw new Error('No robot tasks have been published.');
     const replay=parseTaskEnvelope(await getJson(taskUrl(chosen.slug,'stretch')),env,'stretch').replay;
     if(this.disposed)return;
     const v=this.viewer,axis=env.visual.sourceUpAxis==='Z-up'?'z-up':env.visual.sourceUpAxis==='Y-up'?'y-up':'y-down';
@@ -190,7 +190,7 @@ class Show {
       this.robotScene.clearReplay();this.robotScene.setCarriedObjects(this.layer);this.cameraTo(this.home.pos,this.home.target,1);
       this.log(`environment ready · ${d.tasks.length} tasks published · choose a robot and run`,'ok');this.set(u=>({...u,panel:true}))});
   }
-  play(robot:RobotId,replay:Replay,onEnd:()=>void,speed=1){if(!this.robotScene)return;this.robotScene.setReplay(replay);this.run={robot,replay,start:this.t+.4,speed};this.onRunEnd=onEnd;this.firedRobotEvents=new Set();this.log(`spawn ${ROBOT_NAME[robot]} · ${replay.duration.toFixed(1)} s rollout${speed!==1?` · ${speed}× playback`:''}`,'hi')}
+  play(robot:RobotId,replay:Replay,onEnd:()=>void,speed=1){if(!this.robotScene)return;this.robotScene.route.visible=true;this.robotScene.setReplay(replay);this.run={robot,replay,start:this.t+.4,speed};this.onRunEnd=onEnd;this.firedRobotEvents=new Set();this.log(`spawn ${ROBOT_NAME[robot]} · ${replay.duration.toFixed(1)} s rollout${speed!==1?` · ${speed}× playback`:''}`,'hi')}
   private firedRobotEvents=new Set<number>();
   private envelopes=new Map<string,Replay>();
   /** Load (or reuse) the chosen robot's published rollout for a task and play it; nothing moves before this is called. */
@@ -215,7 +215,21 @@ class Show {
       for(const [i,s] of this.swaps.entries()){const p=progress(t,SWAP_T+i*SWAP_DT,.9);s.flash.update(progress(t,SWAP_T+i*SWAP_DT,1.1));const mesh=this.layerReady?this.layer?.getMesh(s.item.id):null;if(mesh)mesh.scale.setScalar(p>=1?s.item.scale:Math.max(.0001,backOut(p)*s.item.scale))}
       if(this.collidersOn)fadeColliders(v,t<START[5]?easeOutCubic(progress(t,START[4]+.1,1.4)):1-.8*progress(t,START[5],1));
       if(this.run&&this.robotScene){const rt=Math.max(0,(t-this.run.start)*this.run.speed);this.robotScene.update(Math.min(rt,this.run.replay.duration));
-        (this.run.replay.events??[]).forEach((e,i)=>{if(rt>=e.time&&!this.firedRobotEvents.has(i)){this.firedRobotEvents.add(i);this.log(`[${this.run!.robot}] t=${e.time.toFixed(1)}s ${e.label}`,/cannot|fail|unable|no manipulator|partial/i.test(e.label)?'warn':'ok')}});
+        (this.run.replay.events??[]).forEach((e,i)=>{if(rt>=e.time&&!this.firedRobotEvents.has(i)){this.firedRobotEvents.add(i);
+          const wipe=this.run!.replay.wipes?.find(w=>w.start===e.time);
+          const transfer=this.run!.replay.transfers?.find(t=>t.reach===e.time||t.lower===e.time);
+          const contact=this.run!.replay.contact;
+          const point=wipe?.point??(transfer&&(e.time===transfer.reach?transfer.pick:transfer.place))
+            ??(contact?.start===e.time?contact.point:undefined);
+          if(point){
+            this.robotScene!.route.visible=false;
+            const destination=new THREE.Vector3(...point);
+            const body=this.robotScene!.robot.position;
+            const offset=new THREE.Vector3(body.x-destination.x,body.y-destination.y,0).normalize();
+            offset.applyAxisAngle(new THREE.Vector3(0,0,1),.78).multiplyScalar(1.7);offset.z=1.15;
+            this.cameraTo(destination.clone().add(offset),destination,.65);
+          }else if(e.label.startsWith('Navigating')&&(this.run!.replay.wipes?.length||this.run!.replay.transfers?.length)){this.robotScene!.route.visible=true;this.cameraTo(this.home.pos,this.home.target,.8);}
+          this.log(`[${this.run!.robot}] t=${e.time.toFixed(1)}s ${e.label}`,/cannot|fail|unable|no manipulator|partial/i.test(e.label)?'warn':'ok')}});
         if(rt>=this.run.replay.duration&&this.onRunEnd){const end=this.onRunEnd,r=this.run;this.onRunEnd=null;const vd=r.replay.verdict;if(vd)this.log(`verdict ${ROBOT_NAME[r.robot]} · ${vd.status} · ${vd.steps.filter(s=>s.status==='done').length}/${vd.steps.length} steps`,vd.status==='completed'?'ok':'warn');end()}}
     }
     // HTML labels pinned to world points.
@@ -337,14 +351,14 @@ export default function Demo(){
       {phase===3&&<div className="d-swap glass">{d.replacements.map((r,i)=><div key={r.id} className={now>=SWAP_T+i*SWAP_DT?'on':''}><img src={`/api/objects/assets/${encodeURIComponent(r.assetId)}/preview.jpg`} alt=""/><span>{r.assetId}<small>×{r.scale.toFixed(2)} · [{r.position.map(n=>n.toFixed(2)).join(', ')}]</small></span></div>)}</div>}
       {phase===4&&val&&now>START[4]+3.3&&<div className="d-stamp"><b>{val.engine} {String(val.engineVersion).split('.').slice(0,2).join('.')}</b><span>compiled {val.compile==='passed'?'✓':'✗'}</span><span>floor-contact probe {val.dropProbe?.status==='passed'?'✓':'✗'}</span><small>{val.compiledGeomCount} geoms · rest z {Number(val.dropProbe?.actualRestZ).toFixed(3)} m</small></div>}
       {phase===5&&<>
-        {ui.robot&&<div className="d-task glass"><small>TASK · {ROBOT_NAME[ui.robot.id]}</small><b>{ui.robot.replay.task??''}</b><div className="d-prog"><i style={{width:`${ui.robot.time/ui.robot.replay.duration*100}%`}}/></div></div>}
+        {ui.robot&&<div className="d-task glass"><small>TASK · {ROBOT_NAME[ui.robot.id]}{ui.robot.replay.cleaningKit?' + simulated arm':''}</small><b>{ui.robot.replay.task??''}</b><div className="d-prog"><i style={{width:`${ui.robot.time/ui.robot.replay.duration*100}%`}}/></div></div>}
         {event&&ui.running&&<div className="d-caption" key={event.label+ui.robot?.id}>{event.label}</div>}
-        {Object.keys(ui.verdicts).length>0&&<div className="d-verdicts">{(['go2','g1','stretch'] as RobotId[]).filter(id=>ui.verdicts[id]).map(id=>{const r=ui.verdicts[id]!,v=r.verdict;return <div key={id} className={`d-verdict glass ${v!=='missing'?v.status:''}`}>
+        {!ui.running&&Object.keys(ui.verdicts).length>0&&<div className="d-verdicts">{(['go2','g1','stretch'] as RobotId[]).filter(id=>ui.verdicts[id]).map(id=>{const r=ui.verdicts[id]!,v=r.verdict;return <div key={id} className={`d-verdict glass ${v!=='missing'?v.status:''}`}>
             <small>{ROBOT_NAME[id]} · {r.task}</small>{v!=='missing'?<><b>{v.status}</b><span>{v.steps.filter(s=>s.status==='done').length}/{v.steps.length} steps</span><ul>{v.steps.map(s=><li key={s.name} className={s.status}>{s.status==='done'?'✓':s.status==='failed'?'✗':'–'} {s.name}</li>)}</ul></>:<b>no rollout</b>}</div>})}</div>}
-        {ui.panel&&<div className="d-robots glass">
+        {ui.panel&&!ui.running&&<div className="d-robots glass">
           <div className="d-k">06 · SELECT ROBOT</div>
-          <div className="d-robot-row">{ROBOTS.map(r=><button key={r.id} className={`d-robot ${ui.pick.robot===r.id?'sel':''}`} disabled={ui.running} onClick={()=>setUi(u=>({...u,pick:{...u.pick,robot:r.id}}))}><Glyph id={r.id}/><b>{r.name}</b><small>{r.type}</small>{ui.verdicts[r.id]&&ui.verdicts[r.id]!.verdict!=='missing'&&<i className={(ui.verdicts[r.id]!.verdict as Verdict).status}/>}</button>)}</div>
-          <div className="d-k" style={{marginTop:12}}>TASK · GET /api/tasks</div>
+          <div className="d-robot-row">{ROBOTS.map(r=><button key={r.id} className={`d-robot ${ui.pick.robot===r.id?'sel':''}`} disabled={ui.running} onClick={()=>setUi(u=>({...u,pick:{...u.pick,robot:r.id}}))}><Glyph id={r.id}/><b>{r.name}</b><small>{r.id==='go2'&&['wipe-the-table-and-clean-the-sink','wipe-the-table','fill-a-glass-of-water','wipe-the-table-and-move-the-bowl-to-the-sink','move-the-bowl-to-the-sink','clean-the-sink','counter-reach','drawer-opening'].includes(ui.pick.slug)?'Simulated arm':r.type}</small>{ui.verdicts[r.id]&&ui.verdicts[r.id]!.verdict!=='missing'&&<i className={(ui.verdicts[r.id]!.verdict as Verdict).status}/>}</button>)}</div>
+          <div className="d-k" style={{marginTop:12}}>TASK</div>
           <div className="d-task-list">{d.tasks.map(t=><button key={t.slug} className={ui.pick.slug===t.slug?'sel':''} disabled={ui.running} onClick={()=>setUi(u=>({...u,pick:{...u.pick,slug:t.slug}}))}><span>{ui.pick.slug===t.slug?'◉':'○'}</span>{t.task}</button>)}</div>
           <div className="d-run-row"><button className="d-run" disabled={ui.running||!ui.pick.slug} onClick={()=>void show.current?.runTask(ui.pick.slug,ui.pick.robot)}>{ui.running?<>RUNNING<span className="d-spin light"/></>:<>RUN TASK <span>→</span></>}</button>
             <div className="d-run-links"><button className="ghost" onClick={restart}>↺ replay</button><a href="/?view=workspace">Open workspace →</a></div></div>

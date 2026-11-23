@@ -5,7 +5,6 @@ import os
 from pathlib import Path
 import re
 import shutil
-import threading
 import urllib.request
 from urllib.parse import urlparse
 
@@ -14,7 +13,6 @@ from .read_api import EnvironmentStore, ROBOTS, validate_replay
 from .task_api import TaskStore
 
 ROOT = Path(__file__).resolve().parents[1]
-VISITOR_LOCK = threading.Lock()
 
 
 class VisitorEnvironmentStore(EnvironmentStore):
@@ -95,16 +93,13 @@ class HostedHandler(server.Handler, object_server.Handler, SimpleHTTPRequestHand
             return False
         visitor = ROOT / "output" / "visitors" / hashlib.sha256(token.encode()).hexdigest()
         rollouts = visitor / "rollouts"
-        with VISITOR_LOCK:
-            if not (visitor / ".ready").is_file():
-                visitor.mkdir(parents=True, exist_ok=True)
-                shutil.copytree(ROOT / "rollouts" / "kitchen", rollouts, dirs_exist_ok=True)
-                (visitor / ".ready").touch()
         self.scene_path = visitor / "scene.json"
         baseline = Path("/seed-output/simready/scene.json")
         self.scene_fallback = baseline if baseline.is_file() else ROOT / "output" / "simready" / "scene.json"
         self.environment_store = VisitorEnvironmentStore(visitor)
-        self.task_store = TaskStore(rollouts=rollouts, replays=visitor / "replays", environment=self.environment_store)
+        self.task_store = TaskStore(rollouts=rollouts, replays=visitor / "replays",
+                                    environment=self.environment_store,
+                                    builtin_rollouts=ROOT / "rollouts" / "kitchen")
         return True
 
     def do_GET(self):

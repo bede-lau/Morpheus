@@ -4,7 +4,7 @@ import { ROBOTS, type Replay, type RobotId } from './replay';
 export type TaskSummary={slug:string;task:string;robots:Partial<Record<RobotId,string>>};
 export type TaskEnvelope={task:string;taskSlug:string;replay:Replay};
 export type PlanResult={slug:string;task:string;results:Partial<Record<RobotId,unknown>>};
-export const PRESET_TASKS=['Wipe the table','Fill a glass of water'];
+export const PRESET_TASKS=['Wipe the table and clean the sink','Wipe the table','Fill a glass of water'];
 export const MAX_TASK_LENGTH=200;
 const object=(v:unknown):v is Record<string,any>=>!!v&&typeof v==='object'&&!Array.isArray(v);
 const SLUG=/^[a-z0-9-]{1,120}$/;

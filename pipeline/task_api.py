@@ -20,28 +20,38 @@ def _json(status, value):
 
 
 class TaskStore:
-    def __init__(self, rollouts=ROLLOUTS, replays=REPLAYS, environment=None):
+    def __init__(self, rollouts=ROLLOUTS, replays=REPLAYS, environment=None, builtin_rollouts=None):
         self.rollouts = rollouts
         self.replays = replays
         self.environment = environment or EnvironmentStore()
+        self.builtin_rollouts = builtin_rollouts
+
+    def rollout_file(self, slug, robot):
+        if self.builtin_rollouts is not None:
+            shipped = self.builtin_rollouts / slug / f"{robot}.json"
+            if shipped.is_file():
+                return shipped
+        return self.rollouts / slug / f"{robot}.json"
 
     def listing(self):
+        roots = [self.rollouts]
+        if self.builtin_rollouts is not None:
+            roots.append(self.builtin_rollouts)
+        slugs = {folder.name for root in roots if root.is_dir() for folder in root.iterdir()
+                 if folder.is_dir() and folder.name != "default" and SLUG.fullmatch(folder.name)}
         tasks = []
-        if self.rollouts.is_dir():
-            for folder in sorted(self.rollouts.iterdir()):
-                if not folder.is_dir() or folder.name == "default" or not SLUG.match(folder.name):
-                    continue
-                robots, text = {}, folder.name.replace("-", " ")
-                for robot in ROBOT_IDS:
-                    path = folder / f"{robot}.json"
-                    if path.is_file():
-                        robots[robot] = f"/api/tasks/{folder.name}/{robot}"
-                        try:
-                            text = json.loads(path.read_bytes()).get("task") or text
-                        except (ValueError, OSError):
-                            pass
-                if robots:
-                    tasks.append({"slug": folder.name, "task": text, "robots": robots})
+        for slug in sorted(slugs):
+            robots, text = {}, slug.replace("-", " ")
+            for robot in ROBOT_IDS:
+                path = self.rollout_file(slug, robot)
+                if path.is_file():
+                    robots[robot] = f"/api/tasks/{slug}/{robot}"
+                    try:
+                        text = json.loads(path.read_bytes()).get("task") or text
+                    except (ValueError, OSError):
+                        pass
+            if robots:
+                tasks.append({"slug": slug, "task": text, "robots": robots})
         return {"version": 1, "tasks": tasks}
 
     def read(self, path):
@@ -53,7 +63,7 @@ class TaskStore:
         parts = path.split("/")
         if len(parts) != 5 or not SLUG.match(parts[3]) or parts[4] not in ROBOT_IDS:
             return _json(404, {"error": "Unknown task route"})
-        file = self.rollouts / parts[3] / f"{parts[4]}.json"
+        file = self.rollout_file(parts[3], parts[4])
         if not file.is_file():
             return _json(404, {"error": "No rollout for this task and robot"})
         try:

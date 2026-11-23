@@ -1,4 +1,5 @@
 import copy
+import hashlib
 import json
 from pathlib import Path
 import shutil
@@ -48,6 +49,30 @@ class HostedVisitorIsolationTests(unittest.TestCase):
         except HTTPError as exc:
             return exc.code, json.load(exc)
 
+    def test_existing_visitors_receive_the_current_builtin_catalog(self):
+        token = 'c' * 64
+        visitor = self.root / 'output' / 'visitors' / hashlib.sha256(token.encode()).hexdigest()
+        shipped = self.root / 'rollouts' / 'kitchen'
+        for slug in ('wipe-the-table', 'previous-custom-task'):
+            folder = visitor / 'rollouts' / slug
+            folder.mkdir(parents=True)
+            replay = json.loads((shipped / 'wipe-the-table' / 'stretch.json').read_text())
+            replay['task'] = 'Saved before deployment'
+            (folder / 'stretch.json').write_text(json.dumps(replay))
+        (visitor / '.ready').touch()
+
+        status, body = self.request('/api/tasks', token)
+        self.assertEqual(status, 200)
+        slugs = {item['slug'] for item in body['tasks']}
+        self.assertIn('drawer-opening', slugs)
+        self.assertIn('previous-custom-task', slugs)
+        status, current = self.request('/api/tasks/wipe-the-table/stretch', token)
+        self.assertEqual(status, 200)
+        self.assertEqual(current, json.loads((shipped / 'wipe-the-table' / 'stretch.json').read_text()))
+        status, saved = self.request('/api/tasks/previous-custom-task/stretch', token)
+        self.assertEqual(status, 200)
+        self.assertEqual(saved['task'], 'Saved before deployment')
+
     def test_scene_and_plan_isolation_and_reload(self):
         a, b = 'a' * 64, 'b' * 64
         self.assertEqual(self.request('/api/objects/scene')[0], 401)
@@ -69,7 +94,7 @@ class HostedVisitorIsolationTests(unittest.TestCase):
             seen.append(landmarks.visitor_scene_path.get())
             folder = Path(rollouts) / 'private-task'
             folder.mkdir(parents=True)
-            baseline = json.loads((Path(rollouts) / 'wipe-the-table' / 'stretch.json').read_text())
+            baseline = json.loads((self.root / 'rollouts' / 'kitchen' / 'wipe-the-table' / 'stretch.json').read_text())
             (folder / 'stretch.json').write_text(json.dumps(baseline))
             Path(replays).mkdir(parents=True, exist_ok=True)
             (Path(replays) / 'stretch.json').write_text(json.dumps(baseline))

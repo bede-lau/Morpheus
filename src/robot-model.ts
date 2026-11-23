@@ -49,6 +49,26 @@ export class ArticulatedRobot {
     node.position.copy(homePosition).add(anchor.clone().sub(anchor.clone().applyQuaternion(q)).applyQuaternion(homeQuaternion));
     node.quaternion.copy(homeQuaternion).multiply(q);
   }
+  /** Solve the G1 right palm against a world-space tool handle using the exported joint limits. */
+  reachRightHand(target:THREE.Vector3){
+    const wrist=this.root.getObjectByName('right_wrist_yaw_link');
+    if(!wrist)return;
+    const names=['right_wrist_pitch_joint','right_elbow_joint','right_shoulder_yaw_joint','right_shoulder_roll_joint','right_shoulder_pitch_joint'];
+    const values=names.map(name=>this.joints.get(name)!.joint.home);
+    names.forEach((name,i)=>this.set(name,values[i]));
+    const palm=()=>wrist.localToWorld(new THREE.Vector3(.105,0,0));
+    for(let pass=0;pass<24;pass++){
+      if(palm().distanceToSquared(target)<.000004)break;
+      names.forEach((name,i)=>{
+        const {node,joint}=this.joints.get(name)!;
+        const pivot=node.localToWorld(new THREE.Vector3().fromArray(joint.anchor));
+        const axis=new THREE.Vector3().fromArray(joint.axis).applyQuaternion(node.getWorldQuaternion(new THREE.Quaternion())).normalize();
+        const from=palm().sub(pivot).projectOnPlane(axis),to=target.clone().sub(pivot).projectOnPlane(axis);
+        const angle=Math.atan2(axis.dot(from.clone().cross(to)),from.dot(to));
+        values[i]=THREE.MathUtils.clamp(values[i]+angle,joint.range![0],joint.range![1]);this.set(name,values[i]);
+      });
+    }
+  }
   /** Offset from the exported home value. */
   offset(joint:string,delta:number){const e=this.joints.get(joint);if(e)this.set(joint,e.joint.home+delta)}
 }

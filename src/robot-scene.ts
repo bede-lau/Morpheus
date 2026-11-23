@@ -1,3 +1,6 @@
+import { DishTransfer } from './dish-transfer';
+import { ContactScene } from './contact-scene';
+import { Cleaning } from './cleaning';
 import * as THREE from 'three';
 import type { RoomViewer } from './viewer';
 import { createDemoReplay, sampleReplay, carriedPose, stretchLift, stretchTip, STRETCH_ARM, type Landmark, type Replay, type ReplayFrame, type RobotId } from './replay';
@@ -26,6 +29,9 @@ function dispose(root:THREE.Object3D){root.traverse(o=>{if(o.userData.shared)ret
 export class RobotScene {
   root=new THREE.Group(); route=new THREE.Group(); reach=new THREE.Group(); robot=new THREE.Group();
   arm=new THREE.Group(); legs:THREE.Object3D[]=[]; replay:Replay=createDemoReplay('stretch'); follow=false;
+  private contact:ContactScene|null=null;
+  private dishes:DishTransfer[]=[];
+  private cleaning:Cleaning|null=null;
   private previous:THREE.Vector3|null=null;
   private hasReplay=true; private pose:{position:THREE.Vector3;yaw:number}|null=null;
   eye=new THREE.Group(); private savedVisibility:{route:boolean;reach:boolean;eye:boolean}|null=null;
@@ -60,7 +66,17 @@ export class RobotScene {
     else if(!active&&this.savedVisibility){const v=this.savedVisibility;this.savedVisibility=null;this.route.visible=v.route;this.reach.visible=v.reach;this.eye.visible=v.eye}
   }
   clearReplay(){this.carriedLayer?.resetPoses();this.pose=null;this.hasReplay=false;this.root.visible=false;this.previous=null;}
-  setReplay(replay:Replay){this.hasReplay=true;this.root.visible=true;this.replay=replay;this.previous=null;this.buildRobot(replay.robot);dispose(this.route);dispose(this.reach);
+  setReplay(replay:Replay){
+    if(this.cleaning){this.root.remove(this.cleaning.root);dispose(this.cleaning.root);this.cleaning=null;}
+    this.carriedLayer?.resetPoses();
+    for(const dish of this.dishes){this.root.remove(dish.root);dispose(dish.root);}
+    this.dishes=(replay.transfers??[]).map(track=>new DishTransfer(replay,track));
+    for(const dish of this.dishes)this.root.add(dish.root);
+    if(this.contact){this.root.remove(this.contact.root);dispose(this.contact.root);}
+    this.contact=replay.contact?new ContactScene(replay.contact):null;
+    if(this.contact)this.root.add(this.contact.root);
+    if(replay.wipes?.length||this.dishes.length||this.contact){this.cleaning=new Cleaning(replay);this.root.add(this.cleaning.root);}
+    this.hasReplay=true;this.root.visible=true;this.replay=replay;this.previous=null;this.buildRobot(replay.robot);dispose(this.route);dispose(this.reach);
     const points=replay.frames.map(f=>new THREE.Vector3(f.position[0],f.position[1],f.position[2]+.025));
     const path=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color:0x077c5c,dashSize:.13,gapSize:.075,depthTest:true,transparent:true,opacity:.85}));path.computeLineDistances();path.renderOrder=10;this.route.add(path);
     [points[0],points.at(-1)!].forEach(p=>{const dot=new THREE.Mesh(new THREE.RingGeometry(.08,.13,32),new THREE.MeshBasicMaterial({color:0x0a8967,side:THREE.DoubleSide,depthTest:true}));dot.position.copy(p);dot.renderOrder=11;this.route.add(dot)});
@@ -87,7 +103,7 @@ export class RobotScene {
     loadRobotModel(id).then(({scene,meta})=>{
       if(token!==this.modelToken)return;
       const clone=scene.clone(true);this.robot.remove(placeholder);placeholder.geometry.dispose();placeholder.material.dispose();this.robot.add(clone);
-      this.model=new ArticulatedRobot(clone,meta);if(this.lastPose)this.poseModel(this.lastPose.frame,this.lastPose.time,this.lastPose.moving);
+      this.model=new ArticulatedRobot(clone,meta);if(this.lastPose)this.update(this.lastTime);
     }).catch(e=>console.warn(`Robot model for ${id} unavailable; showing the footprint only.`,e));
   }
   /** Joint animation on the loaded mesh: gait while moving, arm extension and lift from the replay. */
@@ -97,23 +113,26 @@ export class RobotScene {
       for(const [leg,offset] of [['FL',0],['RR',0],['FR',Math.PI],['RL',Math.PI]] as const){const s=moving?Math.sin(phase+offset):0;m.offset(`${leg}_thigh_joint`,-.28*s);m.offset(`${leg}_calf_joint`,.38*Math.max(0,s));}
     }else if(id==='g1'){
       const ext=frame.armExtension;
+      for(const joint of ['right_shoulder_yaw_joint','right_shoulder_roll_joint','right_wrist_pitch_joint'])m.offset(joint,0);
       for(const [side,offset] of [['left',0],['right',Math.PI]] as const){const s=moving?Math.sin(phase*.75+offset):0;
         m.offset(`${side}_hip_pitch_joint`,-.3*s);m.offset(`${side}_knee_joint`,.5*Math.max(0,-s)+.04);m.offset(`${side}_ankle_pitch_joint`,-.18*Math.max(0,-s));
         m.offset(`${side}_shoulder_pitch_joint`,(moving?.28*Math.sin(phase*.75+offset+Math.PI):0)-1.25*ext);m.offset(`${side}_elbow_joint`,-.7*ext);}
     }else if(id==='stretch'){
       for(const j of ['joint_arm_l0','joint_arm_l1','joint_arm_l2','joint_arm_l3'])m.set(j,STRETCH_SEGMENT*frame.armExtension);
       // joint_lift is the arm height above the base minus the arm's height at joint zero (sidecar position at the exported home value).
-      const arm=m.meta.bodies.link_arm_l4;if(arm?.joint)m.set('joint_lift',this.lift-(arm.position[2]-arm.joint.home));
+      const arm=m.meta.bodies.link_lift;if(arm?.joint)m.set('joint_lift',this.lift-(arm.position[2]-arm.joint.home));
       const roll=moving?time*5:0;m.offset('joint_left_wheel',roll);m.offset('joint_right_wheel',roll);
     }
   }
   update(time:number){if(!this.hasReplay)return;const frame=sampleReplay(this.replay,time);const p=new THREE.Vector3(...frame.position);
     if(this.follow&&this.previous){const d=p.clone().sub(this.previous);this.viewer.camera.position.add(d);this.viewer.orbit.target.add(d)}
     this.previous=p.clone();this.robot.position.copy(p);this.robot.rotation.z=frame.yaw;this.pose={position:p.clone(),yaw:frame.yaw};
-    this.lastTime=time;this.updateCarried(time,frame);
+    this.lastTime=time;if(!this.dishes.length)this.updateCarried(time,frame);
     const nearby=sampleReplay(this.replay,Math.min(this.replay.duration,time+.02));
     const moving=Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;
-    this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);
+    this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);this.cleaning?.update(time,this.robot,this.model);
+    for(const dish of this.dishes)dish.update(time,this.robot,this.model,this.cleaning!,this.carriedLayer);
+    this.contact?.update(time,this.robot,this.model,this.cleaning!);
   }
   setLayer(layer:string){this.viewer.setLayers(layer!=='collisions',layer==='collisions'&&!this.hasEnvironmentColliders,layer==='collisions'&&this.hasEnvironmentColliders);this.reach.visible=layer==='reach'&&this.hasReplay&&this.replay.source==='demo';}
   home(){if(this.hasEnvironmentColliders)this.viewer.home();else{this.viewer.orbit.target.set(1.15,0,.65);this.viewer.camera.position.set(6.15,-6.7,6.65);this.viewer.orbit.update()}this.previous=null;}

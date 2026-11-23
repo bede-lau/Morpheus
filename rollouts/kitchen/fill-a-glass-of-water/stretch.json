@@ -7,7 +7,7 @@
   "version": 1,
   "source": "backend",
   "robot": "stretch",
-  "duration": 20.8,
+  "duration": 23.5,
   "frames": [
    {
     "time": 0.0,
@@ -326,7 +326,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 1.7908,
+    "yaw": 1.786,
     "armExtension": 0.0
    },
    {
@@ -336,7 +336,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 1.9503,
+    "yaw": 1.9407,
     "armExtension": 0.0
    },
    {
@@ -346,7 +346,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 2.1098,
+    "yaw": 2.0954,
     "armExtension": 0.0
    },
    {
@@ -356,7 +356,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 2.2693,
+    "yaw": 2.2501,
     "armExtension": 0.0
    },
    {
@@ -366,7 +366,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 2.4288,
+    "yaw": 2.4048,
     "armExtension": 0.0
    },
    {
@@ -376,7 +376,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 2.5883,
+    "yaw": 2.5594,
     "armExtension": 0.0
    },
    {
@@ -386,7 +386,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 2.7478,
+    "yaw": 2.7141,
     "armExtension": 0.0
    },
    {
@@ -396,7 +396,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 2.9073,
+    "yaw": 2.8688,
     "armExtension": 0.0
    },
    {
@@ -406,7 +406,7 @@
      1.7441,
      0.0
     ],
-    "yaw": 3.0668,
+    "yaw": 3.0235,
     "armExtension": 0.0
    },
    {
@@ -416,7 +416,7 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
@@ -426,8 +426,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.0588
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.2,
@@ -436,8 +436,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.1175
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.3,
@@ -446,8 +446,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.1763
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.4,
@@ -456,8 +456,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.235
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.5,
@@ -466,8 +466,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.2938
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.6,
@@ -476,8 +476,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.3525
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.7,
@@ -486,8 +486,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.4113
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.8,
@@ -496,8 +496,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.4701
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 4.9,
@@ -506,8 +506,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.0,
@@ -516,8 +516,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.1,
@@ -526,8 +526,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.2,
@@ -536,8 +536,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.3,
@@ -546,8 +546,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.4,
@@ -556,8 +556,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.5,
@@ -566,8 +566,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.6,
@@ -576,8 +576,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.7,
@@ -586,8 +586,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.8,
@@ -596,8 +596,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 5.9,
@@ -606,8 +606,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.0,
@@ -616,8 +616,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.1,
@@ -626,8 +626,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.2,
@@ -636,8 +636,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.3,
@@ -646,8 +646,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.4,
@@ -656,8 +656,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.5,
@@ -666,8 +666,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.6,
@@ -676,8 +676,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.7,
@@ -686,8 +686,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.8,
@@ -696,8 +696,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 6.9,
@@ -706,8 +706,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.0,
@@ -716,8 +716,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.1,
@@ -726,8 +726,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.2,
@@ -736,8 +736,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.3,
@@ -746,8 +746,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.4,
@@ -756,8 +756,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.5,
@@ -766,8 +766,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.6,
@@ -776,8 +776,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.7,
@@ -786,8 +786,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.8,
@@ -796,8 +796,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 7.9,
@@ -806,8 +806,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.0,
@@ -816,8 +816,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.1,
@@ -826,8 +826,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.2,
@@ -836,8 +836,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.3,
@@ -846,8 +846,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.4,
@@ -856,8 +856,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.5,
@@ -866,8 +866,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.6,
@@ -876,8 +876,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.7,
@@ -886,8 +886,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.8,
@@ -896,8 +896,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 8.9,
@@ -906,8 +906,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.5288
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.0,
@@ -916,8 +916,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.4701
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.1,
@@ -926,8 +926,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.4113
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.2,
@@ -936,8 +936,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.3525
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.3,
@@ -946,8 +946,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.2938
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.4,
@@ -956,8 +956,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.235
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.5,
@@ -966,8 +966,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.1763
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.6,
@@ -976,8 +976,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.1175
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.7,
@@ -986,8 +986,8 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
-    "armExtension": 0.0588
+    "yaw": -3.105,
+    "armExtension": 0.0
    },
    {
     "time": 9.8,
@@ -996,7 +996,7 @@
      1.7441,
      0.0
     ],
-    "yaw": -3.0569,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
@@ -1006,1097 +1006,1367 @@
      1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.0,
     "position": [
-     1.8822,
-     1.7003,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.1,
     "position": [
-     1.8894,
-     1.6566,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.2,
     "position": [
-     1.8965,
-     1.6128,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.3,
     "position": [
-     1.9037,
-     1.5691,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.4,
     "position": [
-     1.9108,
-     1.5253,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.5,
     "position": [
-     1.9179,
-     1.4816,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.6,
     "position": [
-     1.9251,
-     1.4378,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.7,
     "position": [
-     1.9322,
-     1.3941,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.8,
     "position": [
-     1.9394,
-     1.3503,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 10.9,
     "position": [
-     1.9465,
-     1.3066,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.0,
     "position": [
-     1.9537,
-     1.2628,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.1,
     "position": [
-     1.9608,
-     1.2191,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.2,
     "position": [
-     1.9679,
-     1.1753,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.3,
     "position": [
-     1.9751,
-     1.1316,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.4,
     "position": [
-     1.9822,
-     1.0878,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.5,
     "position": [
-     1.9894,
-     1.0441,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.6,
     "position": [
-     1.9965,
-     1.0003,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.7,
     "position": [
-     2.0037,
-     0.9566,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.105,
     "armExtension": 0.0
    },
    {
     "time": 11.8,
     "position": [
-     2.0108,
-     0.9128,
+     1.8751,
+     1.7441,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 11.9,
     "position": [
-     2.0179,
-     0.8691,
+     1.8796,
+     1.6995,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.0,
     "position": [
-     2.0251,
-     0.8253,
+     1.8842,
+     1.655,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.1,
     "position": [
-     2.0322,
-     0.7816,
+     1.8887,
+     1.6104,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.2,
     "position": [
-     2.0394,
-     0.7378,
+     1.8933,
+     1.5659,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.3,
     "position": [
-     2.0465,
-     0.6941,
+     1.8978,
+     1.5213,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.4,
     "position": [
-     2.0537,
-     0.6503,
+     1.9024,
+     1.4768,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.5,
     "position": [
-     2.0608,
-     0.6066,
+     1.9069,
+     1.4322,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.6,
     "position": [
-     2.0679,
-     0.5628,
+     1.9114,
+     1.3877,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.7,
     "position": [
-     2.0751,
-     0.5191,
+     1.916,
+     1.3431,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.8,
     "position": [
-     2.0822,
-     0.4753,
+     1.9205,
+     1.2986,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 12.9,
     "position": [
-     2.0894,
-     0.4316,
+     1.9251,
+     1.2541,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.0,
     "position": [
-     2.0965,
-     0.3878,
+     1.9296,
+     1.2095,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.1,
     "position": [
-     2.1037,
-     0.3441,
+     1.9342,
+     1.165,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.2,
     "position": [
-     2.1108,
-     0.3003,
+     1.9387,
+     1.1204,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.3,
     "position": [
-     2.1179,
-     0.2566,
+     1.9433,
+     1.0759,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.4,
     "position": [
-     2.1251,
-     0.2128,
+     1.9478,
+     1.0313,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.5,
     "position": [
-     2.1322,
-     0.1691,
+     1.9524,
+     0.9868,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.6,
     "position": [
-     2.1394,
-     0.1253,
+     1.9569,
+     0.9422,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.7,
     "position": [
-     2.1465,
-     0.0816,
+     1.9614,
+     0.8977,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.8,
     "position": [
-     2.1537,
-     0.0378,
+     1.966,
+     0.8531,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 13.9,
     "position": [
-     2.1608,
-     -0.0059,
+     1.9705,
+     0.8086,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.0,
     "position": [
-     2.1679,
-     -0.0497,
+     1.9751,
+     0.7641,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.1,
     "position": [
-     2.1751,
-     -0.0934,
+     1.9796,
+     0.7195,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.2,
     "position": [
-     2.1822,
-     -0.1372,
+     1.9842,
+     0.675,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.3,
     "position": [
-     2.1894,
-     -0.1809,
+     1.9887,
+     0.6304,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.4,
     "position": [
-     2.1965,
-     -0.2247,
+     1.9933,
+     0.5859,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.5,
     "position": [
-     2.2037,
-     -0.2684,
+     1.9978,
+     0.5413,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.6,
     "position": [
-     2.2108,
-     -0.3122,
+     2.0024,
+     0.4968,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.7,
     "position": [
-     2.2179,
-     -0.3559,
+     2.0069,
+     0.4522,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.8,
     "position": [
-     2.2251,
-     -0.3997,
+     2.0114,
+     0.4077,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 14.9,
     "position": [
-     2.2322,
-     -0.4434,
+     2.016,
+     0.3631,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.0,
     "position": [
-     2.2394,
-     -0.4872,
+     2.0205,
+     0.3186,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.1,
     "position": [
-     2.2465,
-     -0.5309,
+     2.0251,
+     0.2741,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.2,
     "position": [
-     2.2537,
-     -0.5747,
+     2.0296,
+     0.2295,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.3,
     "position": [
-     2.2608,
-     -0.6184,
+     2.0342,
+     0.185,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.4,
     "position": [
-     2.2679,
-     -0.6622,
+     2.0387,
+     0.1404,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.5,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0433,
+     0.0959,
      0.0
     ],
-    "yaw": -2.9798,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.6,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0478,
+     0.0513,
      0.0
     ],
-    "yaw": -2.8275,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.7,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0524,
+     0.0068,
      0.0
     ],
-    "yaw": -2.6752,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.8,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0569,
+     -0.0378,
      0.0
     ],
-    "yaw": -2.5229,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 15.9,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0614,
+     -0.0823,
      0.0
     ],
-    "yaw": -2.3706,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.0,
     "position": [
-     2.2751,
-     -0.7059,
+     2.066,
+     -0.1269,
      0.0
     ],
-    "yaw": -2.2183,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.1,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0705,
+     -0.1714,
      0.0
     ],
-    "yaw": -2.066,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.2,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0751,
+     -0.2159,
      0.0
     ],
-    "yaw": -1.9137,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.3,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0796,
+     -0.2605,
      0.0
     ],
-    "yaw": -1.7615,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.4,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0842,
+     -0.305,
      0.0
     ],
-    "yaw": -1.6092,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.5,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0887,
+     -0.3496,
      0.0
     ],
-    "yaw": -1.4636,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.6,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0933,
+     -0.3941,
      0.0
     ],
-    "yaw": -1.318,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.7,
     "position": [
-     2.2751,
-     -0.7059,
+     2.0978,
+     -0.4387,
      0.0
     ],
-    "yaw": -1.1724,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.8,
     "position": [
-     2.2751,
-     -0.7059,
+     2.1024,
+     -0.4832,
      0.0
     ],
-    "yaw": -1.0268,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 16.9,
     "position": [
-     2.2751,
-     -0.7059,
+     2.1069,
+     -0.5278,
      0.0
     ],
-    "yaw": -0.8812,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 17.0,
     "position": [
-     2.2751,
-     -0.7059,
+     2.1114,
+     -0.5723,
      0.0
     ],
-    "yaw": -0.7356,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 17.1,
     "position": [
-     2.2751,
-     -0.7059,
+     2.116,
+     -0.6169,
      0.0
     ],
-    "yaw": -0.59,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 17.2,
     "position": [
-     2.2751,
-     -0.7059,
+     2.1205,
+     -0.6614,
      0.0
     ],
-    "yaw": -0.4444,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 17.3,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.2988,
+    "yaw": -3.0399,
     "armExtension": 0.0
    },
    {
     "time": 17.4,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.1532,
+    "yaw": 3.0844,
     "armExtension": 0.0
    },
    {
     "time": 17.5,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": 2.9255,
     "armExtension": 0.0
    },
    {
     "time": 17.6,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.0588
+    "yaw": 2.7666,
+    "armExtension": 0.0
    },
    {
     "time": 17.7,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.1175
+    "yaw": 2.6077,
+    "armExtension": 0.0
    },
    {
     "time": 17.8,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.1763
+    "yaw": 2.4488,
+    "armExtension": 0.0
    },
    {
     "time": 17.9,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.2351
+    "yaw": 2.29,
+    "armExtension": 0.0
    },
    {
     "time": 18.0,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.2938
+    "yaw": 2.1311,
+    "armExtension": 0.0
    },
    {
     "time": 18.1,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.3526
+    "yaw": 1.9722,
+    "armExtension": 0.0
    },
    {
     "time": 18.2,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.4114
+    "yaw": 1.8133,
+    "armExtension": 0.0
    },
    {
     "time": 18.3,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.4701
+    "yaw": 1.6544,
+    "armExtension": 0.0
    },
    {
     "time": 18.4,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.5289
+    "yaw": 1.8067,
+    "armExtension": 0.0
    },
    {
     "time": 18.5,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.5289
+    "yaw": 1.959,
+    "armExtension": 0.0
    },
    {
     "time": 18.6,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.5289
+    "yaw": 2.1113,
+    "armExtension": 0.0
    },
    {
     "time": 18.7,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.5289
+    "yaw": 2.2637,
+    "armExtension": 0.0
    },
    {
     "time": 18.8,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.5289
+    "yaw": 2.416,
+    "armExtension": 0.0
    },
    {
     "time": 18.9,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.5289
+    "yaw": 2.5683,
+    "armExtension": 0.0
    },
    {
     "time": 19.0,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.4701
+    "yaw": 2.7206,
+    "armExtension": 0.0
    },
    {
     "time": 19.1,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.4114
+    "yaw": 2.8729,
+    "armExtension": 0.0
    },
    {
     "time": 19.2,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.3526
+    "yaw": 3.0252,
+    "armExtension": 0.0
    },
    {
     "time": 19.3,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.2938
+    "yaw": -3.1056,
+    "armExtension": 0.0
    },
    {
     "time": 19.4,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.2351
+    "yaw": -3.1056,
+    "armExtension": 0.0
    },
    {
     "time": 19.5,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.1763
+    "yaw": -3.1056,
+    "armExtension": 0.0
    },
    {
     "time": 19.6,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.1175
+    "yaw": -3.1056,
+    "armExtension": 0.0
    },
    {
     "time": 19.7,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
-    "armExtension": 0.0588
+    "yaw": -3.1056,
+    "armExtension": 0.0
    },
    {
     "time": 19.8,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 19.9,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.0,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.1,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.2,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.3,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.4,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.5,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.6,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.7,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
     "armExtension": 0.0
    },
    {
     "time": 20.8,
     "position": [
-     2.2751,
+     2.1251,
      -0.7059,
      0.0
     ],
-    "yaw": -0.0076,
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 20.9,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.0,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.1,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.2,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.3,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.4,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.5,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.6,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.7,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.8,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 21.9,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.0,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.1,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.2,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.3,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.4,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.5,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.6,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.7,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.8,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 22.9,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 23.0,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 23.1,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 23.2,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 23.3,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 23.4,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
+    "armExtension": 0.0
+   },
+   {
+    "time": 23.5,
+    "position": [
+     2.1251,
+     -0.7059,
+     0.0
+    ],
+    "yaw": -3.1056,
     "armExtension": 0.0
    }
   ],
@@ -2115,29 +2385,45 @@
     "label": "Arrived at the sink counter"
    },
    {
-    "time": 4.9,
-    "label": "Filling glass"
+    "time": 4.0,
+    "label": "Reaching for the glass"
    },
    {
-    "time": 9.8,
-    "label": "Navigating to the table"
+    "time": 5.2,
+    "label": "Grasped the glass"
    },
    {
-    "time": 16.4,
-    "label": "Arrived at the table"
+    "time": 5.7,
+    "label": "Filling the glass under the tap"
    },
    {
-    "time": 19.8,
-    "label": "Placed glass on table"
+    "time": 9.7,
+    "label": "Lifting the glass"
    },
    {
-    "time": 20.8,
+    "time": 11.7,
+    "label": "Navigating to the practice table"
+   },
+   {
+    "time": 18.3,
+    "label": "Arrived at the practice table"
+   },
+   {
+    "time": 19.3,
+    "label": "Setting the filled glass on the table"
+   },
+   {
+    "time": 21.3,
+    "label": "Released the glass on the table"
+   },
+   {
+    "time": 23.5,
     "label": "Task completed"
    }
   ],
   "verdict": {
    "status": "completed",
-   "summary": "Stretch completed 'fill a glass of water': Navigate to sink counter; Fill glass at sink counter; Navigate to table; Place glass on table.",
+   "summary": "Stretch completed 'fill a glass of water': Navigate to sink counter; Fill glass under tap; Navigate to practice table; Serve filled glass on table.",
    "steps": [
     {
      "name": "Navigate to sink counter",
@@ -2145,19 +2431,19 @@
      "note": "0.6 m path, stopped 0.08 m from the surface."
     },
     {
-     "name": "Fill glass at sink counter",
+     "name": "Fill glass under tap",
      "status": "done",
-     "note": "Held 4 s at the reviewed sink counter. Decisions (gpt-6-luna) feasibility estimate p=0.99."
+     "note": "Grasped the glass at the staged pickup point."
     },
     {
-     "name": "Navigate to table",
+     "name": "Navigate to practice table",
      "status": "done",
-     "note": "2.5 m path, stopped 0.09 m from the surface."
+     "note": "2.5 m path, stopped 0.10 m from the surface."
     },
     {
-     "name": "Place glass on table",
+     "name": "Serve filled glass on table",
      "status": "done",
-     "note": "Arm extended to 0.53. Decisions (gpt-6-luna) feasibility estimate p=1.00."
+     "note": "Placed and released on the destination surface."
     }
    ],
    "planner": "rules"
@@ -2165,18 +2451,19 @@
   "landmarks": [
    {
     "id": "table",
-    "label": "Table",
+    "label": "Practice table",
     "kind": "table",
     "position": [
-     2.9251,
-     -0.7309,
-     0.351
+     1.48,
+     -0.76,
+     0.35
     ],
     "size": [
-     0.45,
-     3.1,
-     0.7021
-    ]
+     0.42,
+     0.65,
+     0.7
+    ],
+    "fixture": "practice-table"
    },
    {
     "id": "sink",
@@ -2451,6 +2738,29 @@
    "No interior cluster met the table rule (0.65-1.00 m top, >=0.5 m2, >0.3 m from walls); the interior-most accessible counter-height cluster is labelled table.",
    "Sink location pinned by human review of the scan (output/kitchen/landmark-review.json).",
    "Room interior, landmarks and spawn come from the companion collider mesh (public/samples/rustic-kitchen-collider.glb); heights are above the fitted floor plane."
+  ],
+  "transfers": [
+   {
+    "kind": "glass",
+    "pick": [
+     1.3301,
+     1.7441,
+     0.7446
+    ],
+    "reach": 4.0,
+    "grasp": 5.2,
+    "fillStart": 5.7,
+    "fillEnd": 9.7,
+    "lift": 9.7,
+    "place": [
+     1.57,
+     -0.7059,
+     0.77
+    ],
+    "lower": 19.3,
+    "release": 21.3,
+    "end": 22.5
+   }
   ]
  }
 }
