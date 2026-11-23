@@ -11,6 +11,7 @@ CLI: python -m pipeline.task_planner "wipe the table" --all | --robot stretch
 from __future__ import annotations
 
 import argparse
+import copy
 import heapq
 import json
 import math
@@ -44,6 +45,13 @@ ROBOTS = {
 }
 ROBOT_IDS = ("stretch", "go2", "g1")
 HEADLINE = "wipe-the-table-and-move-the-bowl-to-the-sink"   # copied to rollouts/kitchen/default
+BOWL_TASKS = {HEADLINE, "move-the-bowl-to-the-sink"}
+KITCHEN_DEMOS = BOWL_TASKS | {
+    "wipe-the-table", "fill-a-glass-of-water", "wipe-the-table-and-clean-the-sink",
+    "clean-the-sink", "counter-reach", "drawer-opening",
+}
+CHECKS = {"counter-reach": ("touch", "sink"), "drawer-opening": ("open", "table"),
+          "aisle-clearance": ("navigate", "table")}
 ACTIONS = ("navigate", "wipe", "fill", "pick", "place")
 MANIPULATION = {"wipe", "fill", "pick", "place"}
 # Stretch 3 arm shared with src/replay.ts STRETCH_ARM: mounted on the mast at robot-local (-0.135, -0.02) and
@@ -189,7 +197,7 @@ class World:
                     stack.append((a, b))
         return seen
 
-    def approach(self, robot, lm):
+    def approach(self, robot, lm, extra_gap=0):
         """Free reachable pose with the footprint APPROACH_GAP from the landmark rect, facing its centre."""
         free, xs, ys = self.grid(robot)
         seen = self.reachable_cells(robot)
@@ -199,7 +207,7 @@ class World:
             return None
         rect = self.landmark_rect(lm)
         d = rect_distance(pts, [rect])
-        target = ROBOTS[robot]["radius"] + APPROACH_GAP
+        target = ROBOTS[robot]["radius"] + APPROACH_GAP + extra_gap
         centre = np.array(lm["position"][:2])
         for tol in (0.03, 0.08, 0.15, 0.3, 0.6):
             ok = np.abs(d - target) <= tol
@@ -270,6 +278,13 @@ def _move_steps(clause, landmarks):
 
 
 def rules_plan(task, landmarks):
+    check = CHECKS.get(slugify(task))
+    if check:
+        action, target = check
+        steps = [{"action": "navigate", "target": target}]
+        if action != "navigate":
+            steps.append({"action": action, "target": target})
+        return steps
     ids = {lm["id"] for lm in landmarks}
     text = task.lower()
     steps = []
@@ -411,12 +426,12 @@ def openai_plan(task, landmarks):
     raise ValueError(last or "no model available")
 
 
-def decisions_feasibility(robot, steps, world):
+def decisions_feasibility(robot, steps, world, equipped=False):
     """Optional Decisions predicates; returns {stepIndex: note}. Empty on any error."""
     key = load_key()
     if not key or os.environ.get("MORPHEUS_DECISIONS") == "off":
         return {}
-    prof = ROBOTS[robot]
+    prof = task_profile(robot, equipped)
     questions = []
     for i, step in enumerate(steps):
         if step["action"] not in MANIPULATION:
@@ -534,7 +549,7 @@ class Timeline:
         self.arm_to(0.8)
 
 
-ACTION_TEXT = {"wipe": "Wipe", "fill": "Fill glass at", "pick": "Pick up", "place": "Place glass on"}
+ACTION_TEXT = {"touch": "Touch marker at", "open": "Open drawer at", "wipe": "Wipe", "fill": "Fill glass at", "pick": "Pick up", "place": "Place glass on"}
 
 
 def surface_top(lm):
@@ -581,13 +596,26 @@ def arm_target(robot, distance):
     return min(1.0, max(0.2, (distance - 0.15) / reach)) if reach else 0.0
 
 
-def simulate(world, robot, task, steps):
+def task_profile(robot, equipped):
     prof = ROBOTS[robot]
+    return {**prof, "name": "Go2 with simulated arm", "reach": .8, "armHeight": (.3, 1.1)} if equipped else prof
+
+
+def simulate(world, robot, task, steps):
+    slug = slugify(task)
+    cleaning_kit = robot == "go2" and slug in KITCHEN_DEMOS
+    prof = task_profile(robot, cleaning_kit)
     yaw0 = world.spawn_yaw
     if steps and steps[0]["target"] in world.by_id:  # face the first target
         yaw0 = yaw_towards(*(np.array(world.by_id[steps[0]["target"]]["position"][:2]) - world.spawn))
     tl = Timeline(world.spawn, yaw0)
     tl.event("Spawned at the kitchen entrance" if world.mesh is not None else "Spawned at the kitchen door")
+    tl.wipes = []
+    tl.transfers = []
+    tl.contact = None
+    tl.cleaning_kit = cleaning_kit
+    if cleaning_kit:
+        tl.event("Go2 fitted with simulated telescoping arm")
     results, at, arrival = [], None, None
     aborted = False
     held, carried = None, []
@@ -617,7 +645,7 @@ def simulate(world, robot, task, steps):
                 results.append({"name": title, "status": "failed", "note": f"Stationary base; the {name} is {d:.2f} m away, beyond its {prof['reach']:.2f} m reach."})
                 aborted = True
                 continue
-            pose = world.approach(robot, lm)
+            pose = world.approach(robot, lm, extra_gap=(.15 if robot != "g1" else .03) if slug == "drawer-opening" else 0)
             path = world.astar(robot, tl.pos, pose["position"]) if pose is not None else None
             if path is None:
                 tl.event(f"No collision-free path to the {name}")
@@ -633,6 +661,17 @@ def simulate(world, robot, task, steps):
             tl.event(f"Arrived at the {name}")
             at, arrival = lm["id"], pose
             note = f"{length:.1f} m path, stopped {pose['distance'] - prof['radius']:.2f} m from the surface."
+            if slug == "aisle-clearance":
+                samples = np.array([frame["position"][:2] for frame in tl.frames])
+                distance = world.clearance(samples)
+                if world.mesh is not None:
+                    from .room_mesh import cell_index
+                    rows, columns, _ = cell_index(world.mesh, samples)
+                    distance = np.minimum(distance, world.mesh_clear[rows, columns])
+                tl.hold(.5)
+                extra = float(distance.min() - prof["radius"])
+                tl.event(f"Reached aisle checkpoint · {extra:.2f} m minimum footprint clearance")
+                note = f"{length:.1f} m route; {extra:.2f} m minimum sampled clearance beyond the base footprint."
             results.append({"name": title, "status": "done", "note": note})
             continue
         # manipulation
@@ -659,6 +698,82 @@ def simulate(world, robot, task, steps):
             results.append({"name": title, "status": "failed", "note": why.capitalize() + "."})
             aborted = True
             continue
+        if step["action"] in {"touch", "open"}:
+            drawer = step["action"] == "open"
+            if drawer and not lm.get("fixture"):
+                results.append({"name": title, "status": "failed", "note": "This kitchen has no staged drawer fixture."})
+                tl.event("No drawer fixture is available")
+                aborted = True
+                continue
+            point = [1.748, -.76, .852] if drawer else place_point(world, lm, tl.pos, .24)
+            if not drawer:
+                direction = tl.pos - np.array(point[:2])
+                point[:2] = (np.array(point[:2]) + .11 * direction / np.linalg.norm(direction)).round(4).tolist()
+            pull = [.12, 0, 0] if drawer else [0, 0, 0]
+            tl.turn_to(arm_pose_for(tl.pos, point)[0] if robot == "stretch" else yaw_towards(*(np.array(point[:2]) - tl.pos)))
+            start = tl.time
+            tl.event("Reaching for the drawer handle" if drawer else "Reaching for the counter marker")
+            tl.hold(1.5)
+            contact = tl.time
+            tl.event("Pulling the drawer open" if drawer else "Touching the counter marker")
+            tl.hold(2)
+            release = tl.time
+            tl.event("Drawer open · releasing handle" if drawer else "Counter marker touched · withdrawing")
+            tl.hold(1.5)
+            tl.contact = {"point": point, "travel": pull, "start": start, "contact": contact,
+                          "release": release, "end": tl.time, "kind": "drawer" if drawer else "counter"}
+            results.append({"name": title, "status": "done",
+                            "note": "Scripted 12 cm drawer travel." if drawer else "Scripted contact with a marker on the reviewed counter."})
+            continue
+        # Authored object interactions use a common clock for the hand, prop and water.
+        # Store only complete transfers; legacy and arbitrary plans retain their original schema.
+        if slug in KITCHEN_DEMOS and step["action"] in {"fill", "pick", "place"}:
+            if step["action"] in {"fill", "pick"}:
+                glass = step["action"] == "fill"
+                target = place_point(world, lm, tl.pos, .085) if glass else list(lm.get("meshPosition", lm["position"]))
+                label = "glass" if glass else "bowl"
+                yaw = arm_pose_for(tl.pos, target)[0] if robot == "stretch" else yaw_towards(*(np.array(target[:2]) - tl.pos))
+                tl.turn_to(yaw)
+                held = {"kind": label, "pick": target, "reach": tl.time}
+                if not glass:
+                    held["objectId"] = lm["objectId"]
+                tl.event(f"Reaching for the {label}")
+                tl.hold(1.2)
+                held["grasp"] = tl.time
+                tl.event(f"Grasped the {label}")
+                tl.hold(.5)
+                if glass:
+                    held["fillStart"] = tl.time
+                    tl.event("Filling the glass under the tap")
+                    tl.hold(4)
+                    held["fillEnd"] = tl.time
+                held["lift"] = tl.time
+                tl.event(f"Lifting the {label}")
+                tl.hold(2)
+                results.append({"name": "Fill glass under tap" if glass else title, "status": "done", "note": f"Grasped the {label} at the staged pickup point."})
+                continue
+            if held is not None and "pick" in held:
+                glass = held["kind"] == "glass"
+                height = .07 if glass else .0554
+                target = place_point(world, lm, tl.pos, height if glass else height+.018)
+                if lm.get("fixture") == "practice-table":
+                    target[2] = .70 + height
+                yaw = arm_pose_for(tl.pos, target)[0] if robot == "stretch" else yaw_towards(*(np.array(target[:2]) - tl.pos))
+                tl.turn_to(yaw)
+                held.update(place=target, lower=tl.time)
+                tl.event("Setting the filled glass on the table" if glass else "Lowering the bowl into the sink")
+                tl.hold(2)
+                held["release"] = tl.time
+                tl.event("Released the glass on the table" if glass else "Released the bowl in the sink")
+                tl.hold(1.2)
+                held["end"] = tl.time
+                tl.transfers.append(held)
+                if not glass:
+                    carried.append({"objectId": held["objectId"], "pickAt": held["pick"], "pickTime": held["grasp"],
+                                    "placeAt": target, "placeTime": held["release"], "carryOffset": list(CARRY_OFFSET)})
+                results.append({"name": "Serve filled glass on table" if glass else "Place bowl in sink", "status": "done", "note": "Placed and released on the destination surface."})
+                held = None
+                continue
         if step["action"] == "pick" or (step["action"] == "place" and held is not None):
             if step["action"] == "pick":
                 obj, target = lm, lm.get("meshPosition", lm["position"])
@@ -692,11 +807,25 @@ def simulate(world, robot, task, steps):
         tl.turn_to(arm_pose_for(tl.pos, lm["position"])[0] if robot == "stretch" else yaw_towards(*(np.array(lm["position"][:2]) - tl.pos)))
         ext = arm_target(robot, arrival["distance"])
         if step["action"] == "wipe":
+            start = tl.time
+            point = place_point(world, lm, tl.pos, .035 if lm["id"] == "sink" else .012)
+            if lm.get("fixture") == "practice-table":
+                point[2] = round(lm["position"][2] + lm["size"][2] / 2 + .011, 4)
+            name = "simulated sink basin" if lm["id"] == "sink" else name
+            title = f"Wipe {name}"
+            tl.event(f"Positioning the cleaning cloth at the {name}")
+            tl.hold(1)
+            if not tl.wipes:
+                tl.event("Picked up the cleaning cloth")
+            tl.hold(1)
             tl.event(f"Wiping the {name}")
-            tl.wipe(tl.yaw)
-            tl.arm_to(0.0)
+            tl.hold(6)
+            tl.event("Carrying the cloth to the next surface" if any(s["action"] == "wipe" for s in steps[i+1:]) else f"Setting down the cloth on the {name}")
+            tl.hold(1.5)
+            tl.wipes.append({"target": lm["id"], "point": point, "start": start, "end": tl.time})
+
             tl.event(f"Finished wiping the {name}")
-            results.append({"name": title, "status": "done", "note": "Arm oscillated 0.55-0.85 for 6 s over an approx. 0.6 m x 0.4 m patch."})
+            results.append({"name": title, "status": "done", "note": "Scripted cloth pickup and contact strokes on the reachable surface patch."})
         elif step["action"] == "fill":
             tl.arm_to(ext)
             tl.event("Filling glass")
@@ -729,11 +858,30 @@ def summarize(robot, task, status, results):
 
 def plan_task(task, robot, world=None, revision=None, use_openai=True, steps_info=None):
     world = world or World()
+    if slugify(task) in KITCHEN_DEMOS and world.mesh is not None:
+        # The scan's long "table" landmark includes a hob. Place a freestanding
+        # practice table on clear floor and plan with its footprint as an obstacle.
+        world = copy.copy(world)
+        table = {**world.by_id["table"], "label": "Practice table", "position": [1.48, -.76, .35],
+                 "size": [.42, .65, .70], "fixture": "practice-table"}
+        world.landmarks = [table if lm["id"] == "table" else lm for lm in world.landmarks]
+        if slugify(task) in BOWL_TASKS:
+            bowl = pick_object("bowl", world.landmarks)
+            if bowl:
+                point = [1.565, -.965, .70 + bowl["halfHeight"]]
+                placed = {**bowl, "position": point, "meshPosition": point}
+                world.landmarks = [placed if lm is bowl else lm for lm in world.landmarks]
+        world.by_id = {lm["id"]: lm for lm in world.landmarks}
+        world.rects = np.vstack([world.rects, world.landmark_rect(table)])
+        world.grids = {}
     revision = revision or EnvironmentStore().snapshot()["revision"]
-    steps, planner, model = steps_info or plan_steps(task, world.landmarks, use_openai)
+    builtin = slugify(task) in KITCHEN_DEMOS or slugify(task) in CHECKS
+    if steps_info is None:
+        steps_info = plan_steps(task, world.landmarks, use_openai and not builtin)
+    steps, planner, model = steps_info
     tl, results, status = simulate(world, robot, task, steps)
-    if use_openai or planner != "rules":
-        for i, note in decisions_feasibility(robot, steps, world).items():
+    if (use_openai and not builtin) or planner != "rules":
+        for i, note in decisions_feasibility(robot, steps, world, tl.cleaning_kit).items():
             if i < len(results):
                 results[i]["note"] = (results[i]["note"] + " " + note).strip()
     tl.event({"completed": "Task completed", "partial": "Task partially completed", "failed": "Task failed"}[status])
@@ -747,6 +895,14 @@ def plan_task(task, robot, world=None, revision=None, use_openai=True, steps_inf
                    "task": task, "events": tl.events, "verdict": verdict, "landmarks": world.landmarks,
                    "plannerNotes": world.info["notes"]},
     }
+    if tl.wipes:
+        envelope["replay"]["wipes"] = tl.wipes
+    if tl.cleaning_kit:
+        envelope["replay"]["cleaningKit"] = True
+    if tl.contact:
+        envelope["replay"]["contact"] = tl.contact
+    if tl.transfers:
+        envelope["replay"]["transfers"] = tl.transfers
     if getattr(tl, "carried", None):
         envelope["replay"]["carried"] = tl.carried
     validate_carried(envelope["replay"])
@@ -781,8 +937,9 @@ def plan_and_write(task, robots=ROBOT_IDS, use_openai=True, rollouts=ROLLOUTS, r
     task = task.strip()
     world = World()
     revision = EnvironmentStore().snapshot()["revision"]
-    steps_info = steps_info or plan_steps(task, world.landmarks, use_openai)
     slug = slugify(task)
+    if steps_info is None and slug not in KITCHEN_DEMOS and slug not in CHECKS:
+        steps_info = plan_steps(task, world.landmarks, use_openai)
     results = {}
     for robot in robots:
         env = plan_task(task, robot, world, revision, use_openai, steps_info)

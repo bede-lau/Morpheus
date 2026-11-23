@@ -61,8 +61,11 @@ class TaskPlannerTest(unittest.TestCase):
 
     def test_verdicts_per_robot(self):
         go2 = self.envelopes[("wipe the table", "go2")]["replay"]["verdict"]
-        self.assertIn(go2["status"], {"failed", "partial"})
-        self.assertTrue(any(s["status"] == "failed" and s["name"].startswith("Wipe") for s in go2["steps"]))
+        self.assertEqual(go2["status"], "completed")
+        self.assertTrue(self.envelopes[("wipe the table", "go2")]["replay"]["cleaningKit"])
+        stock = plan_task("clean the table", "go2", self.world, self.revision, use_openai=False)["replay"]
+        self.assertNotIn("cleaningKit", stock)
+        self.assertNotEqual(stock["verdict"]["status"], "completed")
         self.assertEqual(self.envelopes[("wipe the table", "g1")]["replay"]["verdict"]["status"], "completed")
         self.assertEqual(self.envelopes[("wipe the table", "stretch")]["replay"]["verdict"]["status"], "completed")
         self.assertEqual(self.envelopes[("fill a glass of water", "stretch")]["replay"]["verdict"]["status"], "completed")
@@ -128,8 +131,9 @@ class CarryTaskTest(unittest.TestCase):
         sink = self.world.landmark_rect(self.world.by_id["sink"])
         self.assertTrue(sink[0] <= c["placeAt"][0] <= sink[2] and sink[1] <= c["placeAt"][1] <= sink[3])
         validate_replay(json.loads(json.dumps(self.envs["stretch"])), "stretch", self.revision)
-        self.assertNotIn("carried", self.envs["go2"]["replay"])
-        self.assertNotEqual(self.envs["go2"]["replay"]["verdict"]["status"], "completed")
+        self.assertTrue(self.envs["go2"]["replay"]["cleaningKit"])
+        self.assertEqual(len(self.envs["go2"]["replay"]["carried"]), 1)
+        self.assertEqual(self.envs["go2"]["replay"]["verdict"]["status"], "completed")
         self.assertIn(self.envs["g1"]["replay"]["verdict"]["status"], {"completed", "partial"})
 
     @unittest.skipUnless(room_mesh.GLB.exists(), "companion collider GLB missing")
