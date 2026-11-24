@@ -6,10 +6,10 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {ArticulatedRobot} from './robot-model';
 import {parseReplay,sampleReplay} from './replay';
 
-for(const id of ['g1','go2','stretch']){
-  test(id+' recorded aisle trajectory drives the MuJoCo model pose',async()=>{
+for(const [id,slug] of [['g1','aisle-clearance'],['go2','aisle-clearance'],['stretch','aisle-clearance'],['stretch','counter-reach']]){
+  test(id+' '+slug+' uses recorded MuJoCo state',async()=>{
     const asset=id==='g1'?'g1-12dof':id;
-    const replay=parseReplay(JSON.parse(fs.readFileSync(new URL('../rollouts/kitchen/aisle-clearance/'+id+'.json',import.meta.url),'utf8')).replay);
+    const replay=parseReplay(JSON.parse(fs.readFileSync(new URL('../rollouts/kitchen/'+slug+'/'+id+'.json',import.meta.url),'utf8')).replay);
     const data=fs.readFileSync(new URL('./robots/'+asset+'.glb',import.meta.url));
     const {scene}=await new GLTFLoader().parseAsync(data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength),'');
     const meta=JSON.parse(fs.readFileSync(new URL('./robots/'+asset+'.json',import.meta.url),'utf8'));
@@ -19,7 +19,7 @@ for(const id of ['g1','go2','stretch']){
     const physics=replay.physics!;
     assert.ok(physics.engine.startsWith('MuJoCo'));
     assert.equal(physics.heldOutPassed,12);
-    const frame=sampleReplay(replay,.523);
+    const frame=sampleReplay(replay,slug==='counter-reach'?16.123:.523);
     parent.position.fromArray(frame.position);
     parent.rotation.z=frame.yaw;
     model.applyPhysicsPose(frame.physicsPose!,frame.yaw,physics.jointNames);

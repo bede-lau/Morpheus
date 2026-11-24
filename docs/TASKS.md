@@ -190,7 +190,7 @@ published kitchen. Every sample comes from wheel or joint actuation and
 `mj_step`. The camera interpolates the measured state. The kitchen uses a
 level floor and collision boxes derived from the companion collider grid and
 the saved scene, with assumed metric scale. Other built-in tasks are labelled
-**Scripted simulation preview**.
+**Scripted simulation preview**, except the Stretch counter reach below.
 
 - Stretch 3 uses a differential-drive controller tuned in MuJoCo by cross-entropy search.
 - G1 uses the pinned Unitree 12-DoF PPO/LSTM walking checkpoint.
@@ -212,4 +212,15 @@ acceptance trials pass.
 python -m scripts.train_stretch_aisle --robot-xml /path/to/hello_robot_stretch_3/stretch.xml --output /tmp/stretch-aisle
 python -m scripts.run_legged_aisle g1 --asset-root /path/to/g1-assets --output /tmp/g1-aisle
 python -m scripts.run_legged_aisle go2 --robot-xml /path/to/unitree_go2/go2.xml --checkpoint /path/to/policy_deploy.onnx --output /tmp/go2-aisle
+```
+
+
+**Counter reach** also has a Stretch 3 recording. It uses the actual wheel,
+lift, and arm actuators and a collidable marker. The playback marker lights
+from the sampled normal force. The nominal trial held fingertip contact for
+3.47 s and released it, with 21.1 N peak normal force. The tuned settings
+also passed all 12 held-out starts.
+
+```sh
+python -m scripts.train_stretch_counter --robot-xml /path/to/hello_robot_stretch_3/stretch.xml --output /tmp/stretch-counter
 ```

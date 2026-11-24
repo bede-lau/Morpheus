@@ -6,7 +6,7 @@ export type PhysicsEvidence = {
   engine:string; modelRevision:string; visualModel?:'g1-12dof'|'go2'; jointNames:string[];
   goalError:number; minimumClearance:number; heldOutPassed:number; heldOutTotal:number;
 };
-export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number; physicsPose?:PhysicsPose };
+export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number; physicsPose?:PhysicsPose; contactForce?:number };
 export type ReplayEvent = { time: number; label: string };
 export type StepStatus = 'done' | 'failed' | 'skipped';
 export type Verdict = { status: 'completed' | 'partial' | 'failed'; summary: string; steps: { name: string; status: StepStatus; note?: string }[]; planner?: string };
@@ -19,7 +19,7 @@ export type Transfer = {
   fillStart?:number; fillEnd?:number;
 };
 export type ContactTrial = {
-  kind:'drawer'|'counter'; point:Vec3; travel:Vec3;
+  kind:'drawer'|'counter'; point:Vec3; travel:Vec3; padSize?:Vec3;
   start:number; contact:number; release:number; end:number;
 };
 export type Wipe = { target: string; point: Vec3; start: number; end: number };
@@ -41,7 +41,7 @@ export function sampleReplay(replay: Replay, time: number): ReplayFrame {
   if(end===0)return {...replay.frames[0],time:t};
   const a=replay.frames[end-1],b=replay.frames[end],mix=(t-a.time)/(b.time-a.time);
   const angle=Math.atan2(Math.sin(b.yaw-a.yaw),Math.cos(b.yaw-a.yaw));
-  return {time:t,physicsPose:blendPhysics(a.physicsPose,b.physicsPose,mix),position:a.position.map((v,i)=>v+(b.position[i]-v)*mix) as Vec3,yaw:a.yaw+angle*mix,armExtension:a.armExtension+(b.armExtension-a.armExtension)*mix};
+  return {time:t,contactForce:a.contactForce,physicsPose:blendPhysics(a.physicsPose,b.physicsPose,mix),position:a.position.map((v,i)=>v+(b.position[i]-v)*mix) as Vec3,yaw:a.yaw+angle*mix,armExtension:a.armExtension+(b.armExtension-a.armExtension)*mix};
 }
 function blendPhysics(a:PhysicsPose|undefined,b:PhysicsPose|undefined,fraction:number):PhysicsPose|undefined{
   if(!a||!b)return undefined;
@@ -65,6 +65,9 @@ export function parseReplay(data: unknown): Replay {
 }
 const vec3=(v:unknown)=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
 function validateTaskFields(r:Replay){
+  if(r.frames.some(f=>f.contactForce!==undefined&&(!Number.isFinite(f.contactForce)||f.contactForce<0))){
+    throw new Error('Invalid recorded contact force.');
+  }
   if(r.physics!==undefined){
     const p=r.physics;
     if(!p||typeof p.engine!=='string'||typeof p.modelRevision!=='string'
@@ -82,6 +85,7 @@ function validateTaskFields(r:Replay){
   if(r.contact!==undefined){
     const c=r.contact;
     if(!c||!['drawer','counter'].includes(c.kind)||!vec3(c.point)||!vec3(c.travel)
+      ||c.padSize!==undefined&&(!vec3(c.padSize)||c.padSize.some(value=>value<=0))
       ||![c.start,c.contact,c.release,c.end].every(Number.isFinite)
       ||!(0<=c.start&&c.start<c.contact&&c.contact<c.release&&c.release<c.end&&c.end<=r.duration)){
       throw new Error('Invalid contact trial.');
