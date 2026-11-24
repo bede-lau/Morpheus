@@ -2,9 +2,11 @@ import type { Vec3 } from './types';
 
 export type RobotId = 'stretch' | 'go2' | 'g1';
 export type PhysicsPose = { quaternion:[number,number,number,number]; joints:number[] };
+export type PhysicsModel = 'g1-12dof' | 'g1-hands' | 'go2' | 'go2-arm';
 export type PhysicsEvidence = {
-  engine:string; modelRevision:string; visualModel?:'g1-12dof'|'go2'; jointNames:string[];
+  engine:string; modelRevision:string; visualModel?:PhysicsModel; jointNames:string[];
   goalError:number; minimumClearance:number; heldOutPassed:number; heldOutTotal:number;
+  contactDwellSeconds?:number; peakContactForceNewtons?:number;
 };
 export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number; physicsPose?:PhysicsPose; contactForce?:number };
 export type ReplayEvent = { time: number; label: string };
@@ -71,7 +73,8 @@ function validateTaskFields(r:Replay){
   if(r.physics!==undefined){
     const p=r.physics;
     if(!p||typeof p.engine!=='string'||typeof p.modelRevision!=='string'
-      ||!(p.visualModel===undefined||p.visualModel==='g1-12dof'&&r.robot==='g1'||p.visualModel==='go2'&&r.robot==='go2')
+      ||!(p.visualModel===undefined||r.robot==='g1'&&(p.visualModel==='g1-12dof'||p.visualModel==='g1-hands')
+        ||r.robot==='go2'&&(p.visualModel==='go2'||p.visualModel==='go2-arm'))
       ||!Array.isArray(p.jointNames)||p.jointNames.length<1||p.jointNames.length>64
       ||p.jointNames.some(name=>typeof name!=='string'||!name)||new Set(p.jointNames).size!==p.jointNames.length
       ||![p.goalError,p.minimumClearance].every(value=>Number.isFinite(value)&&value>=0)

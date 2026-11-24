@@ -24,8 +24,8 @@ PROXY_HEIGHT = 1.65
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def load_model(robot_xml, world, fixtures=()):
-    tree = ET.parse(robot_xml).getroot()
+def load_model(robot_xml, world, fixtures=(), *, robot_tree=None, bodies=()):
+    tree = robot_tree if robot_tree is not None else ET.parse(robot_xml).getroot()
     compiler = tree.find("compiler")
     for key in ("assetdir","meshdir","texturedir"):
         if compiler.get(key):
@@ -49,6 +49,7 @@ def load_model(robot_xml, world, fixtures=()):
                       size=f"{(right-left)/2} {(top-bottom)/2} {PROXY_HEIGHT/2}")
     for fixture in fixtures:
         ET.SubElement(body, "geom", **fixture)
+    body.extend(bodies)
     return mujoco.MjModel.from_xml_string(ET.tostring(tree, encoding="unicode"))
 
 

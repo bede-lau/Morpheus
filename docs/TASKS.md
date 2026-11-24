@@ -183,14 +183,14 @@ CLI: `pipeline/.venv/bin/python -m pipeline.task_planner "wipe the table" --all`
 - Nothing in the UI may call a rollout "validated". Labels: "Planned rollout
   · reviewed against collision geometry".
 
-## Recorded aisle trials
+## Recorded MuJoCo trials
 
 **Aisle clearance** uses recorded MuJoCo state for all three robots in the
 published kitchen. Every sample comes from wheel or joint actuation and
 `mj_step`. The camera interpolates the measured state. The kitchen uses a
 level floor and collision boxes derived from the companion collider grid and
 the saved scene, with assumed metric scale. Other built-in tasks are labelled
-**Scripted simulation preview**, except the Stretch counter reach below.
+**Scripted simulation preview**, except the counter reach trials below.
 
 - Stretch 3 uses a differential-drive controller tuned in MuJoCo by cross-entropy search.
 - G1 uses the pinned Unitree 12-DoF PPO/LSTM walking checkpoint.
@@ -215,12 +215,28 @@ python -m scripts.run_legged_aisle go2 --robot-xml /path/to/unitree_go2/go2.xml 
 ```
 
 
-**Counter reach** also has a Stretch 3 recording. It uses the actual wheel,
-lift, and arm actuators and a collidable marker. The playback marker lights
-from the sampled normal force. The nominal trial held fingertip contact for
-3.47 s and released it, with 21.1 N peak normal force. The tuned settings
-also passed all 12 held-out starts.
+**Counter reach** has recordings for all three robots. Each controller
+approaches a staged marker, makes contact through MuJoCo dynamics, and
+withdraws. The marker lights from sampled normal force, and the viewer uses
+the recorded base and joint poses. G1 uses the Menagerie hand model and
+target tracking. Go2 uses a simulated telescoping arm with two powered jaws.
+The legged runs reuse frozen walking policies and tune the arm controllers.
+
+| Robot | Longest continuous nominal contact | Peak nominal force | Held-out starts passed |
+| --- | ---: | ---: | ---: |
+| Stretch 3 | 3.47 s | 21.1 N | 12/12 |
+| Unitree G1 | 0.80 s | 28.7 N | 12/12 |
+| Go2 with simulated arm | 2.17 s | 19.6 N | 12/12 |
+
+These trials validate contact with the fixture in the sample kitchen proxy.
+The held-out starts vary spawn position, heading, and, for G1 and Go2, height.
 
 ```sh
 python -m scripts.train_stretch_counter --robot-xml /path/to/hello_robot_stretch_3/stretch.xml --output /tmp/stretch-counter
+python -m scripts.train_legged_counter g1 --robot-xml /path/to/unitree_g1/g1_with_hands.xml --asset-root /path/to/g1-assets --output /tmp/g1-counter
+python -m scripts.train_legged_counter go2 --robot-xml /path/to/unitree_go2/go2.xml --checkpoint /path/to/policy_deploy.onnx --output /tmp/go2-counter
 ```
+
+The legged runner writes the matching robot-only MJCF alongside each
+qualified replay. Use `scripts/export-robot-models.py` to regenerate the GLB
+and joint metadata from that MJCF (`g1-hands` or `go2-arm` as the model ID).

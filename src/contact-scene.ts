@@ -42,7 +42,7 @@ export class ContactScene {
     }
   }
 
-  update(time:number,robot:T.Group,model:ArticulatedRobot|null,rig:Cleaning,force?:number){
+  update(time:number,robot:T.Group,model:ArticulatedRobot|null,rig:Cleaning|null,force?:number){
     const {start,contact,release,end}=this.trial;
     this.fixture.position.copy(this.travel).multiplyScalar(smooth((time-contact)/(release-contact)));
     this.handle.copy(this.base).add(this.fixture.position);
@@ -51,7 +51,7 @@ export class ContactScene {
       this.indicator.color.setHex(touched?0x3ecf80:0xdcb54a);
       this.indicator.emissive.setHex(touched?0x097447:0x000000);
     }
-    if(force!==undefined||time<start||time>end)return;
+    if(!rig||force!==undefined||time<start||time>end)return;
     const id=rig.robotId;
     const rest=robot.localToWorld(new T.Vector3(...HAND_REST[id]));
     const blend=smooth((time-start)/(contact-start))*smooth((end-time)/(end-release));
