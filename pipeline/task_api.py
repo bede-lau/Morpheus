@@ -86,7 +86,7 @@ class TaskStore:
             robots = (robot,) if robot else ROBOT_IDS
             slug = slugify(task)
             recorded = {}
-            if self.builtin_rollouts is not None and slug in {"aisle-clearance", "counter-reach"}:
+            if self.builtin_rollouts is not None and (self.builtin_rollouts / slug).is_dir():
                 for robot_id in robots:
                     status, content, _ = self.read(f"/api/tasks/{slug}/{robot_id}")
                     if status == 200:

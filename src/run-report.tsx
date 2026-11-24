@@ -87,6 +87,8 @@ export function RunReport({ replay, onClose }: { replay: Replay; onClose: () => 
   const m = useMemo(() => { const r = computeRunMetrics(replay); return Object.assign(r, { events: replay.events ?? [] }); }, [replay]);
   const [hover, setHover] = useState<number | null>(null), [table, setTable] = useState(false);
   const robot = ROBOTS.find(r => r.id === replay.robot)!, clearanceTone = m.minClearance === null ? undefined : m.minClearance < NEAR_MISS_M ? 'bad' : m.minClearance < .25 ? 'warn' : 'good';
+  const measured = replay.physics;
+  const contact = measured?.contactDwellSeconds;
   return <div className="rr-root" data-status={m.status}>
     <header className="rr-head">
       <ScoreRing score={m.score} status={m.status} />
@@ -106,10 +108,13 @@ export function RunReport({ replay, onClose }: { replay: Replay; onClose: () => 
       <Tile label="Mean · peak speed" value={`${fmt(m.meanSpeed)}·${fmt(m.peakSpeed)}`} unit="m/s" hint={`${(m.movingFraction * 100).toFixed(0)}% of time moving · ${m.stops} stops`} />
       <Tile label="Heading change" value={deg(m.totalTurn)} hint="integrated |yaw rate|" />
       <Tile label="Jerk RMS" value={fmt(m.jerkRms, 2)} unit="m/s³" hint={`accel RMS ${fmt(m.accelRms)} m/s²`} tone={m.jerkRms > 6 ? 'warn' : 'good'} />
-      <Tile label="Arm duty" value={(m.armDuty * 100).toFixed(0)} unit="%" hint={`peak extension ${(m.armPeak * 100).toFixed(0)}% · ${m.manipulationTime.toFixed(1)} s manipulating`} />
+      {measured?(contact!==undefined?
+        <Tile label={replay.contact?.kind==='drawer'?'Continuous grasp':'Continuous contact'} value={fmt(contact)} unit="s" hint={`${fmt(measured.peakContactForceNewtons!,1)} N peak normal force · measured in MuJoCo`} />:
+        <Tile label="Held-out starts" value={`${measured.heldOutPassed}/${measured.heldOutTotal}`} hint="Completed in MuJoCo" />):
+        <Tile label="Arm duty" value={(m.armDuty * 100).toFixed(0)} unit="%" hint={`peak extension ${(m.armPeak * 100).toFixed(0)}% · ${m.manipulationTime.toFixed(1)} s manipulating`} />}
     </section>
-    {table ? <section className="rr-table-wrap"><table className="rr-table"><thead><tr><th>t (s)</th><th>x (m)</th><th>y (m)</th><th>speed (m/s)</th><th>yaw rate (rad/s)</th><th>accel (m/s²)</th><th>arm</th><th>clearance (m)</th></tr></thead><tbody>
-      {m.samples.filter((_, i) => i % 10 === 0).map(s => <tr key={s.t}><td>{s.t.toFixed(1)}</td><td>{fmt(s.x)}</td><td>{fmt(s.y)}</td><td>{fmt(s.speed)}</td><td>{fmt(s.yawRate)}</td><td>{fmt(s.accel)}</td><td>{fmt(s.arm)}</td><td>{fmt(s.clearance)}</td></tr>)}
+    {table ? <section className="rr-table-wrap"><table className="rr-table"><thead><tr><th>t (s)</th><th>x (m)</th><th>y (m)</th><th>speed (m/s)</th><th>yaw rate (rad/s)</th><th>accel (m/s²)</th>{!measured&&<th>arm</th>}<th>clearance (m)</th></tr></thead><tbody>
+      {m.samples.filter((_, i) => i % 10 === 0).map(s => <tr key={s.t}><td>{s.t.toFixed(1)}</td><td>{fmt(s.x)}</td><td>{fmt(s.y)}</td><td>{fmt(s.speed)}</td><td>{fmt(s.yawRate)}</td><td>{fmt(s.accel)}</td>{!measured&&<td>{fmt(s.arm)}</td>}<td>{fmt(s.clearance)}</td></tr>)}
     </tbody></table></section> : <>
       <section className="rr-grid">
         <div className="rr-panel rr-span2"><h4><Gauge size={14} /> Timeline</h4><Timeline m={m} hover={hover} setHover={setHover} />

@@ -8,7 +8,7 @@ export type PhysicsEvidence = {
   goalError:number; minimumClearance:number; heldOutPassed:number; heldOutTotal:number;
   contactDwellSeconds?:number; peakContactForceNewtons?:number;
 };
-export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number; physicsPose?:PhysicsPose; contactForce?:number };
+export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number; physicsPose?:PhysicsPose; contactForce?:number; drawerDisplacement?:number };
 export type ReplayEvent = { time: number; label: string };
 export type StepStatus = 'done' | 'failed' | 'skipped';
 export type Verdict = { status: 'completed' | 'partial' | 'failed'; summary: string; steps: { name: string; status: StepStatus; note?: string }[]; planner?: string };
@@ -22,6 +22,7 @@ export type Transfer = {
 };
 export type ContactTrial = {
   kind:'drawer'|'counter'; point:Vec3; travel:Vec3; padSize?:Vec3;
+  drawerParts?:{position:Vec3;size:Vec3}[];
   start:number; contact:number; release:number; end:number;
 };
 export type Wipe = { target: string; point: Vec3; start: number; end: number };
@@ -43,7 +44,9 @@ export function sampleReplay(replay: Replay, time: number): ReplayFrame {
   if(end===0)return {...replay.frames[0],time:t};
   const a=replay.frames[end-1],b=replay.frames[end],mix=(t-a.time)/(b.time-a.time);
   const angle=Math.atan2(Math.sin(b.yaw-a.yaw),Math.cos(b.yaw-a.yaw));
-  return {time:t,contactForce:a.contactForce,physicsPose:blendPhysics(a.physicsPose,b.physicsPose,mix),position:a.position.map((v,i)=>v+(b.position[i]-v)*mix) as Vec3,yaw:a.yaw+angle*mix,armExtension:a.armExtension+(b.armExtension-a.armExtension)*mix};
+  const drawerDisplacement=a.drawerDisplacement!==undefined&&b.drawerDisplacement!==undefined?
+    a.drawerDisplacement+(b.drawerDisplacement-a.drawerDisplacement)*mix:undefined;
+  return {time:t,contactForce:a.contactForce,drawerDisplacement,physicsPose:blendPhysics(a.physicsPose,b.physicsPose,mix),position:a.position.map((v,i)=>v+(b.position[i]-v)*mix) as Vec3,yaw:a.yaw+angle*mix,armExtension:a.armExtension+(b.armExtension-a.armExtension)*mix};
 }
 function blendPhysics(a:PhysicsPose|undefined,b:PhysicsPose|undefined,fraction:number):PhysicsPose|undefined{
   if(!a||!b)return undefined;
@@ -78,6 +81,8 @@ function validateTaskFields(r:Replay){
       ||!Array.isArray(p.jointNames)||p.jointNames.length<1||p.jointNames.length>64
       ||p.jointNames.some(name=>typeof name!=='string'||!name)||new Set(p.jointNames).size!==p.jointNames.length
       ||![p.goalError,p.minimumClearance].every(value=>Number.isFinite(value)&&value>=0)
+      ||(p.contactDwellSeconds!==undefined||p.peakContactForceNewtons!==undefined)
+        &&(!Number.isFinite(p.contactDwellSeconds)||p.contactDwellSeconds!<0||!Number.isFinite(p.peakContactForceNewtons)||p.peakContactForceNewtons!<0)
       ||!Number.isInteger(p.heldOutTotal)||!Number.isInteger(p.heldOutPassed)||p.heldOutTotal<1||p.heldOutPassed!==p.heldOutTotal
       ||r.frames.some(({physicsPose:pose})=>!pose||!Array.isArray(pose.quaternion)||pose.quaternion.length!==4
         ||!pose.quaternion.every(Number.isFinite)||Math.abs(Math.hypot(...pose.quaternion)-1)>1e-4
@@ -92,6 +97,11 @@ function validateTaskFields(r:Replay){
       ||![c.start,c.contact,c.release,c.end].every(Number.isFinite)
       ||!(0<=c.start&&c.start<c.contact&&c.contact<c.release&&c.release<c.end&&c.end<=r.duration)){
       throw new Error('Invalid contact trial.');
+    }
+    if(c.kind==='drawer'&&r.physics&&(!Array.isArray(c.drawerParts)||c.drawerParts.length!==4
+      ||c.drawerParts.some(part=>!part||!vec3(part.position)||!vec3(part.size)||part.size.some(value=>value<=0))
+      ||r.frames.some(frame=>typeof frame.drawerDisplacement!=='number'||!Number.isFinite(frame.drawerDisplacement)))){
+      throw new Error('Invalid recorded drawer motion.');
     }
   }
   if(r.transfers!==undefined){

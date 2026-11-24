@@ -1,6 +1,6 @@
 import * as T from 'three';
 import type {Cleaning} from './cleaning';
-import type {ContactTrial, RobotId} from './replay';
+import type {ContactTrial, ReplayFrame, RobotId} from './replay';
 import type {ArticulatedRobot} from './robot-model';
 
 const smooth=(n:number)=>T.MathUtils.smoothstep(n,0,1);
@@ -22,7 +22,10 @@ export class ContactScene {
       const mesh=new T.Mesh(new T.BoxGeometry(width,depth,height),new T.MeshStandardMaterial({color,roughness:.72}));
       mesh.position.set(x,y,z);this.fixture.add(mesh);return mesh.material;
     };
-    if(trial.kind==='drawer'){
+    if(trial.kind==='drawer'&&trial.drawerParts){
+      const colors=[0x253436,0x253436,0x815737,0xb89269];
+      trial.drawerParts.forEach((part,i)=>box(...part.size,colors[i],...part.position));
+    }else if(trial.kind==='drawer'){
       // Build the drawer from its near-side handle. Rails constrain it to a straight pull.
       box(.025,.29,.082,0x815737,-.049,0,-.226);
       box(.24,.29,.012,0xb89269,-.178,0,-.270);
@@ -42,16 +45,17 @@ export class ContactScene {
     }
   }
 
-  update(time:number,robot:T.Group,model:ArticulatedRobot|null,rig:Cleaning|null,force?:number){
+  update(time:number,robot:T.Group,model:ArticulatedRobot|null,rig:Cleaning|null,recorded?:ReplayFrame){
     const {start,contact,release,end}=this.trial;
-    this.fixture.position.copy(this.travel).multiplyScalar(smooth((time-contact)/(release-contact)));
+    if(recorded?.drawerDisplacement!==undefined)this.fixture.position.set(recorded.drawerDisplacement,0,0);
+    else this.fixture.position.copy(this.travel).multiplyScalar(smooth((time-contact)/(release-contact)));
     this.handle.copy(this.base).add(this.fixture.position);
     if(this.indicator){
-      const touched=force===undefined?time>=contact:force>1;
+      const touched=recorded?(recorded.contactForce??0)>1:time>=contact;
       this.indicator.color.setHex(touched?0x3ecf80:0xdcb54a);
       this.indicator.emissive.setHex(touched?0x097447:0x000000);
     }
-    if(!rig||force!==undefined||time<start||time>end)return;
+    if(!rig||recorded||time<start||time>end)return;
     const id=rig.robotId;
     const rest=robot.localToWorld(new T.Vector3(...HAND_REST[id]));
     const blend=smooth((time-start)/(contact-start))*smooth((end-time)/(end-release));

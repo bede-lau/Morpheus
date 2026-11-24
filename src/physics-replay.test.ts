@@ -4,11 +4,13 @@ import fs from 'node:fs';
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {ArticulatedRobot} from './robot-model';
+import {ContactScene} from './contact-scene';
 import {parseReplay,sampleReplay} from './replay';
 
 for(const [id,slug] of [
   ['g1','aisle-clearance'],['go2','aisle-clearance'],['stretch','aisle-clearance'],
   ['g1','counter-reach'],['go2','counter-reach'],['stretch','counter-reach'],
+  ['go2','drawer-opening'],['stretch','drawer-opening'],
 ]){
   test(id+' '+slug+' uses recorded MuJoCo state',async()=>{
     const replay=parseReplay(JSON.parse(fs.readFileSync(new URL('../rollouts/kitchen/'+slug+'/'+id+'.json',import.meta.url),'utf8')).replay);
@@ -38,6 +40,18 @@ for(const [id,slug] of [
       assert.ok(physics.peakContactForceNewtons!>1);
       assert.ok(replay.frames.some(f=>(f.contactForce??0)>1&&f.time<replay.contact!.release));
       assert.equal(replay.frames.at(-1)!.contactForce,0);
+    }
+    if(replay.contact?.kind==='drawer'){
+      const drawer=new ContactScene(replay.contact);
+      const last=replay.frames.at(-1)!;
+      assert.ok(last.drawerDisplacement!>=.12);
+      const opening=sampleReplay(replay,replay.contact.release-2.03);
+      assert.ok(opening.drawerDisplacement!>0 && opening.drawerDisplacement!<last.drawerDisplacement!);
+      drawer.update(opening.time,parent,model,null,opening);
+      assert.equal(drawer.fixture.position.x,opening.drawerDisplacement);
+      drawer.update(last.time,parent,model,null,last);
+      assert.equal(drawer.fixture.position.x,last.drawerDisplacement);
+      assert.throws(()=>parseReplay({...replay,frames:[{...replay.frames[0],drawerDisplacement:undefined},...replay.frames.slice(1)]}),/Invalid recorded drawer/);
     }
     assert.throws(()=>parseReplay({...replay,frames:[{...replay.frames[0],physicsPose:undefined},...replay.frames.slice(1)]}),/Invalid recorded physics/);
   });

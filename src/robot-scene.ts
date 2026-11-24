@@ -75,7 +75,7 @@ export class RobotScene {
     if(this.contact){this.root.remove(this.contact.root);dispose(this.contact.root);}
     this.contact=replay.contact?new ContactScene(replay.contact):null;
     if(this.contact)this.root.add(this.contact.root);
-    if(!replay.physics&&(replay.wipes?.length||this.dishes.length||this.contact)){
+    if(replay.contact?.drawerParts||!replay.physics&&(replay.wipes?.length||this.dishes.length||this.contact)){
       this.cleaning=new Cleaning(replay);this.root.add(this.cleaning.root);
     }
     this.hasReplay=true;this.root.visible=true;this.replay=replay;this.previous=null;this.buildRobot(replay.robot);dispose(this.route);dispose(this.reach);
@@ -141,9 +141,12 @@ export class RobotScene {
     this.lastTime=time;if(!this.dishes.length)this.updateCarried(time,frame);
     const nearby=sampleReplay(this.replay,Math.min(this.replay.duration,time+.02));
     const moving=Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;
-    this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);this.cleaning?.update(time,this.robot,this.model);
-    if(this.cleaning)for(const dish of this.dishes)dish.update(time,this.robot,this.model,this.cleaning,this.carriedLayer);
-    this.contact?.update(time,this.robot,this.model,this.cleaning,this.replay.physics?frame.contactForce??0:undefined);
+    this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);
+    if(this.cleaning&&!this.replay.physics){
+      this.cleaning.update(time,this.robot,this.model);
+      for(const dish of this.dishes)dish.update(time,this.robot,this.model,this.cleaning,this.carriedLayer);
+    }
+    this.contact?.update(time,this.robot,this.model,this.cleaning,this.replay.physics?frame:undefined);
   }
   setLayer(layer:string){this.viewer.setLayers(layer!=='collisions',layer==='collisions'&&!this.hasEnvironmentColliders,layer==='collisions'&&this.hasEnvironmentColliders);this.reach.visible=layer==='reach'&&this.hasReplay&&this.replay.source==='demo';}
   home(){if(this.hasEnvironmentColliders)this.viewer.home();else{this.viewer.orbit.target.set(1.15,0,.65);this.viewer.camera.position.set(6.15,-6.7,6.65);this.viewer.orbit.update()}this.previous=null;}
