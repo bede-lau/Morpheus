@@ -241,14 +241,17 @@ The legged runner writes the matching robot-only MJCF alongside each
 qualified replay. Use `scripts/export-robot-models.py` to regenerate the GLB
 and joint metadata from that MJCF (`g1-hands` or `go2-arm` as the model ID).
 
-**Drawer opening** uses a passive rail, a collidable handle, and measured
-gripper and drawer motion. The runner requires at least 12 cm of travel
-after release, at least 10 cm pulled with two-sided contact, and a continuous
-grasp lasting at least 0.25 s. It exports a replay only after the nominal
-trial and 12 held-out approaches complete. The fixture is staged at the
-practice table in the kitchen proxy.
+**Drawer opening** has recordings for all three robots. It uses a passive
+rail, a collidable handle, and measured gripper and drawer motion. The runner
+requires at least 12 cm of travel after release, at least 10 cm pulled under
+finger contact, and a continuous grasp lasting at least 0.25 s. Stretch and
+Go2 use two-sided contact. G1 pulls using its articulated fingers, then lifts
+its hand clear of the handle before opening the fingers. The runner exports
+a replay only after the nominal trial and 12 held-out approaches complete.
+The fixture is staged at the practice table in the kitchen proxy.
 
 ```sh
 python -m scripts.train_kitchen_drawer --robot-xml /path/to/hello_robot_stretch_3/stretch.xml --output /tmp/stretch-drawer-report.json
 python -m scripts.train_kitchen_drawer --robot-xml /path/to/unitree_go2/go2.xml --go2-checkpoint /path/to/policy_deploy.onnx --output /tmp/go2-drawer-report.json
+python -m scripts.train_kitchen_drawer --robot-xml /path/to/unitree_g1/g1_with_hands.xml --g1-assets /path/to/g1-assets --output /tmp/g1-drawer-report.json
 ```
