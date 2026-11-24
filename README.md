@@ -148,11 +148,11 @@ sequenceDiagram
   <img src="docs/media/architecture.svg" width="1200" alt="Morpheus architecture: a React, Three.js and Spark browser client calls local environment and object services. Geometry validation, task planning, Decisions matching and SimReady assets use local files; offline Terra or Codex discovery saves detections and matched scenes.">
 </picture>
 
-The environment service serves scenes and planned replays and validates MJCF with MuJoCo. The object service manages catalogue matching and saved replacements. Object discovery can also run offline. Robot routes and manipulation are planned or scripted; they are not learned locomotion. The sample scene's scale is assumed.
+The environment service serves scenes, scripted previews, and recorded MuJoCo replays. The object service manages catalogue matching and saved replacements. Object discovery can also run offline. The sample scene's scale is assumed.
 
 <sub>Diagram style inspired by [Supabase](https://github.com/supabase/supabase#how-it-works), [SlideMate](https://github.com/Mattlo0546/slidemate#architecture), and [Skill Issue](https://github.com/Mattlo0546/skill-issue). [Regenerate the SVGs](docs/diagrams/render_architecture.py).</sub>
 
-**Committed state the client reads:** `output/kitchen/scene.json` (111 colliders) · `rollouts/kitchen/*` (3 tasks × 3 robots) · `output/simready/` (prepared meshes + saved scene with Decisions traces) · `public/discovery/` (16 views + detections) · `src/robots/*.glb` (MuJoCo Menagerie meshes).
+**Committed state the client reads:** `output/kitchen/scene.json` (111 colliders) · `rollouts/kitchen/*` (9 tasks × 3 robots) · `output/simready/` (prepared meshes + saved scene with Decisions traces) · `public/discovery/` (16 views + detections) · `src/robots/*.glb` (MuJoCo Menagerie meshes).
 
 ### Object discovery → SimReady swap
 
@@ -323,7 +323,7 @@ Metres, right-handed, Z-up, WXYZ quaternions, static geoms prefixed `env_`. Deta
 We'd rather be precise than impressive.
 
 - The kitchen is a **synthetic World Labs capture** with a companion mesh, not a measured scan of a real home. Scale is assumed.
-- Rollouts are **planned motions checked against the room geometry**, not physics simulations or trained policies. A verdict says which steps are geometrically and kinematically plausible for a body, not that a robot will succeed.
+- Recorded MuJoCo runs cover aisle clearance and counter reach for all three robots, plus drawer opening for Stretch and Go2. The workspace labels the remaining rollouts as scripted previews. [Trial details](docs/TASKS.md#recorded-mujoco-trials)
 - Landmarks are inferred from geometry. The sink was pinned by a person after looking at the scan, and the UI says so.
 - SimReady swaps are **visual + static collision** replacements. Mass, articulation and grasp quality are not validated.
 - The table bowl sits slightly past Stretch's nominal reach; the pick uses a declared 0.20 m gripper allowance, shown in the step note.
