@@ -141,7 +141,7 @@ export class RobotScene {
     const moving=Math.hypot(nearby.position[0]-frame.position[0],nearby.position[1]-frame.position[1])>1e-5;
     this.lastPose={frame,time,moving};this.poseModel(frame,time,moving);this.cleaning?.update(time,this.robot,this.model);
     for(const dish of this.dishes)dish.update(time,this.robot,this.model,this.cleaning!,this.carriedLayer);
-    this.contact?.update(time,this.robot,this.model,this.cleaning!);
+    this.contact?.update(time,this.robot,this.model,this.cleaning!,this.replay.physics?frame.contactForce??0:undefined);
   }
   setLayer(layer:string){this.viewer.setLayers(layer!=='collisions',layer==='collisions'&&!this.hasEnvironmentColliders,layer==='collisions'&&this.hasEnvironmentColliders);this.reach.visible=layer==='reach'&&this.hasReplay&&this.replay.source==='demo';}
   home(){if(this.hasEnvironmentColliders)this.viewer.home();else{this.viewer.orbit.target.set(1.15,0,.65);this.viewer.camera.position.set(6.15,-6.7,6.65);this.viewer.orbit.update()}this.previous=null;}

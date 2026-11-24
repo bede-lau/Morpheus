@@ -58,7 +58,7 @@ class Show {
     this.set(u=>({...u,stage:'loading',status:'GET /api/environments/kitchen'}));
     const [envRaw,views,detections,report,objects,tasks]=await Promise.all([getJson('/api/environments/kitchen'),fetch('/discovery/views.json').then(r=>r.json()),fetch('/discovery/detections.json').then(r=>r.json()),fetch('/discovery/report.json').then(r=>r.json()),getJson('/api/objects/scene'),fetchTasks()]);
     const env=parseEnvironment(envRaw);if(!env.visual.splatUrl)throw new Error('The kitchen has no visual scan.');
-    const chosen=tasks.find(t=>t.slug==='wipe-the-table-and-clean-the-sink')??tasks.find(t=>t.slug.includes('bowl'))??tasks.find(t=>t.slug==='wipe-the-table')??tasks[0];if(!chosen)throw new Error('No robot tasks have been published.');
+    const chosen=tasks.find(t=>t.slug==='aisle-clearance')??tasks.find(t=>t.slug==='wipe-the-table-and-clean-the-sink')??tasks.find(t=>t.slug.includes('bowl'))??tasks.find(t=>t.slug==='wipe-the-table')??tasks[0];if(!chosen)throw new Error('No robot tasks have been published.');
     const replay=parseTaskEnvelope(await getJson(taskUrl(chosen.slug,'stretch')),env,'stretch').replay;
     if(this.disposed)return;
     const v=this.viewer,axis=env.visual.sourceUpAxis==='Z-up'?'z-up':env.visual.sourceUpAxis==='Y-up'?'y-up':'y-down';

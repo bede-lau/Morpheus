@@ -27,6 +27,14 @@ for(const id of ['g1','stretch','go2'] as const){
         assert.ok(new T.Vector3(...replay.frames[0].position).distanceTo(new T.Vector3(...replay.frames.at(-1)!.position))>2);
       }
       if(!replay.contact)continue;
+      if(replay.physics){
+        const start=replay.frames[0];
+        const end=replay.frames.at(-1)!;
+        assert.equal(start.contactForce,0);
+        assert.equal(end.contactForce,0);
+        assert.ok(replay.frames.some(frame=>(frame.contactForce??0)>1));
+        continue; // Measured poses are checked in physics-replay.test.ts.
+      }
       const trial=replay.contact;
       const fixture=new ContactScene(trial);
       const rig=new Cleaning(replay);

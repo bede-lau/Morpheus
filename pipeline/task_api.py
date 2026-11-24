@@ -86,17 +86,18 @@ class TaskStore:
             robots = (robot,) if robot else ROBOT_IDS
             slug = slugify(task)
             recorded = {}
-            if self.builtin_rollouts is not None and slug == "aisle-clearance":
+            if self.builtin_rollouts is not None and slug in {"aisle-clearance", "counter-reach"}:
                 for robot_id in robots:
                     status, content, _ = self.read(f"/api/tasks/{slug}/{robot_id}")
                     if status == 200:
                         envelope = json.loads(content)
                         if envelope["replay"].get("physics"):
                             recorded[robot_id] = envelope
-            if len(recorded) == len(robots):
-                results = recorded
-                for robot_id, envelope in results.items():
-                    write_json(self.replays / f"{robot_id}.json", envelope)
-            else:
-                slug, results = plan_and_write(task, robots, rollouts=self.rollouts, replays=self.replays)
+            pending = tuple(robot_id for robot_id in robots if robot_id not in recorded)
+            results = {}
+            if pending:
+                slug, results = plan_and_write(task, pending, rollouts=self.rollouts, replays=self.replays)
+            for robot_id, envelope in recorded.items():
+                write_json(self.replays / f"{robot_id}.json", envelope)
+            results.update(recorded)
         return _json(200, {"version": 1, "slug": slug, "task": task.strip(), "results": results})

@@ -37,20 +37,21 @@ export class ContactScene {
       box(.145,.18,.018,0x537178,-.105,0,-.231);
       box(.055,.076,.21,0x698b91,-.105,0,-.117);
       box(.11,.057,.025,0x698b91,-.056,0,-.015);
-      this.indicator=box(.028,.095,.042,0xdcb54a,-.014,0,0);
+      const [width,depth,height]=trial.padSize??[.028,.095,.042];
+      this.indicator=box(width,depth,height,0xdcb54a,-width/2,0,0);
     }
   }
 
-  update(time:number,robot:T.Group,model:ArticulatedRobot|null,rig:Cleaning){
+  update(time:number,robot:T.Group,model:ArticulatedRobot|null,rig:Cleaning,force?:number){
     const {start,contact,release,end}=this.trial;
     this.fixture.position.copy(this.travel).multiplyScalar(smooth((time-contact)/(release-contact)));
     this.handle.copy(this.base).add(this.fixture.position);
     if(this.indicator){
-      const touched=time>=contact;
+      const touched=force===undefined?time>=contact:force>1;
       this.indicator.color.setHex(touched?0x3ecf80:0xdcb54a);
       this.indicator.emissive.setHex(touched?0x097447:0x000000);
     }
-    if(time<start||time>end)return;
+    if(force!==undefined||time<start||time>end)return;
     const id=rig.robotId;
     const rest=robot.localToWorld(new T.Vector3(...HAND_REST[id]));
     const blend=smooth((time-start)/(contact-start))*smooth((end-time)/(end-release));
