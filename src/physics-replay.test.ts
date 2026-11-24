@@ -6,20 +6,23 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {ArticulatedRobot} from './robot-model';
 import {parseReplay,sampleReplay} from './replay';
 
-for(const [id,slug] of [['g1','aisle-clearance'],['go2','aisle-clearance'],['stretch','aisle-clearance'],['stretch','counter-reach']]){
+for(const [id,slug] of [
+  ['g1','aisle-clearance'],['go2','aisle-clearance'],['stretch','aisle-clearance'],
+  ['g1','counter-reach'],['go2','counter-reach'],['stretch','counter-reach'],
+]){
   test(id+' '+slug+' uses recorded MuJoCo state',async()=>{
-    const asset=id==='g1'?'g1-12dof':id;
     const replay=parseReplay(JSON.parse(fs.readFileSync(new URL('../rollouts/kitchen/'+slug+'/'+id+'.json',import.meta.url),'utf8')).replay);
+    const physics=replay.physics!;
+    const asset=physics.visualModel??id;
     const data=fs.readFileSync(new URL('./robots/'+asset+'.glb',import.meta.url));
     const {scene}=await new GLTFLoader().parseAsync(data.buffer.slice(data.byteOffset,data.byteOffset+data.byteLength),'');
     const meta=JSON.parse(fs.readFileSync(new URL('./robots/'+asset+'.json',import.meta.url),'utf8'));
     const model=new ArticulatedRobot(scene,meta);
     const parent=new T.Group();
     parent.add(scene);
-    const physics=replay.physics!;
     assert.ok(physics.engine.startsWith('MuJoCo'));
     assert.equal(physics.heldOutPassed,12);
-    const frame=sampleReplay(replay,slug==='counter-reach'?16.123:.523);
+    const frame=sampleReplay(replay,replay.contact?replay.contact.contact+.023:.523);
     parent.position.fromArray(frame.position);
     parent.rotation.z=frame.yaw;
     model.applyPhysicsPose(frame.physicsPose!,frame.yaw,physics.jointNames);
@@ -30,6 +33,12 @@ for(const [id,slug] of [['g1','aisle-clearance'],['go2','aisle-clearance'],['str
     assert.ok(base.getWorldQuaternion(new T.Quaternion()).angleTo(new T.Quaternion(x,y,z,w))<1e-6);
     const first=replay.frames[0].physicsPose!.joints;
     assert.ok(frame.physicsPose!.joints.some((value,i)=>Math.abs(value-first[i])>.02));
+    if(replay.contact){
+      assert.ok(physics.contactDwellSeconds!>=.25);
+      assert.ok(physics.peakContactForceNewtons!>1);
+      assert.ok(replay.frames.some(f=>(f.contactForce??0)>1&&f.time<replay.contact!.release));
+      assert.equal(replay.frames.at(-1)!.contactForce,0);
+    }
     assert.throws(()=>parseReplay({...replay,frames:[{...replay.frames[0],physicsPose:undefined},...replay.frames.slice(1)]}),/Invalid recorded physics/);
   });
 }

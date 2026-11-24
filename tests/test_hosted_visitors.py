@@ -83,6 +83,18 @@ class HostedVisitorIsolationTests(unittest.TestCase):
             self.assertEqual(self.request(f"/api/tasks/aisle-clearance/{robot}", token), (200, result))
             self.assertEqual(self.request(f"/api/environments/kitchen/replays/{robot}", token), (200, result))
 
+    def test_counter_task_serves_recorded_contact_for_all_robots(self):
+        token = "e" * 64
+        status, body = self.request("/api/tasks/plan", token, {"task": "Counter reach"})
+        self.assertEqual(status, 200)
+        self.assertEqual(set(body["results"]), {"g1", "go2", "stretch"})
+        for robot, result in body["results"].items():
+            replay = result["replay"]
+            self.assertEqual(replay["physics"]["heldOutPassed"], 12)
+            self.assertGreaterEqual(replay["physics"]["contactDwellSeconds"], .25)
+            self.assertEqual(replay["frames"][-1]["contactForce"], 0)
+            self.assertEqual(self.request(f"/api/tasks/counter-reach/{robot}", token), (200, result))
+
     def test_scene_and_plan_isolation_and_reload(self):
         a, b = 'a' * 64, 'b' * 64
         self.assertEqual(self.request('/api/objects/scene')[0], 401)

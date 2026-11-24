@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import type { PhysicsPose, RobotId } from './replay';
+import type { PhysicsModel, PhysicsPose, RobotId } from './replay';
 
 /**
  * Real robot meshes exported from MuJoCo Menagerie (scripts/export-robot-models.py): one GLB per robot in
@@ -8,11 +8,13 @@ import type { PhysicsPose, RobotId } from './replay';
  */
 export type JointInfo={name:string;type:'hinge'|'slide';axis:number[];anchor:number[];home:number;range:number[]|null};
 export type RobotMeta={robot:string;liftZ:number;bounds:{min:number[];max:number[]};bodies:Record<string,{parent:string;position:number[];free?:boolean;joint?:JointInfo}>};
-type VisualRobotId=RobotId|'g1-12dof';
+type VisualRobotId=RobotId|PhysicsModel;
 export const MODEL_URLS:Record<VisualRobotId,{glb:string;meta:string}>={
   stretch:{glb:new URL('./robots/stretch.glb',import.meta.url).href,meta:new URL('./robots/stretch.json',import.meta.url).href},
   go2:{glb:new URL('./robots/go2.glb',import.meta.url).href,meta:new URL('./robots/go2.json',import.meta.url).href},
+  'go2-arm':{glb:new URL('./robots/go2-arm.glb',import.meta.url).href,meta:new URL('./robots/go2-arm.json',import.meta.url).href},
   'g1-12dof':{glb:new URL('./robots/g1-12dof.glb',import.meta.url).href,meta:new URL('./robots/g1-12dof.json',import.meta.url).href},
+  'g1-hands':{glb:new URL('./robots/g1-hands.glb',import.meta.url).href,meta:new URL('./robots/g1-hands.json',import.meta.url).href},
   g1:{glb:new URL('./robots/g1.glb',import.meta.url).href,meta:new URL('./robots/g1.json',import.meta.url).href},
 };
 const cache=new Map<VisualRobotId,Promise<{scene:THREE.Group;meta:RobotMeta}>>();
