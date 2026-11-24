@@ -9,7 +9,7 @@ import re
 import threading
 
 from .read_api import EnvironmentStore, validate_replay
-from .task_planner import ROBOT_IDS, ROLLOUTS, REPLAYS, plan_and_write
+from .task_planner import ROBOT_IDS, ROLLOUTS, REPLAYS, plan_and_write, slugify, write_json
 
 SLUG = re.compile(r"^[a-z0-9-]{1,80}$")
 PLAN_LOCK = threading.Lock()
@@ -83,5 +83,20 @@ class TaskStore:
         if robot is not None and robot not in ROBOT_IDS:
             return _json(400, {"error": "Unknown robot"})
         with PLAN_LOCK:
-            slug, results = plan_and_write(task, (robot,) if robot else ROBOT_IDS, rollouts=self.rollouts, replays=self.replays)
+            robots = (robot,) if robot else ROBOT_IDS
+            slug = slugify(task)
+            recorded = {}
+            if self.builtin_rollouts is not None and slug == "aisle-clearance":
+                for robot_id in robots:
+                    status, content, _ = self.read(f"/api/tasks/{slug}/{robot_id}")
+                    if status == 200:
+                        envelope = json.loads(content)
+                        if envelope["replay"].get("physics"):
+                            recorded[robot_id] = envelope
+            if len(recorded) == len(robots):
+                results = recorded
+                for robot_id, envelope in results.items():
+                    write_json(self.replays / f"{robot_id}.json", envelope)
+            else:
+                slug, results = plan_and_write(task, robots, rollouts=self.rollouts, replays=self.replays)
         return _json(200, {"version": 1, "slug": slug, "task": task.strip(), "results": results})

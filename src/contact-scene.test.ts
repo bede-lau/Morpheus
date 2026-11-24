@@ -22,7 +22,8 @@ for(const id of ['g1','stretch','go2'] as const){
       if(slug==='clean-the-sink')assert.equal(replay.wipes?.[0].target,'sink');
       if(slug==='move-the-bowl-to-the-sink')assert.equal(replay.transfers?.[0].kind,'bowl');
       if(slug==='aisle-clearance'){
-        assert.match(replay.events!.at(-2)!.label,/minimum footprint clearance/);
+        assert.match(replay.events!.at(-1)!.label,/physics run complete/);
+        assert.ok(replay.physics?.minimumClearance && replay.physics.heldOutPassed===12);
         assert.ok(new T.Vector3(...replay.frames[0].position).distanceTo(new T.Vector3(...replay.frames.at(-1)!.position))>2);
       }
       if(!replay.contact)continue;
