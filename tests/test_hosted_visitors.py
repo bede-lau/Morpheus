@@ -95,14 +95,12 @@ class HostedVisitorIsolationTests(unittest.TestCase):
             self.assertEqual(replay["frames"][-1]["contactForce"], 0)
             self.assertEqual(self.request(f"/api/tasks/counter-reach/{robot}", token), (200, result))
 
-    def test_drawer_task_preserves_recorded_and_scripted_runs(self):
+    def test_drawer_task_preserves_recorded_runs_for_all_robots(self):
         token = "f" * 64
         status, body = self.request("/api/tasks/plan", token, {"task": "Drawer opening"})
         self.assertEqual(status, 200)
         self.assertEqual(set(body["results"]), {"g1", "go2", "stretch"})
-        self.assertNotIn("physics", body["results"]["g1"]["replay"])
-        for robot in ("go2", "stretch"):
-            result = body["results"][robot]
+        for robot, result in body["results"].items():
             replay = result["replay"]
             self.assertEqual(replay["physics"]["heldOutPassed"], 12)
             self.assertGreaterEqual(replay["frames"][-1]["drawerDisplacement"], .12)

@@ -323,7 +323,7 @@ Metres, right-handed, Z-up, WXYZ quaternions, static geoms prefixed `env_`. Deta
 We'd rather be precise than impressive.
 
 - The kitchen is a **synthetic World Labs capture** with a companion mesh, not a measured scan of a real home. Scale is assumed.
-- Recorded MuJoCo runs cover aisle clearance and counter reach for all three robots, plus drawer opening for Stretch and Go2. The workspace labels the remaining rollouts as scripted previews. [Trial details](docs/TASKS.md#recorded-mujoco-trials)
+- Recorded MuJoCo runs cover aisle clearance, counter reach, and drawer opening for all three robots. The workspace labels the remaining rollouts as scripted previews. [Trial details](docs/TASKS.md#recorded-mujoco-trials)
 - Landmarks are inferred from geometry. The sink was pinned by a person after looking at the scan, and the UI says so.
 - SimReady swaps are **visual + static collision** replacements. Mass, articulation and grasp quality are not validated.
 - The table bowl sits slightly past Stretch's nominal reach; the pick uses a declared 0.20 m gripper allowance, shown in the step note.

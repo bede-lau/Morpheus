@@ -10,7 +10,7 @@ import {parseReplay,sampleReplay} from './replay';
 for(const [id,slug] of [
   ['g1','aisle-clearance'],['go2','aisle-clearance'],['stretch','aisle-clearance'],
   ['g1','counter-reach'],['go2','counter-reach'],['stretch','counter-reach'],
-  ['go2','drawer-opening'],['stretch','drawer-opening'],
+  ['g1','drawer-opening'],['go2','drawer-opening'],['stretch','drawer-opening'],
 ]){
   test(id+' '+slug+' uses recorded MuJoCo state',async()=>{
     const replay=parseReplay(JSON.parse(fs.readFileSync(new URL('../rollouts/kitchen/'+slug+'/'+id+'.json',import.meta.url),'utf8')).replay);
@@ -45,7 +45,7 @@ for(const [id,slug] of [
       const drawer=new ContactScene(replay.contact);
       const last=replay.frames.at(-1)!;
       assert.ok(last.drawerDisplacement!>=.12);
-      const opening=sampleReplay(replay,replay.contact.release-2.03);
+      const opening=sampleReplay(replay,(replay.contact.contact+replay.contact.release)/2);
       assert.ok(opening.drawerDisplacement!>0 && opening.drawerDisplacement!<last.drawerDisplacement!);
       drawer.update(opening.time,parent,model,null,opening);
       assert.equal(drawer.fixture.position.x,opening.drawerDisplacement);
