@@ -26,7 +26,12 @@ export type ContactTrial = {
   start:number; contact:number; release:number; end:number;
 };
 export type Wipe = { target: string; point: Vec3; start: number; end: number };
-export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[]; carried?: CarriedObject[]; wipes?: Wipe[]; cleaningKit?: boolean; transfers?: Transfer[]; contact?: ContactTrial; physics?: PhysicsEvidence };
+export type RecordedCloth = {
+  faces:[number,number,number][];
+  marks:Vec3[];
+  frames:{time:number;points:number[];tabPosition:Vec3;tabQuaternion:PhysicsPose['quaternion'];wiped:number[]}[];
+};
+export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[]; carried?: CarriedObject[]; wipes?: Wipe[]; cleaningKit?: boolean; transfers?: Transfer[]; contact?: ContactTrial; physics?: PhysicsEvidence; cloth?:RecordedCloth };
 export const ROBOTS = [
   { id: 'go2' as const, name: 'Go2', type: 'Quadruped', description: 'A mobile quadruped for exploring a room. This demo model has no manipulation arm.', reach: 'No arm', clearance: 'Review', drawer: 'Not tested' },
   { id: 'g1' as const, name: 'Unitree G1', type: 'Humanoid', description: 'A 1.3 m humanoid that walks between work areas and reaches with two arms at counter height.', reach: 'Reachable', clearance: 'Review', drawer: 'Not tested' },
@@ -102,6 +107,23 @@ function validateTaskFields(r:Replay){
       ||c.drawerParts.some(part=>!part||!vec3(part.position)||!vec3(part.size)||part.size.some(value=>value<=0))
       ||r.frames.some(frame=>typeof frame.drawerDisplacement!=='number'||!Number.isFinite(frame.drawerDisplacement)))){
       throw new Error('Invalid recorded drawer motion.');
+    }
+  }
+  if(r.cloth!==undefined){
+    const c=r.cloth;
+    const count=c?.frames?.[0]?.points?.length??0, vertices=count/3;
+    if(!r.physics||!c||!Array.isArray(c.marks)||c.marks.length>64||!c.marks.every(vec3)
+      ||!Number.isInteger(vertices)||vertices<3||vertices>256
+      ||!Array.isArray(c.faces)||!c.faces.length||c.faces.length>512
+      ||c.faces.some(f=>!vec3(f)||f.some(i=>!Number.isInteger(i)||i<0||i>=vertices))
+      ||!Array.isArray(c.frames)||c.frames.length<2||c.frames.length>4096
+      ||c.frames[0].time!==0||c.frames.at(-1)!.time!==r.duration
+      ||c.frames.some((f,i)=>!f||!Number.isFinite(f.time)||i>0&&f.time<=c.frames[i-1].time
+        ||!Array.isArray(f.points)||f.points.length!==count||!f.points.every(Number.isFinite)
+        ||!vec3(f.tabPosition)||!Array.isArray(f.tabQuaternion)||f.tabQuaternion.length!==4
+        ||!f.tabQuaternion.every(Number.isFinite)||Math.abs(Math.hypot(...f.tabQuaternion)-1)>.001
+        ||!Array.isArray(f.wiped)||f.wiped.some(mark=>!Number.isInteger(mark)||mark<0||mark>=c.marks.length))){
+      throw new Error('Invalid recorded cloth motion.');
     }
   }
   if(r.transfers!==undefined){

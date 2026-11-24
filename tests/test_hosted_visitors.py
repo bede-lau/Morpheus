@@ -107,6 +107,17 @@ class HostedVisitorIsolationTests(unittest.TestCase):
             self.assertEqual(replay["frames"][-1]["contactForce"], 0)
             self.assertEqual(self.request(f"/api/tasks/drawer-opening/{robot}", token), (200, result))
 
+    def test_table_wipe_serves_recorded_cloth_and_scripted_previews(self):
+        token = "9" * 64
+        status, body = self.request("/api/tasks/plan", token, {"task": "Wipe the table"})
+        self.assertEqual(status, 200)
+        self.assertEqual(set(body["results"]), {"g1", "go2", "stretch"})
+        result = body["results"]["stretch"]
+        self.assertGreaterEqual(len(result["replay"]["cloth"]["frames"][-1]["wiped"]), 8)
+        self.assertEqual(self.request("/api/tasks/wipe-the-table/stretch", token), (200, result))
+        for robot in ("g1", "go2"):
+            self.assertNotIn("physics", body["results"][robot]["replay"])
+
     def test_scene_and_plan_isolation_and_reload(self):
         a, b = 'a' * 64, 'b' * 64
         self.assertEqual(self.request('/api/objects/scene')[0], 401)

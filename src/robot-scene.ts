@@ -1,6 +1,7 @@
 import { DishTransfer } from './dish-transfer';
 import { ContactScene } from './contact-scene';
 import { Cleaning } from './cleaning';
+import { ClothScene } from './cloth-scene';
 import * as THREE from 'three';
 import type { RoomViewer } from './viewer';
 import { createDemoReplay, sampleReplay, carriedPose, stretchLift, stretchTip, STRETCH_ARM, type Landmark, type Replay, type ReplayFrame, type RobotId } from './replay';
@@ -32,6 +33,7 @@ export class RobotScene {
   private contact:ContactScene|null=null;
   private dishes:DishTransfer[]=[];
   private cleaning:Cleaning|null=null;
+  private cloth:ClothScene|null=null;
   private previous:THREE.Vector3|null=null;
   private hasReplay=true; private pose:{position:THREE.Vector3;yaw:number}|null=null;
   eye=new THREE.Group(); private savedVisibility:{route:boolean;reach:boolean;eye:boolean}|null=null;
@@ -68,6 +70,8 @@ export class RobotScene {
   clearReplay(){this.carriedLayer?.resetPoses();this.pose=null;this.hasReplay=false;this.root.visible=false;this.previous=null;}
   setReplay(replay:Replay){
     if(this.cleaning){this.root.remove(this.cleaning.root);dispose(this.cleaning.root);this.cleaning=null;}
+    if(this.cloth){this.root.remove(this.cloth.root);dispose(this.cloth.root);this.cloth=null;}
+    if(replay.cloth){this.cloth=new ClothScene(replay.cloth);this.root.add(this.cloth.root);}
     this.carriedLayer?.resetPoses();
     for(const dish of this.dishes){this.root.remove(dish.root);dispose(dish.root);}
     this.dishes=(replay.transfers??[]).map(track=>new DishTransfer(replay,track));
@@ -75,7 +79,7 @@ export class RobotScene {
     if(this.contact){this.root.remove(this.contact.root);dispose(this.contact.root);}
     this.contact=replay.contact?new ContactScene(replay.contact):null;
     if(this.contact)this.root.add(this.contact.root);
-    if(replay.contact?.drawerParts||!replay.physics&&(replay.wipes?.length||this.dishes.length||this.contact)){
+    if(replay.cloth||replay.contact?.drawerParts||!replay.physics&&(replay.wipes?.length||this.dishes.length||this.contact)){
       this.cleaning=new Cleaning(replay);this.root.add(this.cleaning.root);
     }
     this.hasReplay=true;this.root.visible=true;this.replay=replay;this.previous=null;this.buildRobot(replay.robot);dispose(this.route);dispose(this.reach);
@@ -147,6 +151,7 @@ export class RobotScene {
       for(const dish of this.dishes)dish.update(time,this.robot,this.model,this.cleaning,this.carriedLayer);
     }
     this.contact?.update(time,this.robot,this.model,this.cleaning,this.replay.physics?frame:undefined);
+    this.cloth?.update(time);
   }
   setLayer(layer:string){this.viewer.setLayers(layer!=='collisions',layer==='collisions'&&!this.hasEnvironmentColliders,layer==='collisions'&&this.hasEnvironmentColliders);this.reach.visible=layer==='reach'&&this.hasReplay&&this.replay.source==='demo';}
   home(){if(this.hasEnvironmentColliders)this.viewer.home();else{this.viewer.orbit.target.set(1.15,0,.65);this.viewer.camera.position.set(6.15,-6.7,6.65);this.viewer.orbit.update()}this.previous=null;}

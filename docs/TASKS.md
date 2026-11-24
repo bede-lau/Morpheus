@@ -255,3 +255,17 @@ python -m scripts.train_kitchen_drawer --robot-xml /path/to/hello_robot_stretch_
 python -m scripts.train_kitchen_drawer --robot-xml /path/to/unitree_go2/go2.xml --go2-checkpoint /path/to/policy_deploy.onnx --output /tmp/go2-drawer-report.json
 python -m scripts.train_kitchen_drawer --robot-xml /path/to/unitree_g1/g1_with_hands.xml --g1-assets /path/to/g1-assets --output /tmp/g1-drawer-report.json
 ```
+
+**Wipe the table** has a Stretch recording. Stretch drives to the practice
+table, grasps the stitched pickup tab on a deformable cloth, lifts the cloth
+completely clear, and then wipes a marked patch on the table. A mark clears
+after measured cloth contact with the table while the cloth slides. The
+release gate requires at least eight cleared cells, 0.20 s with the entire
+cloth held above the surface, and zero direct robot contact with the table or
+other obstacles. The nominal run cleared 19 of 24 marks and passed all 12
+held-out starts. The viewer interpolates the recorded cloth vertices, tab
+pose, and robot joint poses.
+
+```sh
+python -m scripts.train_stretch_wipe --robot-xml /path/to/hello_robot_stretch_3/stretch.xml --output /tmp/stretch-wipe
+```
