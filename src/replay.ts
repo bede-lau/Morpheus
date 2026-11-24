@@ -1,7 +1,12 @@
 import type { Vec3 } from './types';
 
 export type RobotId = 'stretch' | 'go2' | 'g1';
-export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number };
+export type PhysicsPose = { quaternion:[number,number,number,number]; joints:number[] };
+export type PhysicsEvidence = {
+  engine:string; modelRevision:string; visualModel?:'g1-12dof'|'go2'; jointNames:string[];
+  goalError:number; minimumClearance:number; heldOutPassed:number; heldOutTotal:number;
+};
+export type ReplayFrame = { time: number; position: Vec3; yaw: number; armExtension: number; physicsPose?:PhysicsPose };
 export type ReplayEvent = { time: number; label: string };
 export type StepStatus = 'done' | 'failed' | 'skipped';
 export type Verdict = { status: 'completed' | 'partial' | 'failed'; summary: string; steps: { name: string; status: StepStatus; note?: string }[]; planner?: string };
@@ -18,7 +23,7 @@ export type ContactTrial = {
   start:number; contact:number; release:number; end:number;
 };
 export type Wipe = { target: string; point: Vec3; start: number; end: number };
-export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[]; carried?: CarriedObject[]; wipes?: Wipe[]; cleaningKit?: boolean; transfers?: Transfer[]; contact?: ContactTrial };
+export type Replay = { version: 1; duration: number; source: 'demo' | 'backend'; robot: RobotId; frames: ReplayFrame[]; task?: string; events?: ReplayEvent[]; verdict?: Verdict; landmarks?: Landmark[]; carried?: CarriedObject[]; wipes?: Wipe[]; cleaningKit?: boolean; transfers?: Transfer[]; contact?: ContactTrial; physics?: PhysicsEvidence };
 export const ROBOTS = [
   { id: 'go2' as const, name: 'Go2', type: 'Quadruped', description: 'A mobile quadruped for exploring a room. This demo model has no manipulation arm.', reach: 'No arm', clearance: 'Review', drawer: 'Not tested' },
   { id: 'g1' as const, name: 'Unitree G1', type: 'Humanoid', description: 'A 1.3 m humanoid that walks between work areas and reaches with two arms at counter height.', reach: 'Reachable', clearance: 'Review', drawer: 'Not tested' },
@@ -36,7 +41,15 @@ export function sampleReplay(replay: Replay, time: number): ReplayFrame {
   if(end===0)return {...replay.frames[0],time:t};
   const a=replay.frames[end-1],b=replay.frames[end],mix=(t-a.time)/(b.time-a.time);
   const angle=Math.atan2(Math.sin(b.yaw-a.yaw),Math.cos(b.yaw-a.yaw));
-  return {time:t,position:a.position.map((v,i)=>v+(b.position[i]-v)*mix) as Vec3,yaw:a.yaw+angle*mix,armExtension:a.armExtension+(b.armExtension-a.armExtension)*mix};
+  return {time:t,physicsPose:blendPhysics(a.physicsPose,b.physicsPose,mix),position:a.position.map((v,i)=>v+(b.position[i]-v)*mix) as Vec3,yaw:a.yaw+angle*mix,armExtension:a.armExtension+(b.armExtension-a.armExtension)*mix};
+}
+function blendPhysics(a:PhysicsPose|undefined,b:PhysicsPose|undefined,fraction:number):PhysicsPose|undefined{
+  if(!a||!b)return undefined;
+  const sign=a.quaternion.reduce((sum,v,i)=>sum+v*b.quaternion[i],0)<0?-1:1;
+  const rotation=a.quaternion.map((v,i)=>v+(sign*b.quaternion[i]-v)*fraction);
+  const norm=Math.hypot(...rotation);
+  return {quaternion:rotation.map(v=>v/norm) as PhysicsPose['quaternion'],
+    joints:a.joints.map((value,i)=>value+(b.joints[i]-value)*fraction)};
 }
 export function parseReplay(data: unknown): Replay {
   const r=data as Replay;
@@ -52,6 +65,20 @@ export function parseReplay(data: unknown): Replay {
 }
 const vec3=(v:unknown)=>Array.isArray(v)&&v.length===3&&v.every(Number.isFinite);
 function validateTaskFields(r:Replay){
+  if(r.physics!==undefined){
+    const p=r.physics;
+    if(!p||typeof p.engine!=='string'||typeof p.modelRevision!=='string'
+      ||!(p.visualModel===undefined||p.visualModel==='g1-12dof'&&r.robot==='g1'||p.visualModel==='go2'&&r.robot==='go2')
+      ||!Array.isArray(p.jointNames)||p.jointNames.length<1||p.jointNames.length>64
+      ||p.jointNames.some(name=>typeof name!=='string'||!name)||new Set(p.jointNames).size!==p.jointNames.length
+      ||![p.goalError,p.minimumClearance].every(value=>Number.isFinite(value)&&value>=0)
+      ||!Number.isInteger(p.heldOutTotal)||!Number.isInteger(p.heldOutPassed)||p.heldOutTotal<1||p.heldOutPassed!==p.heldOutTotal
+      ||r.frames.some(({physicsPose:pose})=>!pose||!Array.isArray(pose.quaternion)||pose.quaternion.length!==4
+        ||!pose.quaternion.every(Number.isFinite)||Math.abs(Math.hypot(...pose.quaternion)-1)>1e-4
+        ||!Array.isArray(pose.joints)||pose.joints.length!==p.jointNames.length||!pose.joints.every(Number.isFinite))){
+      throw new Error('Invalid recorded physics replay.');
+    }
+  }
   if(r.contact!==undefined){
     const c=r.contact;
     if(!c||!['drawer','counter'].includes(c.kind)||!vec3(c.point)||!vec3(c.travel)

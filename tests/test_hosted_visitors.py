@@ -73,6 +73,16 @@ class HostedVisitorIsolationTests(unittest.TestCase):
         self.assertEqual(status, 200)
         self.assertEqual(saved['task'], 'Saved before deployment')
 
+    def test_aisle_task_uses_recorded_physics_for_all_robots(self):
+        token = "d" * 64
+        status, body = self.request("/api/tasks/plan", token, {"task": "Aisle clearance"})
+        self.assertEqual(status, 200)
+        self.assertEqual(set(body["results"]), {"g1", "go2", "stretch"})
+        for robot, result in body["results"].items():
+            self.assertEqual(result["replay"]["physics"]["heldOutPassed"], 12)
+            self.assertEqual(self.request(f"/api/tasks/aisle-clearance/{robot}", token), (200, result))
+            self.assertEqual(self.request(f"/api/environments/kitchen/replays/{robot}", token), (200, result))
+
     def test_scene_and_plan_isolation_and_reload(self):
         a, b = 'a' * 64, 'b' * 64
         self.assertEqual(self.request('/api/objects/scene')[0], 401)

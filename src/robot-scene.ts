@@ -77,7 +77,7 @@ export class RobotScene {
     if(this.contact)this.root.add(this.contact.root);
     if(replay.wipes?.length||this.dishes.length||this.contact){this.cleaning=new Cleaning(replay);this.root.add(this.cleaning.root);}
     this.hasReplay=true;this.root.visible=true;this.replay=replay;this.previous=null;this.buildRobot(replay.robot);dispose(this.route);dispose(this.reach);
-    const points=replay.frames.map(f=>new THREE.Vector3(f.position[0],f.position[1],f.position[2]+.025));
+    const points=replay.frames.map(f=>new THREE.Vector3(f.position[0],f.position[1],(replay.physics?0:f.position[2])+.025));
     const path=new THREE.Line(new THREE.BufferGeometry().setFromPoints(points),new THREE.LineDashedMaterial({color:0x077c5c,dashSize:.13,gapSize:.075,depthTest:true,transparent:true,opacity:.85}));path.computeLineDistances();path.renderOrder=10;this.route.add(path);
     [points[0],points.at(-1)!].forEach(p=>{const dot=new THREE.Mesh(new THREE.RingGeometry(.08,.13,32),new THREE.MeshBasicMaterial({color:0x0a8967,side:THREE.DoubleSide,depthTest:true}));dot.position.copy(p);dot.renderOrder=11;this.route.add(dot)});
     const zone=new THREE.Mesh(new THREE.CylinderGeometry(.95,.95,.02,64),new THREE.MeshBasicMaterial({color:0x31b18a,transparent:true,opacity:.18,depthWrite:false}));zone.rotation.x=Math.PI/2;zone.position.copy(points.at(-1)!).add(new THREE.Vector3(0,0,.8));this.reach.add(zone);this.reach.visible=false;this.addLandmarks(replay.landmarks??[]);this.update(0);
@@ -94,21 +94,30 @@ export class RobotScene {
   private buildRobot(id:RobotId){dispose(this.robot);this.arm=new THREE.Group();this.legs=[];this.eye=new THREE.Group();this.model=null;const token=++this.modelToken;
     if(id==='stretch'){this.arm.position.set(STRETCH_ARM.mount[0],STRETCH_ARM.mount[1],STRETCH_ARM.height);this.robot.add(this.arm);}
     const placeholder=new THREE.Mesh(new THREE.CylinderGeometry(PLACEHOLDER_RADIUS[id],PLACEHOLDER_RADIUS[id],.02,32),new THREE.MeshBasicMaterial({color:0x8fa39c,transparent:true,opacity:.35}));placeholder.rotation.x=Math.PI/2;placeholder.position.z=.02;this.robot.add(placeholder);
-    const halo=new THREE.Mesh(new THREE.RingGeometry(.32,.35,48),new THREE.MeshBasicMaterial({color:0x12936d,transparent:true,opacity:.65,side:THREE.DoubleSide}));halo.position.z=.015;halo.userData.decoration=true;this.robot.add(halo);
+    const halo=new THREE.Mesh(new THREE.RingGeometry(.32,.35,48),new THREE.MeshBasicMaterial({color:0x12936d,transparent:true,opacity:.65,side:THREE.DoubleSide}));halo.position.z=.015;halo.userData.decoration=true;this.robot.add(halo);halo.visible=!this.replay.physics;
     // Eye marker at the POV camera origin (EYE_FORWARD along local +Y, eye height above origin).
     this.eye.position.set(0,EYE_FORWARD[id],EYE_HEIGHT[id]);const lens=new THREE.Mesh(new THREE.SphereGeometry(.028,16,12),new THREE.MeshBasicMaterial({color:0x14d39a}));this.eye.add(lens);
     const ring=new THREE.Mesh(new THREE.TorusGeometry(.04,.008,8,24),new THREE.MeshBasicMaterial({color:0x253236}));ring.rotation.x=Math.PI/2;this.eye.add(ring);this.robot.add(this.eye);
     // Real meshes (metres, Z-up, +Y forward, lowest point at z=0) replace the placeholder once loaded. Node tests have no DOM/fetch.
     if(typeof document==='undefined')return;
-    loadRobotModel(id).then(({scene,meta})=>{
+    loadRobotModel(this.replay.physics?.visualModel??id).then(({scene,meta})=>{
       if(token!==this.modelToken)return;
       const clone=scene.clone(true);this.robot.remove(placeholder);placeholder.geometry.dispose();placeholder.material.dispose();this.robot.add(clone);
-      this.model=new ArticulatedRobot(clone,meta);if(this.lastPose)this.update(this.lastTime);
+      this.model=new ArticulatedRobot(clone,meta);
+      if(this.replay.physics){
+        const base=Object.values(meta.bodies).find(body=>body.free);
+        if(base)this.eye.position.z-=base.position[2];
+      }
+      if(this.lastPose)this.update(this.lastTime);
     }).catch(e=>console.warn(`Robot model for ${id} unavailable; showing the footprint only.`,e));
   }
   /** Joint animation on the loaded mesh: gait while moving, arm extension and lift from the replay. */
   private poseModel(frame:ReplayFrame,time:number,moving:boolean){
     const m=this.model;if(!m)return;const id=this.replay.robot,phase=time*7;
+    if(frame.physicsPose&&this.replay.physics){
+      m.applyPhysicsPose(frame.physicsPose,frame.yaw,this.replay.physics.jointNames);
+      return;
+    }
     if(id==='go2'){
       for(const [leg,offset] of [['FL',0],['RR',0],['FR',Math.PI],['RL',Math.PI]] as const){const s=moving?Math.sin(phase+offset):0;m.offset(`${leg}_thigh_joint`,-.28*s);m.offset(`${leg}_calf_joint`,.38*Math.max(0,s));}
     }else if(id==='g1'){
