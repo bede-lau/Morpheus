@@ -43,8 +43,8 @@ const OBSTACLES = (l: Landmark) => l.kind !== 'tall' && l.kind !== 'door' && l.k
 export function classifyEvent(label: string): Phase['kind'] {
   const s = label.toLowerCase();
   if (/cannot|out of reach|no collision-free|stationary|beyond/.test(s)) return 'blocked';
-  if (/navigating/.test(s)) return 'navigate';
-  if (/wiping|filling|picked|placed|holding|carrying|wipe|fill/.test(s)) return 'manipulate';
+  if (/navigating|walking to|driving to/.test(s)) return 'navigate';
+  if (/wiping|filling|picked|placed|holding|carrying|wipe|fill|positioning the gripper|grasping|pulling|moving the physical arm|contact measured/.test(s)) return 'manipulate';
   return 'idle';
 }
 export function buildPhases(replay: Replay): Phase[] {
@@ -107,10 +107,14 @@ export function computeRunMetrics(replay: Replay): RunMetrics {
   const surfaces = landmarks.filter(l => l.kind === 'table' || l.kind === 'counter' || l.kind === 'sink').map(l => l.size[2]);
   const inRange = profile.armHeight ? surfaces.filter(h => h >= profile.armHeight![0] && h <= profile.armHeight![1]).length : 0;
   const manipulationSteps = steps.filter(s => !/^navigate/i.test(s.name)), navSteps = steps.filter(s => /^navigate/i.test(s.name));
+  const simulatedArm = replay.physics?.visualModel === 'go2-arm';
+  const testedHeight = replay.contact?.point[2];
   const capabilities: Capability[] = [
     { axis: 'Navigation', score: navSteps.length ? navSteps.filter(s => s.status === 'done').length / navSteps.length : (profile.speed > 0 ? 1 : 0), detail: `${navSteps.filter(s => s.status === 'done').length}/${navSteps.length} navigation steps` },
-    { axis: 'Reach', score: Math.min(1, profile.reach / .5), detail: `${profile.reach.toFixed(2)} m arm reach vs 0.50 m counter approach` },
-    { axis: 'Height window', score: surfaces.length && profile.armHeight ? inRange / surfaces.length : (profile.armHeight ? 1 : 0), detail: profile.armHeight ? `${inRange}/${surfaces.length || 0} surfaces inside ${profile.armHeight[0].toFixed(2)}–${profile.armHeight[1].toFixed(2)} m` : 'No manipulator' },
+    simulatedArm ? { axis: 'Reach', score: 1, detail: 'Simulated arm reached the marker' } :
+      { axis: 'Reach', score: Math.min(1, profile.reach / .5), detail: `${profile.reach.toFixed(2)} m arm reach vs 0.50 m counter approach` },
+    simulatedArm && testedHeight !== undefined ? { axis: 'Tested height', score: 1, detail: `${testedHeight.toFixed(2)} m marker height` } :
+      { axis: 'Height window', score: surfaces.length && profile.armHeight ? inRange / surfaces.length : (profile.armHeight ? 1 : 0), detail: profile.armHeight ? `${inRange}/${surfaces.length || 0} surfaces inside ${profile.armHeight[0].toFixed(2)}–${profile.armHeight[1].toFixed(2)} m` : 'No manipulator' },
     { axis: 'Clearance', score: clearanceScore, detail: minClearance === null ? 'No reviewed obstacles' : `${(minClearance * 100).toFixed(0)} cm minimum margin` },
     { axis: 'Tempo', score: Math.min(1, profile.speed / .8), detail: `${profile.speed.toFixed(2)} m/s nominal, ${(moving.length ? moving.reduce((a, s) => a + s.speed, 0) / moving.length : 0).toFixed(2)} m/s achieved` },
     { axis: 'Manipulation', score: manipulationSteps.length ? manipulationSteps.filter(s => s.status === 'done').length / manipulationSteps.length : (profile.reach ? 1 : 0), detail: `${manipulationSteps.filter(s => s.status === 'done').length}/${manipulationSteps.length} manipulation steps` },

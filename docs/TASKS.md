@@ -190,7 +190,7 @@ published kitchen. Every sample comes from wheel or joint actuation and
 `mj_step`. The camera interpolates the measured state. The kitchen uses a
 level floor and collision boxes derived from the companion collider grid and
 the saved scene, with assumed metric scale. Other built-in tasks are labelled
-**Scripted simulation preview**, except the counter reach trials below.
+**Scripted simulation preview** until a recorded trial passes its held-out starts.
 
 - Stretch 3 uses a differential-drive controller tuned in MuJoCo by cross-entropy search.
 - G1 uses the pinned Unitree 12-DoF PPO/LSTM walking checkpoint.
@@ -240,3 +240,15 @@ python -m scripts.train_legged_counter go2 --robot-xml /path/to/unitree_go2/go2.
 The legged runner writes the matching robot-only MJCF alongside each
 qualified replay. Use `scripts/export-robot-models.py` to regenerate the GLB
 and joint metadata from that MJCF (`g1-hands` or `go2-arm` as the model ID).
+
+**Drawer opening** uses a passive rail, a collidable handle, and measured
+gripper and drawer motion. The runner requires at least 12 cm of travel
+after release, at least 10 cm pulled with two-sided contact, and a continuous
+grasp lasting at least 0.25 s. It exports a replay only after the nominal
+trial and 12 held-out approaches complete. The fixture is staged at the
+practice table in the kitchen proxy.
+
+```sh
+python -m scripts.train_kitchen_drawer --robot-xml /path/to/hello_robot_stretch_3/stretch.xml --output /tmp/stretch-drawer-report.json
+python -m scripts.train_kitchen_drawer --robot-xml /path/to/unitree_go2/go2.xml --go2-checkpoint /path/to/policy_deploy.onnx --output /tmp/go2-drawer-report.json
+```
